@@ -1,0 +1,42 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+  html {
+    scroll-behavior: smooth;
+    overflow-x: hidden;
+  }
+
+  body {
+    @apply bg-[#F8FAFC] text-[#334155] antialiased;
+    font-family: 'Inter', system-ui, sans-serif;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  *:focus-visible {
+    @apply outline-2 outline-offset-2 outline-brand-pink;
+  }
+
+  ::selection {
+    @apply bg-brand-pink/20 text-brand-navy;
+  }
+}
+
+@layer components {
+
+  /* Glassmorphism utility */
+  .glass {
+    @apply bg-white/70 backdrop-blur-md border border-white/20;
+  }
+
+  .glass-dark {
+    @apply bg-[#0F172A]/80 backdrop-blur-lg border border-white/10;
+  }
+
+  /* Custom transitions */
+  .transition-smooth {
+    @apply transition-all duration-300 ease-in-out;
+  }
+}
