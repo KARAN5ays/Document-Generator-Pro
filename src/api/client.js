@@ -1,6 +1,6 @@
 import axios from 'axios';
 
-const API_BASE_URL = import.meta.env.VITE_API_URL || 'http://localhost:8000/api';
+const API_BASE_URL = import.meta.env.VITE_API_URL;
 const REQUEST_TIMEOUT_MS = Number(import.meta.env.VITE_API_TIMEOUT) || 30000;
 
 const API = axios.create({
@@ -11,7 +11,7 @@ const API = axios.create({
 
 export const getBackendOrigin = () => {
     const base = API.defaults.baseURL || '';
-    return base.replace(/\/api\/?$/, '') || 'http://localhost:8000';
+    return base.replace(/\/api\/?$/, '');
 };
 
 API.interceptors.request.use((config) => {
