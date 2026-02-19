@@ -175,6 +175,7 @@ export const puckConfig = {
                 label: { type: "text" },
                 placeholder: { type: "text" },
                 id: { type: "text" },
+                value: { type: "text" },
                 type: {
                     type: "select",
                     options: [
@@ -186,11 +187,14 @@ export const puckConfig = {
                     ]
                 }
             },
-            defaultProps: { label: "Full Name", placeholder: "John Doe", id: "user_name", type: "text" },
-            render: ({ label, placeholder }) => (
+            defaultProps: { label: "Full Name", placeholder: "John Doe", id: "user_name", value: "", type: "text" },
+            render: ({ label, placeholder, value }) => (
                 <div className="border-b border-pink-100 py-2.5 flex justify-between">
                     <span className="text-xs font-bold text-slate-500 uppercase">{label}</span>
-                    <span className="text-sm text-brand-navy font-medium">[{placeholder}]</span>
+                    {value
+                        ? <span className="text-sm text-brand-navy font-semibold">{value}</span>
+                        : <span className="text-sm text-slate-400 italic">[{placeholder}]</span>
+                    }
                 </div>
             )
         },

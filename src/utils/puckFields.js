@@ -181,7 +181,9 @@ export function injectFieldsIntoPuckData(data, fields = {}) {
     if (type === 'DynamicField') {
       const fieldId = item.props.id || `dynamic_${idx}`
       if (fields[fieldId] != null && fields[fieldId] !== '') {
-        item.props.placeholder = String(fields[fieldId])
+        item.props.value = String(fields[fieldId])
+      } else {
+        item.props.value = ''
       }
       return
     }
@@ -228,4 +230,55 @@ export function injectFieldsIntoPuckData(data, fields = {}) {
   }
 
   return out
+}
+
+/**
+ * Extract ONLY DynamicField components as user-fillable inputs.
+ * Used by Create Document to show user-facing fields only.
+ */
+export function extractDynamicFields(rawContent) {
+  const items = flattenContent(rawContent)
+  const fields = []
+  const seen = new Set()
+
+  items.forEach((item, idx) => {
+    if (!item || !item.type || !item.props) return
+    if (item.type !== 'DynamicField') return
+    const { props } = item
+    const id = props.id || `dynamic_${idx}`
+    if (seen.has(id)) return
+    seen.add(id)
+    fields.push({
+      id,
+      label: props.label || 'Field',
+      type: props.type || 'text',
+      placeholder: props.placeholder || '',
+      required: !!props.required,
+    })
+  })
+  return fields
+}
+
+/**
+ * Extract Table components to build table editors.
+ * Returns [{tableIdx, headers: string[], defaultRows: string[][]}]
+ */
+export function extractTableSchemas(rawContent) {
+  const items = flattenContent(rawContent)
+  const tables = []
+  const colKeys = ['col1', 'col2', 'col3', 'col4']
+
+  items.forEach((item, idx) => {
+    if (!item || !item.type || !item.props) return
+    if (item.type !== 'Table') return
+    const headers = (item.props.headers || []).map(h =>
+      typeof h === 'string' ? h : (h?.label ?? '')
+    )
+    const numCols = Math.min(headers.length, 4)
+    const defaultRows = (item.props.rows || []).map(r =>
+      colKeys.slice(0, numCols).map(k => r[k] ?? '')
+    )
+    tables.push({ tableIdx: idx, headers, defaultRows })
+  })
+  return tables
 }
