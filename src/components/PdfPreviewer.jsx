@@ -23,9 +23,9 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
     templates?.find((t) => t.id === documentData.templateId) || templates?.[0] || null
   const fields = documentData.fields || {}
 
-  const hasValidData = Boolean(
-    template?.fields?.every((f) => (f.required ? `${fields[f.id] ?? ''}`.trim() : true)),
-  )
+  // Always show preview when a template is selected.
+  // This ensures custom fields (and partial fills) are visible in real-time.
+  const hasValidData = Boolean(template)
 
   const formatAmount = (amount) => {
     const num = parseFloat(amount)
@@ -228,9 +228,11 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
               {/* Layout components */}
               <div className="pt-12">
                 {template?.ui_config?.content ? (
-                  <div className="border border-slate-100 rounded-xl overflow-hidden bg-white shadow-sm p-8">
-                    <PuckRenderer data={template.ui_config} fields={fields} />
-                  </div>
+                  <>
+                    <div className="border border-slate-100 rounded-xl overflow-hidden bg-white shadow-sm p-8">
+                      <PuckRenderer data={template.ui_config} fields={fields} />
+                    </div>
+                  </>
                 ) : template?.layout === 'certificate' ? (
                   <CertificatePreview fields={fields} template={template} documentData={documentData} formatDate={formatDate} />
                 ) : template?.layout === 'receipt' ? (
@@ -358,31 +360,42 @@ function ReceiptPreview({ fields, documentData, formatDate, formatAmount }) {
 }
 
 function DefaultPreview({ fields, template, documentData }) {
+  const customFields = (documentData.customFields || []).filter(cf => cf.label || cf.value)
   return (
-    <div className="space-y-4">
+    <div className="space-y-1">
       {(template?.fields || []).map((def) => {
-        if (def.id === 'grade' && fields[def.id]) return null;
+        const val = fields[def.id]
+        if (def.id === 'grade' && val) return null
         return (
-          <div key={def.id} className="flex justify-between border-b border-slate-100 py-2 text-sm">
-            <span className="text-slate-500">{def.label}</span>
-            <span className="font-medium">{fields[def.id]}</span>
+          <div key={def.id} className="flex justify-between items-center border-b border-slate-100 py-2.5 text-sm gap-4">
+            <span className="text-slate-500 shrink-0">{def.label}</span>
+            <span className={`font-semibold text-right truncate ${val ? 'text-brand-navy' : 'text-slate-300 italic'}`}>
+              {val || `Enter ${def.label.toLowerCase()}...`}
+            </span>
           </div>
         )
       })}
 
       {fields.grade && !(template?.fields || []).some(f => f.id === 'grade') && (
-        <div className="flex justify-between border-b border-slate-100 py-2 text-sm">
+        <div className="flex justify-between items-center border-b border-slate-100 py-2.5 text-sm">
           <span className="text-slate-500">Grade</span>
           <span className="px-2 py-0.5 rounded-full bg-pink-50 text-pink-700 text-xs font-bold">{fields.grade}</span>
         </div>
       )}
 
-      {(documentData.customFields || []).map((cf) => (
-        <div key={cf.id} className="flex justify-between border-b border-slate-100 py-2 text-sm">
-          <span className="text-slate-500">{cf.label}</span>
-          <span className="font-medium">{cf.value}</span>
-        </div>
-      ))}
+      {customFields.length > 0 && (
+        <>
+          <div className="pt-3 pb-1">
+            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Custom Fields</span>
+          </div>
+          {customFields.map((cf) => (
+            <div key={cf.id} className="flex justify-between items-center border-b border-pink-50 py-2.5 text-sm gap-4">
+              <span className="text-slate-500 shrink-0">{cf.label || '—'}</span>
+              <span className="font-semibold text-brand-navy text-right truncate">{cf.value || '—'}</span>
+            </div>
+          ))}
+        </>
+      )}
     </div>
   )
 }
