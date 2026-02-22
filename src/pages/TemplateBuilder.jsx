@@ -210,7 +210,9 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
     try {
       setTemplateLoading(true)
       const res = await API.get('document-types/')
-      setExistingTemplates(res.data || [])
+      // Only display templates belonging to the user. Global/system templates will be hidden from the builder.
+      const editableTemplates = (res.data || []).filter(t => t.can_edit_in_builder === true)
+      setExistingTemplates(editableTemplates)
     } catch (err) {
       console.error('Failed to fetch templates', err)
     } finally {
