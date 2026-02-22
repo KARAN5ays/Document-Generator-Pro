@@ -8,9 +8,9 @@ import Sidebar from './components/Sidebar'
 import Navbar from './components/Navbar'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
-import Register from './pages/Register'
 import TemplateBuilder from './pages/TemplateBuilder'
 import YourDocuments from './pages/YourDocuments'
+import SettingsView from './pages/SettingsView'
 import API from './api/client'
 
 // Simple Error Boundary Component
@@ -61,6 +61,7 @@ export default function App() {
   const [sidebarOpen, setSidebarOpen] = useState(false)
   const [authView, setAuthView] = useState('login')
   const [verifyPreFillCode, setVerifyPreFillCode] = useState('')
+  const [userProfile, setUserProfile] = useState(null)
 
   // Auth state management
   const [token, setToken] = useState(() => {
@@ -78,6 +79,7 @@ export default function App() {
     setToken(null)
     setActiveView('dashboard') // Reset view
     setTemplates([]) // Clear templates
+    setUserProfile(null) // Clear profile
     setDocumentData({ // Reset document data
       templateId: null,
       fields: {},
@@ -100,8 +102,28 @@ export default function App() {
   })
 
   useEffect(() => {
-    if (token) fetchTemplates()
+    if (token) {
+      fetchTemplates()
+      fetchUserProfile()
+    }
   }, [token])
+
+  const fetchUserProfile = async () => {
+    try {
+      const config = { headers: { Authorization: `Bearer ${token}` } }
+      const res = await API.get('users/me/', config)
+      setUserProfile({
+        name: res.data.username || res.data.email?.split('@')[0] || 'User',
+        email: res.data.email,
+        role: res.data.is_superuser ? 'Administrator' : 'Standard User'
+      })
+    } catch (err) {
+      console.error("Failed to fetch user profile", err)
+      if (err.response?.status === 401) {
+        handleLogout()
+      }
+    }
+  }
 
   useEffect(() => {
     const onLogout = () => setToken(null)
@@ -198,7 +220,7 @@ export default function App() {
     <ErrorBoundary>
       <div className="min-h-screen bg-brand-soft">
         <Navbar
-          username="Admin User"
+          username={userProfile?.name || "Loading..."}
           notificationCount={0}
           onLogout={handleLogout}
           onToggleSidebar={() => setSidebarOpen((v) => !v)}
@@ -210,7 +232,8 @@ export default function App() {
           onLogout={handleLogout}
           isOpen={sidebarOpen}
           onClose={() => setSidebarOpen(false)}
-          username="Admin User"
+          username={userProfile?.name || "Loading..."}
+          role={userProfile?.role || "User"}
         />
 
         {/* Main content: pt-24 clears fixed navbar (h-16) + 32px visual gap */}
@@ -265,6 +288,10 @@ export default function App() {
                   }}
                   onCancel={() => setActiveView('dashboard')}
                 />
+              )}
+
+              {activeView === 'settings' && (
+                <SettingsView userProfile={userProfile} />
               )}
             </motion.div>
           </AnimatePresence>

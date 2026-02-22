@@ -9,15 +9,25 @@ export const AuthProvider = ({ children }) => {
     const [loading, setLoading] = useState(true);
 
     useEffect(() => {
-        // You could add a call to /api/users/me/ here to fetch user details 
-        // with the token if the backend provides it. 
-        // For now, if we have a token, we assume logged in.
-        if (token) {
-            setUser({ handle: "user" }); // Placeholder user
-        } else {
-            setUser(null);
-        }
-        setLoading(false);
+        const fetchUser = async () => {
+            if (token) {
+                try {
+                    const res = await API.get('/users/me/', {
+                        headers: { Authorization: `Bearer ${token}` }
+                    });
+                    setUser(res.data);
+                } catch (err) {
+                    console.error("Failed to fetch user profile", err);
+                    // Invalid token or expired, clear it
+                    logout();
+                }
+            } else {
+                setUser(null);
+            }
+            setLoading(false);
+        };
+
+        fetchUser();
     }, [token]);
 
     const login = async (username, password) => {
