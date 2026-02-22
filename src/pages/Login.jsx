@@ -1,20 +1,13 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, User, Shield, ArrowRight, Loader2, AlertCircle, FileText, CheckCircle2, Search, CheckCircle, XCircle, Calendar, Fingerprint } from 'lucide-react'
+import { Lock, User, Shield, ArrowRight, Loader2, AlertCircle, FileText, CheckCircle2 } from 'lucide-react'
 import API from '../api/client'
 
-export default function Login({ onLogin, onSwitchToRegister }) {
-    const [activeTab, setActiveTab] = useState('login') // 'login' | 'verify'
+export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify }) {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
     const [isLoading, setIsLoading] = useState(false)
-
-    // Verification State
-    const [verifyCode, setVerifyCode] = useState('')
-    const [verifyResult, setVerifyResult] = useState(null)
-    const [isVerifying, setIsVerifying] = useState(false)
-    const [verifyError, setVerifyError] = useState('')
 
     const handleLoginSubmit = async (e) => {
         e.preventDefault()
@@ -35,43 +28,6 @@ export default function Login({ onLogin, onSwitchToRegister }) {
         } finally {
             setIsLoading(false)
         }
-    }
-
-    const handleVerifySubmit = async (e) => {
-        e.preventDefault()
-        if (verifyCode.length < 8) return
-
-        setIsVerifying(true)
-        setVerifyResult(null)
-        setVerifyError('')
-
-        try {
-            // Simulate scanning
-            await new Promise(r => setTimeout(r, 600))
-
-            const response = await API.get(`verify/${verifyCode}/`)
-            const doc = response.data?.document
-            if (doc) {
-                setVerifyResult(doc)
-            } else {
-                setVerifyError('Document not found or invalid code.')
-            }
-        } catch (err) {
-            console.error("Verification failed", err)
-            setVerifyError('Document not found or invalid code.')
-        } finally {
-            setIsVerifying(false)
-        }
-    }
-
-    const formatDate = (dateStr) => {
-        if (!dateStr) return ''
-        const date = new Date(dateStr)
-        return date.toLocaleDateString('en-US', {
-            year: 'numeric',
-            month: 'long',
-            day: 'numeric',
-        })
     }
 
     return (
@@ -133,223 +89,122 @@ export default function Login({ onLogin, onSwitchToRegister }) {
                     </div>
 
                     <div className="bg-white rounded-2xl shadow-card border border-slate-200 overflow-hidden">
+                        <div className="p-6 sm:p-8">
+                            <motion.div
+                                key="login"
+                                initial={{ opacity: 0, x: -20 }}
+                                animate={{ opacity: 1, x: 0 }}
+                            >
+                                <div className="mb-6">
+                                    <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-pink/10 to-pink-50 flex items-center justify-center mb-4">
+                                        <User className="w-6 h-6 text-brand-pink" />
+                                    </div>
+                                    <h2 className="text-2xl font-bold text-brand-navy">Welcome back</h2>
+                                    <p className="text-slate-500 mt-1">Sign in to your DocGen account</p>
+                                </div>
 
-                        {/* Tab Switcher */}
-                        <div className="flex border-b border-slate-100">
-                            <button
-                                onClick={() => setActiveTab('login')}
-                                className={`flex-1 py-4 text-sm font-bold text-center transition-colors relative ${activeTab === 'login' ? 'text-brand-navy' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
-                            >
-                                Member Login
-                                {activeTab === 'login' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-pink" />}
-                            </button>
-                            <button
-                                onClick={() => setActiveTab('verify')}
-                                className={`flex-1 py-4 text-sm font-bold text-center transition-colors relative ${activeTab === 'verify' ? 'text-brand-navy' : 'text-slate-400 hover:text-slate-600 hover:bg-slate-50'}`}
-                            >
-                                Verify Document
-                                {activeTab === 'verify' && <div className="absolute bottom-0 left-0 right-0 h-0.5 bg-brand-pink" />}
-                            </button>
+                                <form onSubmit={handleLoginSubmit} className="space-y-5">
+                                    <AnimatePresence mode="wait">
+                                        {error && (
+                                            <motion.div
+                                                initial={{ opacity: 0, height: 0 }}
+                                                animate={{ opacity: 1, height: 'auto' }}
+                                                exit={{ opacity: 0, height: 0 }}
+                                                className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 text-red-700 text-sm"
+                                            >
+                                                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                                                {error}
+                                            </motion.div>
+                                        )}
+                                    </AnimatePresence>
+
+                                    <div>
+                                        <label className="block text-sm font-medium text-slate-700 mb-2">Username</label>
+                                        <div className="relative">
+                                            <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                            <input
+                                                type="text"
+                                                value={username}
+                                                onChange={(e) => setUsername(e.target.value)}
+                                                className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition-all outline-none"
+                                                placeholder="Enter your username"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <div>
+                                        <div className="flex justify-between items-center mb-2">
+                                            <label className="block text-sm font-medium text-slate-700">Password</label>
+                                            <button type="button" className="text-xs text-brand-pink hover:underline">
+                                                Forgot password?
+                                            </button>
+                                        </div>
+                                        <div className="relative">
+                                            <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
+                                            <input
+                                                type="password"
+                                                value={password}
+                                                onChange={(e) => setPassword(e.target.value)}
+                                                className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition-all outline-none"
+                                                placeholder="Enter your password"
+                                                required
+                                            />
+                                        </div>
+                                    </div>
+
+                                    <motion.button
+                                        type="submit"
+                                        disabled={isLoading}
+                                        className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${isLoading
+                                            ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
+                                            : 'bg-brand-navy hover:bg-slate-800 text-white shadow-lg shadow-slate-900/20 hover:shadow-xl'
+                                            }`}
+                                        whileHover={!isLoading ? { y: -1 } : {}}
+                                        whileTap={!isLoading ? { scale: 0.99 } : {}}
+                                    >
+                                        {isLoading ? (
+                                            <>
+                                                <Loader2 className="w-5 h-5 animate-spin" />
+                                                Signing in...
+                                            </>
+                                        ) : (
+                                            <>
+                                                Sign In
+                                                <ArrowRight className="w-4 h-4" />
+                                            </>
+                                        )}
+                                    </motion.button>
+                                </form>
+
+                                <p className="mt-6 text-center text-slate-500 text-sm">
+                                    Don't have an account?{' '}
+                                    <button
+                                        type="button"
+                                        onClick={onSwitchToRegister}
+                                        className="font-semibold text-brand-pink hover:underline"
+                                    >
+                                        Create account
+                                    </button>
+                                </p>
+                            </motion.div>
                         </div>
 
-                        <div className="p-6 sm:p-8">
-                            <AnimatePresence mode="wait">
-                                {activeTab === 'login' ? (
-                                    <motion.div
-                                        key="login"
-                                        initial={{ opacity: 0, x: -20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: -20 }}
-                                        transition={{ duration: 0.2 }}
-                                    >
-                                        <div className="mb-6">
-                                            <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-pink/10 to-pink-50 flex items-center justify-center mb-4">
-                                                <User className="w-6 h-6 text-brand-pink" />
-                                            </div>
-                                            <h2 className="text-2xl font-bold text-brand-navy">Welcome back</h2>
-                                            <p className="text-slate-500 mt-1">Sign in to your DocGen account</p>
-                                        </div>
+                        {/* New Public Verification CTA bottom banner */}
+                        <div className="bg-slate-50 border-t border-slate-100 p-6 flex flex-col items-center justify-center text-center">
+                            <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-3">
+                                <Shield className="w-6 h-6 text-emerald-500" />
+                            </div>
+                            <h3 className="text-slate-800 font-bold mb-1">Have a document to verify?</h3>
+                            <p className="text-slate-500 text-sm mb-4">You do not need an account to verify authentic documents.</p>
 
-                                        <form onSubmit={handleLoginSubmit} className="space-y-5">
-                                            <AnimatePresence mode="wait">
-                                                {error && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, height: 0 }}
-                                                        animate={{ opacity: 1, height: 'auto' }}
-                                                        exit={{ opacity: 0, height: 0 }}
-                                                        className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-start gap-3 text-red-700 text-sm"
-                                                    >
-                                                        <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
-                                                        {error}
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-
-                                            <div>
-                                                <label className="block text-sm font-medium text-slate-700 mb-2">Username</label>
-                                                <div className="relative">
-                                                    <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                                                    <input
-                                                        type="text"
-                                                        value={username}
-                                                        onChange={(e) => setUsername(e.target.value)}
-                                                        className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition-all outline-none"
-                                                        placeholder="Enter your username"
-                                                        required
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <div>
-                                                <div className="flex justify-between items-center mb-2">
-                                                    <label className="block text-sm font-medium text-slate-700">Password</label>
-                                                    <button type="button" className="text-xs text-brand-pink hover:underline">
-                                                        Forgot password?
-                                                    </button>
-                                                </div>
-                                                <div className="relative">
-                                                    <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
-                                                    <input
-                                                        type="password"
-                                                        value={password}
-                                                        onChange={(e) => setPassword(e.target.value)}
-                                                        className="w-full pl-12 pr-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition-all outline-none"
-                                                        placeholder="Enter your password"
-                                                        required
-                                                    />
-                                                </div>
-                                            </div>
-
-                                            <motion.button
-                                                type="submit"
-                                                disabled={isLoading}
-                                                className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${isLoading
-                                                    ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
-                                                    : 'bg-brand-navy hover:bg-slate-800 text-white shadow-lg shadow-slate-900/20 hover:shadow-xl'
-                                                    }`}
-                                                whileHover={!isLoading ? { y: -1 } : {}}
-                                                whileTap={!isLoading ? { scale: 0.99 } : {}}
-                                            >
-                                                {isLoading ? (
-                                                    <>
-                                                        <Loader2 className="w-5 h-5 animate-spin" />
-                                                        Signing in...
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        Sign In
-                                                        <ArrowRight className="w-4 h-4" />
-                                                    </>
-                                                )}
-                                            </motion.button>
-                                        </form>
-
-                                        <p className="mt-6 text-center text-slate-500 text-sm">
-                                            Don&apos;t have an account?{' '}
-                                            <button
-                                                type="button"
-                                                onClick={onSwitchToRegister}
-                                                className="font-semibold text-brand-pink hover:underline"
-                                            >
-                                                Create account
-                                            </button>
-                                        </p>
-                                    </motion.div>
-                                ) : (
-                                    <motion.div
-                                        key="verify"
-                                        initial={{ opacity: 0, x: 20 }}
-                                        animate={{ opacity: 1, x: 0 }}
-                                        exit={{ opacity: 0, x: 20 }}
-                                        transition={{ duration: 0.2 }}
-                                    >
-                                        <div className="mb-6">
-                                            <div className="w-12 h-12 rounded-2xl bg-emerald-50 flex items-center justify-center mb-4">
-                                                <Shield className="w-6 h-6 text-emerald-500" />
-                                            </div>
-                                            <h2 className="text-2xl font-bold text-brand-navy">Verify Document</h2>
-                                            <p className="text-slate-500 mt-1">Enter the 8-digit tracking code</p>
-                                        </div>
-
-                                        <form onSubmit={handleVerifySubmit} className="space-y-5">
-                                            <div className="relative group">
-                                                <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400 group-focus-within:text-emerald-500 transition-colors" />
-                                                <input
-                                                    value={verifyCode}
-                                                    onChange={(e) => {
-                                                        const val = e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8)
-                                                        setVerifyCode(val)
-                                                        setVerifyError('')
-                                                        setVerifyResult(null)
-                                                    }}
-                                                    placeholder="e.g. 38BF6B23"
-                                                    className="w-full pl-12 pr-4 py-4 rounded-xl border-2 border-slate-200 bg-slate-50/50 text-slate-800 placeholder:text-slate-400 font-mono text-lg font-bold tracking-widest focus:ring-4 focus:ring-emerald-500/10 focus:border-emerald-500 transition-all outline-none uppercase"
-                                                />
-                                            </div>
-
-                                            <AnimatePresence mode="wait">
-                                                {verifyError && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, height: 0 }}
-                                                        animate={{ opacity: 1, height: 'auto' }}
-                                                        exit={{ opacity: 0, height: 0 }}
-                                                        className="p-4 bg-red-50 border border-red-100 rounded-xl flex items-center gap-3 text-red-700 text-sm"
-                                                    >
-                                                        <XCircle className="w-5 h-5 shrink-0" />
-                                                        {verifyError}
-                                                    </motion.div>
-                                                )}
-
-                                                {verifyResult && (
-                                                    <motion.div
-                                                        initial={{ opacity: 0, y: 10 }}
-                                                        animate={{ opacity: 1, y: 0 }}
-                                                        className="bg-emerald-50 border border-emerald-100 rounded-xl p-4 space-y-3"
-                                                    >
-                                                        <div className="flex items-center gap-2 text-emerald-700 font-bold text-sm">
-                                                            <CheckCircle className="w-5 h-5" />
-                                                            Verified Authentic
-                                                        </div>
-                                                        <div className="space-y-2 text-sm">
-                                                            <div className="flex justify-between">
-                                                                <span className="text-emerald-600/70 text-xs uppercase font-bold">Type</span>
-                                                                <span className="font-semibold text-emerald-900">{verifyResult.template_type}</span>
-                                                            </div>
-                                                            <div className="flex justify-between">
-                                                                <span className="text-emerald-600/70 text-xs uppercase font-bold">Date</span>
-                                                                <span className="font-semibold text-emerald-900">{formatDate(verifyResult.created_at)}</span>
-                                                            </div>
-                                                        </div>
-                                                    </motion.div>
-                                                )}
-                                            </AnimatePresence>
-
-                                            <motion.button
-                                                type="submit"
-                                                disabled={isVerifying || verifyCode.length < 8}
-                                                className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${isVerifying || verifyCode.length < 8
-                                                    ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
-                                                    : 'bg-emerald-600 hover:bg-emerald-700 text-white shadow-lg shadow-emerald-600/20 hover:shadow-xl'
-                                                    }`}
-                                                whileHover={!isVerifying && verifyCode.length >= 8 ? { y: -1 } : {}}
-                                                whileTap={!isVerifying && verifyCode.length >= 8 ? { scale: 0.99 } : {}}
-                                            >
-                                                {isVerifying ? (
-                                                    <>
-                                                        <Loader2 className="w-5 h-5 animate-spin" />
-                                                        Verifying...
-                                                    </>
-                                                ) : (
-                                                    <>
-                                                        Verify Now
-                                                        <ArrowRight className="w-4 h-4" />
-                                                    </>
-                                                )}
-                                            </motion.button>
-                                        </form>
-                                    </motion.div>
-                                )}
-                            </AnimatePresence>
+                            <button
+                                onClick={onSwitchToVerify}
+                                className="px-6 py-2.5 bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm rounded-xl hover:border-emerald-500 hover:text-emerald-600 transition-all flex items-center gap-2 group"
+                            >
+                                Verify a Document
+                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
+                            </button>
                         </div>
                     </div>
                 </motion.div>

@@ -60,8 +60,7 @@ export default function App() {
   const [templates, setTemplates] = useState([])
   const [activeView, setActiveView] = useState('dashboard')
   const [isLoading, setIsLoading] = useState(true)
-  const [sidebarOpen, setSidebarOpen] = useState(false)
-  const [authView, setAuthView] = useState('login')
+  const [authView, setAuthView] = useState('login') // 'login' | 'register' | 'publicVerify'
   const [verifyPreFillCode, setVerifyPreFillCode] = useState('')
   const [userProfile, setUserProfile] = useState(null)
 
@@ -171,10 +170,47 @@ export default function App() {
   }
 
   if (!token) {
+    if (authView === 'publicVerify') {
+      return (
+        <ErrorBoundary>
+          <div className="min-h-screen bg-brand-soft pt-12">
+            {/* Minimal public header for verification page */}
+            <div className="absolute top-0 left-0 right-0 p-6 flex justify-between items-center max-w-[1600px] mx-auto z-50">
+              <div className="flex items-center gap-3">
+                <div className="w-9 h-9 rounded-lg bg-gradient-to-br from-brand-pink to-pink-600 flex items-center justify-center shadow-md shadow-brand-pink/20 ring-1 ring-white/50">
+                  <svg className="w-5 h-5 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polygon points="12 2 2 7 12 12 22 7 12 2"></polygon><polyline points="2 17 12 22 22 17"></polyline><polyline points="2 12 12 17 22 12"></polyline></svg>
+                </div>
+                <div>
+                  <h1 className="text-base font-bold text-brand-pink tracking-tight">DocGen</h1>
+                  <p className="text-[9px] text-slate-400 uppercase tracking-widest font-semibold -mt-0.5">Tech Cloud</p>
+                </div>
+              </div>
+              <button
+                onClick={() => setAuthView('login')}
+                className="px-5 py-2.5 rounded-xl bg-white border border-slate-200 text-slate-700 font-bold text-sm shadow-sm hover:shadow-md hover:-translate-y-0.5 transition-all"
+              >
+                Sign In
+              </button>
+            </div>
+
+            <motion.div
+              initial={{ opacity: 0, scale: 0.95 }}
+              animate={{ opacity: 1, scale: 1 }}
+              transition={{ duration: 0.3 }}
+              className="mt-8"
+            >
+              <VerificationTool initialCode="" />
+            </motion.div>
+          </div>
+        </ErrorBoundary>
+      )
+    }
+
     return authView === 'login' ? (
       <Login
         onLogin={handleLogin}
         onSwitchToRegister={() => setAuthView('register')}
+        onSwitchToVerify={() => setAuthView('publicVerify')}
       />
     ) : (
       <Register
