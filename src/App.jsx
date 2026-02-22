@@ -153,7 +153,10 @@ export default function App() {
         onSwitchToRegister={() => setAuthView('register')}
       />
     ) : (
-      <Register onSwitchToLogin={() => setAuthView('login')} />
+      <Register
+        onSwitchToLogin={() => setAuthView('login')}
+        onLogin={handleLogin}
+      />
     )
   }
 

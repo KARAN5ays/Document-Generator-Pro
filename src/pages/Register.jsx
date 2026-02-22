@@ -1,8 +1,9 @@
 import { useState } from 'react'
 import { motion } from 'framer-motion'
 import { Lock, Mail, User, ArrowRight, Loader2, AlertCircle, FileText } from 'lucide-react'
+import API from '../api/client'
 
-export default function Register({ onSwitchToLogin }) {
+export default function Register({ onSwitchToLogin, onLogin }) {
     const [formData, setFormData] = useState({
         username: '',
         email: '',
@@ -34,10 +35,27 @@ export default function Register({ onSwitchToLogin }) {
 
         setIsLoading(true)
         try {
-            // Placeholder - backend may need registration endpoint
-            setError("Registration is not yet available. Please contact your administrator.")
+            const response = await API.post('/register/', {
+                username: formData.username,
+                email: formData.email,
+                password: formData.password,
+            })
+            // If the backend returns access token immediately, we can log in
+            if (response.data?.access) {
+                localStorage.setItem('token', response.data.access)
+                if (response.data.refresh) {
+                    localStorage.setItem('refresh_token', response.data.refresh)
+                }
+                onLogin(response.data.access)
+            } else {
+                // If no token is returned, redirect to login
+                onSwitchToLogin()
+            }
         } catch (err) {
-            setError("Something went wrong. Please try again.")
+            console.error("Registration failed", err)
+            // Show specific error if backend provides it
+            const detail = err.response?.data?.username?.[0] || err.response?.data?.email?.[0] || err.response?.data?.detail
+            setError(detail || "Something went wrong. Please try again.")
         } finally {
             setIsLoading(false)
         }
