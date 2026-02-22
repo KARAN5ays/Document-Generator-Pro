@@ -182,6 +182,16 @@ export default function App() {
     )
   }
 
+  // If we have a token but haven't fetched templates yet, show a clean loading state
+  if (isLoading && token && templates.length === 0) {
+    return (
+      <div className="min-h-screen bg-brand-soft flex flex-col items-center justify-center">
+        <div className="w-12 h-12 border-4 border-brand-pink border-t-transparent rounded-full animate-spin"></div>
+        <p className="mt-4 text-brand-navy font-bold">Loading your workspace...</p>
+      </div>
+    )
+  }
+
   const handleBackendResponse = (backendData) => {
     setDocumentData((prev) => ({
       ...prev,
