@@ -15,6 +15,7 @@ import SettingsView from './pages/SettingsView'
 import API from './api/client'
 
 
+
 // Simple Error Boundary Component
 class ErrorBoundary extends React.Component {
   constructor(props) {
@@ -60,6 +61,7 @@ export default function App() {
   const [templates, setTemplates] = useState([])
   const [activeView, setActiveView] = useState('dashboard')
   const [isLoading, setIsLoading] = useState(true)
+  const [sidebarOpen, setSidebarOpen] = useState(false)
   const [authView, setAuthView] = useState('login') // 'login' | 'register' | 'publicVerify'
   const [verifyPreFillCode, setVerifyPreFillCode] = useState('')
   const [userProfile, setUserProfile] = useState(null)
