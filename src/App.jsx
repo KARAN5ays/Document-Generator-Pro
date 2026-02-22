@@ -8,10 +8,12 @@ import Sidebar from './components/Sidebar'
 import Navbar from './components/Navbar'
 import Dashboard from './pages/Dashboard'
 import Login from './pages/Login'
+import Register from './pages/Register'
 import TemplateBuilder from './pages/TemplateBuilder'
 import YourDocuments from './pages/YourDocuments'
 import SettingsView from './pages/SettingsView'
 import API from './api/client'
+
 
 // Simple Error Boundary Component
 class ErrorBoundary extends React.Component {
