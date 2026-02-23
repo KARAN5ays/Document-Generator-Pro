@@ -131,8 +131,8 @@ function ShareModal({ doc, onClose }) {
           {/* URL Copy Section */}
           <div className="space-y-2">
             <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Document Link</label>
-            <div className="flex items-center gap-2 p-2 rounded-xl border border-pink-100 bg-pink-50/30">
-              <div className="p-2 bg-white rounded-lg text-brand-pink">
+            <div className="flex items-center gap-2 p-2 rounded-xl border border-slate-200 bg-slate-50">
+              <div className="p-2 bg-white rounded-lg text-brand-navy shadow-sm border border-slate-100">
                 <LinkIcon className="w-4 h-4" />
               </div>
               <input
@@ -196,21 +196,20 @@ function DetailsModal({ doc, onClose, onShare }) {
         animate={{ opacity: 1, scale: 1 }}
         exit={{ opacity: 0, scale: 0.95 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg bg-white rounded-2xl shadow-xl border border-pink-100 overflow-hidden"
+        className="w-full max-w-lg bg-white rounded-2xl shadow-card border border-slate-200 overflow-hidden"
       >
-        <div className="h-1 w-full bg-gradient-to-r from-brand-pink to-pink-400" />
         <div className="p-6">
           <div className="flex items-start justify-between gap-4 mb-6">
             <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-pink-100 flex items-center justify-center shrink-0">
-                <FileText className="w-7 h-7 text-brand-pink" />
+              <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0">
+                <FileText className="w-7 h-7 text-slate-500" />
               </div>
               <div>
                 <h2 className="text-xl font-bold text-brand-navy">
                   {doc?.document_type_name || 'Document'}
                 </h2>
                 <div className="flex items-center gap-2 mt-1 text-sm text-slate-500 font-mono">
-                  <Hash className="w-4 h-4 text-brand-pink" />
+                  <Hash className="w-4 h-4 text-slate-400" />
                   {doc?.tracking_field}
                 </div>
                 <span className={`inline-block mt-2 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${doc?.status === 'valid' ? 'bg-pink-100 text-pink-700' : 'bg-slate-100 text-slate-600'
@@ -275,30 +274,30 @@ function DetailsModal({ doc, onClose, onShare }) {
 
 function DocumentsTable({ documents, onViewDetails, onShare, onDelete }) {
   return (
-    <div className="bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-slate-50/80 border-b border-pink-100/50 text-xs text-slate-500 uppercase tracking-wider backdrop-blur-sm sticky top-0 z-10">
-              <th className="px-6 py-4 font-bold">Document</th>
-              <th className="px-6 py-4 font-bold">Tracking ID</th>
-              <th className="px-6 py-4 font-bold">Created</th>
-              <th className="px-6 py-4 font-bold">Status</th>
-              <th className="px-6 py-4 font-bold text-right">Actions</th>
+            <tr className="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider backdrop-blur-sm sticky top-0 z-10">
+              <th className="px-6 py-4">Document</th>
+              <th className="px-6 py-4">Tracking ID</th>
+              <th className="px-6 py-4">Created</th>
+              <th className="px-6 py-4">Status</th>
+              <th className="px-6 py-4 text-right">Actions</th>
             </tr>
           </thead>
-          <tbody className="divide-y divide-pink-50">
+          <tbody className="divide-y divide-slate-100">
             {documents.map((doc) => (
               <motion.tr
                 key={doc.id}
                 initial={{ opacity: 0 }}
                 animate={{ opacity: 1 }}
-                className="hover:bg-pink-50/40 transition-colors group border-b border-slate-50 last:border-0"
+                className="hover:bg-slate-50/50 transition-colors group"
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-10 h-10 rounded-xl bg-pink-100 flex items-center justify-center text-brand-pink font-bold shrink-0">
-                      <FileText className="w-5 h-5" />
+                    <div className="w-9 h-9 rounded-lg bg-pink-50 border border-pink-100 flex items-center justify-center text-brand-pink font-bold shrink-0">
+                      <FileText className="w-4 h-4" />
                     </div>
                     <div className="font-bold text-brand-navy">{doc.document_type_name || 'Document'}</div>
                   </div>

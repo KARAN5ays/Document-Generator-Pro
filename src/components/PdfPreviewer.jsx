@@ -14,7 +14,7 @@ import {
 import API, { getBackendOrigin } from '../api/client'
 import PuckRenderer from './PuckRenderer'
 
-const THEME_OPTIONS = ['auto', 'blue', 'emerald', 'red', 'slate', 'violet', 'cyan', 'amber']
+
 
 export default function PdfPreviewer({ documentData, templates, onUpdate }) {
   const printRef = useRef(null)
@@ -83,22 +83,7 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
     pageStyle,
   })
 
-  // Theme Gradients
-  const accentGradients = {
-    slate: 'from-slate-500 to-slate-700',
-    amber: 'from-amber-500 to-amber-700',
-    emerald: 'from-emerald-500 to-emerald-700',
-    blue: 'from-blue-500 to-blue-700',
-    violet: 'from-violet-500 to-violet-700',
-    cyan: 'from-cyan-500 to-cyan-700',
-    red: 'from-red-500 to-red-700',
-  }
 
-  const effectiveAccent =
-    documentData.themeAccent && documentData.themeAccent !== 'auto'
-      ? documentData.themeAccent
-      : template?.accent
-  const gradient = accentGradients[effectiveAccent] || accentGradients.slate
 
   return (
     <motion.section
@@ -137,7 +122,7 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
                 </motion.button>
                 <motion.button
                   onClick={handleDownloadOfficial}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-navy text-white text-xs font-bold hover:bg-brand-pink transition-smooth shadow-lg shadow-brand-navy/10"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-navy text-white text-xs font-bold hover:bg-slate-800 transition-smooth shadow-sm"
                   whileHover={{ y: -1 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -149,49 +134,17 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
           </AnimatePresence>
         </div>
 
-        {/* Theme Toggles */}
-        <div className="mt-5 flex items-center gap-4 py-3 px-4 bg-slate-50/50 rounded-xl border border-slate-100 flex-wrap">
-          <div className="flex items-center gap-2 text-[10px] font-bold text-slate-400 uppercase tracking-widest border-r border-slate-200 pr-4 shrink-0">
-            <Palette className="w-3.5 h-3.5" />
-            Theme
-          </div>
-          <div className="flex flex-wrap items-center gap-2">
-            {THEME_OPTIONS.map((a) => {
-              const active = (documentData.themeAccent || 'auto') === a
-              return (
-                <motion.button
-                  key={a}
-                  type="button"
-                  onClick={() => onUpdate?.({ themeAccent: a })}
-                  whileTap={{ scale: 0.92 }}
-                  className={`relative group h-6 px-3 rounded-full text-[10px] font-bold transition-smooth uppercase tracking-tighter ${active
-                    ? 'bg-brand-pink text-white'
-                    : 'bg-white text-slate-400 border border-slate-200 hover:border-brand-pink hover:text-brand-pink'
-                    }`}
-                >
-                  {a}
-                  {active && (
-                    <motion.div
-                      layoutId="active-theme"
-                      className="absolute inset-0 bg-brand-pink rounded-full -z-10"
-                      transition={{ type: "spring", bounce: 0.2, duration: 0.6 }}
-                    />
-                  )}
-                </motion.button>
-              )
-            })}
-          </div>
-        </div>
       </div>
 
       <div className="p-6 sm:p-8 lg:p-10 flex justify-center bg-brand-soft/30 min-h-[500px]">
         <motion.div
           ref={printRef}
-          className={`w-full bg-white shadow-2xl rounded-2xl overflow-hidden print-shadow border border-slate-100/50 relative ${template?.layout === 'idcard' ? 'max-w-sm' :
-            template?.layout === 'certificate' ? 'max-w-4xl' : 'max-w-xl'
+          className={`w-full bg-white shadow-card overflow-hidden print-shadow relative ${template?.ui_config?.content ? 'rounded-none' : 'rounded-2xl border border-slate-200'
+            } ${template?.layout === 'idcard' ? 'max-w-sm' :
+              template?.layout === 'certificate' ? 'max-w-4xl' : 'max-w-xl'
             }`}
-          style={{ minHeight: template?.layout === 'certificate' ? '580px' : '450px' }}
-          whileHover={{ y: -4, shadow: "0 25px 50px -12px rgba(0, 0, 0, 0.1)" }}
+          style={{ minHeight: template?.layout === 'certificate' ? '580px' : '800px' }}
+          whileHover={{ y: -2, shadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
           transition={{ type: 'spring', stiffness: 200, damping: 25 }}
         >
           {hasValidData ? (
@@ -200,49 +153,47 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               transition={{ duration: 0.4, ease: 'easeOut' }}
-              className="p-10"
+              className={template?.ui_config?.content ? "w-full min-h-full" : "p-10"}
             >
-              <div className={`bg-gradient-to-r ${gradient} -m-10 -mb-8 p-10 rounded-t-lg relative overflow-hidden`}>
-                <div className="relative z-10 flex justify-between items-start">
-                  <div>
-                    <div className="flex items-center gap-2 text-white/70 text-[10px] font-bold uppercase tracking-widest mb-1">
-                      <Zap className="w-3 h-3 fill-white/20" />
-                      System Template
+              {!template?.ui_config?.content && (
+                <div className={`bg-slate-50 border-b border-slate-100 -m-10 -mb-8 p-10 rounded-t-lg relative overflow-hidden`}>
+                  <div className="relative z-10 flex justify-between items-start">
+                    <div>
+                      <div className="flex items-center gap-2 text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">
+                        <Zap className="w-3 h-3 text-brand-pink" />
+                        System Template
+                      </div>
+                      <h1 className="text-3xl font-black text-brand-navy tracking-tight uppercase">
+                        {template?.name || 'Document'}
+                      </h1>
                     </div>
-                    <h1 className="text-3xl font-black text-white tracking-tight uppercase">
-                      {template?.name || 'Document'}
-                    </h1>
+                    {documentData.uniqueCode && (
+                      <div className="px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-sm">
+                        <p className="text-slate-600 text-[10px] font-mono tracking-widest font-bold">
+                          # {documentData.uniqueCode}
+                        </p>
+                      </div>
+                    )}
                   </div>
-                  {documentData.uniqueCode && (
-                    <div className="px-3 py-1.5 bg-white/10 backdrop-blur-md rounded-lg border border-white/20">
-                      <p className="text-white text-[10px] font-mono tracking-widest font-bold">
-                        # {documentData.uniqueCode}
-                      </p>
-                    </div>
-                  )}
                 </div>
-                {/* Decorative sparkles */}
-                <Sparkles className="absolute top-4 right-4 text-white/10 w-24 h-24 rotate-12" />
-              </div>
+              )}
 
               {/* Layout components */}
-              <div className="pt-12">
+              <div className={template?.ui_config?.content ? "" : "pt-12"}>
                 {template?.ui_config?.content ? (
-                  <>
-                    <div className="border border-slate-100 rounded-xl overflow-hidden bg-white shadow-sm p-8">
-                      <PuckRenderer data={template.ui_config} fields={fields} />
-                    </div>
-                  </>
+                  <PuckRenderer data={template.ui_config} fields={fields} />
                 ) : template?.layout === 'certificate' ? (
                   <CertificatePreview fields={fields} template={template} documentData={documentData} formatDate={formatDate} />
                 ) : template?.layout === 'receipt' ? (
                   <ReceiptPreview fields={fields} documentData={documentData} formatDate={formatDate} formatAmount={formatAmount} />
+                ) : template?.layout === 'letter' || template?.name?.toLowerCase().includes('letter') ? (
+                  <LetterPreview fields={fields} template={template} documentData={documentData} formatDate={formatDate} />
                 ) : (
                   <DefaultPreview fields={fields} template={template} documentData={documentData} />
                 )}
               </div>
 
-              {documentData.uniqueCode && (
+              {!template?.ui_config?.content && documentData.uniqueCode && (
                 <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
                   <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
                     <ExternalLink className="w-3 h-3 text-brand-pink" />
@@ -274,27 +225,34 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
 function CertificatePreview({ fields, template, documentData, formatDate }) {
   return (
     <div className="text-center relative">
-      <div className="rounded-xl border-[12px] border-double border-slate-200 p-10 bg-white relative overflow-hidden">
-        <div className="text-xs uppercase tracking-[0.25em] text-slate-500 mb-8">Official Document of Completion</div>
-        <h2 className="text-4xl font-serif font-bold text-slate-900 mb-2">{template?.name || 'Certificate'}</h2>
-        <div className="w-24 h-1 bg-slate-200 mx-auto mb-10"></div>
+      <div className="rounded-xl border-[16px] border-double border-slate-200 p-12 bg-white relative overflow-hidden shadow-inner">
+        {/* Decorative corners */}
+        <div className="absolute top-4 left-4 w-12 h-12 border-t-2 border-l-2 border-brand-pink opacity-50"></div>
+        <div className="absolute top-4 right-4 w-12 h-12 border-t-2 border-r-2 border-brand-pink opacity-50"></div>
+        <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-brand-pink opacity-50"></div>
+        <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-brand-pink opacity-50"></div>
 
-        <div className="text-sm italic text-slate-500 mb-2">This is to certify that</div>
-        <div className="text-3xl font-serif font-bold text-slate-900 mb-4">{fields.name}</div>
-        <div className="text-slate-700 mb-2">has successfully completed the requirements for</div>
-        <div className="text-xl font-semibold text-slate-900 mb-2">{fields.courseName}</div>
+        <div className="text-sm font-bold uppercase tracking-[0.3em] text-brand-pink mb-6">Certificate of Achievement</div>
+        <h2 className="text-5xl font-serif font-black text-brand-navy mb-4 tracking-tight">{template?.name || 'Certificate'}</h2>
+
+        <div className="w-16 h-1 bg-brand-pink mx-auto mb-12"></div>
+
+        <div className="text-sm italic text-slate-500 mb-3">This is proudly presented to</div>
+        <div className="text-4xl font-serif font-bold text-slate-900 mb-6 border-b border-slate-200 inline-block pb-2 px-8">{fields.name || '[Recipient Name]'}</div>
+
+        <div className="text-slate-600 mb-2 font-medium">for successful completion of</div>
+        <div className="text-2xl font-bold text-brand-navy mb-4">{fields.courseName || '[Course Name]'}</div>
 
         {fields.grade && (
-          <div className="mt-2 text-slate-600">
-            with a grade of <span className="font-bold text-slate-900">{fields.grade}</span>
+          <div className="mt-4 text-slate-600">
+            Graduated with honors: <span className="font-bold text-brand-pink px-3 py-1 bg-pink-50 rounded-lg">{fields.grade}</span>
           </div>
         )}
 
-        <div className="mt-10 text-sm text-slate-600">Issued on <span className="font-medium text-slate-800">{formatDate(fields.date)}</span></div>
+        <div className="mt-12 text-sm text-slate-500 font-medium">Issued on <span className="text-slate-800 font-bold">{formatDate(fields.date) || '[Date]'}</span></div>
 
         {(documentData.customFields || []).length > 0 && (
-          <div className="mt-12 pt-6 border-t border-slate-100 max-w-sm mx-auto">
-            <div className="text-[10px] uppercase tracking-widest text-slate-400 mb-3">Additional Credentials</div>
+          <div className="mt-8 pt-6 max-w-sm mx-auto">
             <div className="space-y-1">
               {(documentData.customFields || []).map(cf => (
                 <div key={cf.id} className="flex justify-between text-xs px-4">
@@ -306,17 +264,19 @@ function CertificatePreview({ fields, template, documentData, formatDate }) {
           </div>
         )}
 
-        <div className="mt-16 flex justify-between items-end px-4">
-          <div className="text-center w-32 pb-4">
-            <div className="border-b border-slate-300 pb-1 mb-1 italic text-slate-400 text-[10px]">Authored Signature</div>
+        <div className="mt-16 flex justify-between items-end px-8">
+          <div className="text-center w-40">
+            <div className="border-b-2 border-slate-300 pb-2 mb-2"></div>
+            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Authorized Signature</div>
           </div>
-          <div className="relative">
-            <div className="w-16 h-16 rounded-full border-4 border-slate-100 flex items-center justify-center text-[8px] uppercase tracking-tighter text-slate-300 font-bold p-1 text-center leading-none">
-              Official<br />Verified<br />Secure
+          <div className="relative z-10">
+            <div className="w-24 h-24 rounded-full border-4 border-pink-100 bg-pink-50 flex items-center justify-center text-[10px] uppercase tracking-widest text-brand-pink font-bold p-2 text-center leading-tight shadow-sm">
+              <span className="opacity-80">Official<br />Seal of<br />Excellence</span>
             </div>
           </div>
-          <div className="text-center w-32 pb-4">
-            <div className="border-b border-slate-300 pb-1 mb-1 italic text-slate-400 text-[10px]">Official Registrar</div>
+          <div className="text-center w-40">
+            <div className="border-b-2 border-slate-300 pb-2 mb-2"></div>
+            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Date of Issuance</div>
           </div>
         </div>
       </div>
@@ -326,27 +286,41 @@ function CertificatePreview({ fields, template, documentData, formatDate }) {
 
 function ReceiptPreview({ fields, documentData, formatDate, formatAmount }) {
   return (
-    <div className="rounded-xl border border-slate-200 p-5">
-      <div className="flex justify-between text-sm">
-        <span>Customer: <strong>{fields.name}</strong></span>
-        <span>Date: <strong>{formatDate(fields.date)}</strong></span>
+    <div className="rounded-2xl border border-slate-200 bg-white p-8 w-full max-w-sm mx-auto shadow-sm relative overflow-hidden">
+      {/* Decorative top zig-zag edge (simplified) */}
+      <div className="absolute top-0 left-0 right-0 h-2 bg-[radial-gradient(circle,transparent_4px,white_4px)] bg-[length:12px_12px] -mt-1 hidden fill-slate-50"></div>
+
+      <div className="text-center mb-8 border-b border-dashed border-slate-300 pb-6">
+        <div className="w-12 h-12 bg-slate-50 border border-slate-200 text-slate-500 rounded-full flex items-center justify-center mx-auto mb-4">
+          <FileText className="w-5 h-5" />
+        </div>
+        <h3 className="text-xl font-black text-brand-navy uppercase tracking-widest mb-1">Official Receipt</h3>
+        {documentData.uniqueCode && (
+          <p className="text-xs text-slate-500 font-mono tracking-widest">#{documentData.uniqueCode}</p>
+        )}
       </div>
 
-      {fields.grade && (
-        <div className="mt-3 text-sm flex justify-between border-t border-slate-50 pt-3">
-          <span className="text-slate-500">Grade</span>
-          <span className="px-2 py-0.5 rounded-full bg-pink-50 text-pink-700 text-xs font-bold">{fields.grade}</span>
+      <div className="space-y-4 mb-8">
+        <div className="flex justify-between items-end text-sm">
+          <span className="text-slate-500 font-medium">Date</span>
+          <span className="font-bold text-slate-800">{formatDate(fields.date) || '[Date]'}</span>
         </div>
-      )}
+        <div className="flex justify-between items-end text-sm">
+          <span className="text-slate-500 font-medium">Customer</span>
+          <span className="font-bold text-slate-800 text-right">{fields.name || '[Name]'}</span>
+        </div>
+      </div>
 
-      <div className="mt-5 flex justify-between border-t pt-4">
-        <span className="text-slate-600">Total Amount</span>
-        <span className="text-lg font-bold">${formatAmount(fields.amount)}</span>
+      <div className="border-t-2 border-slate-800 pt-6 pb-2 mb-6">
+        <div className="flex justify-between items-center">
+          <span className="text-slate-600 font-black uppercase tracking-widest text-sm">Total Paid</span>
+          <span className="text-3xl font-black text-brand-navy">${formatAmount(fields.amount)}</span>
+        </div>
       </div>
 
       {(documentData.customFields || []).length > 0 && (
-        <div className="mt-6 pt-4 border-t border-slate-100 space-y-2">
-          <div className="text-[10px] uppercase font-bold text-slate-400">Additional Details</div>
+        <div className="mt-6 pt-4 border-t border-dashed border-slate-200 space-y-2">
+          <div className="text-[10px] uppercase font-bold text-slate-400 mb-2">Additional Details</div>
           {(documentData.customFields || []).map(cf => (
             <div key={cf.id} className="flex justify-between text-xs">
               <span className="text-slate-500">{cf.label}</span>
@@ -355,6 +329,67 @@ function ReceiptPreview({ fields, documentData, formatDate, formatAmount }) {
           ))}
         </div>
       )}
+
+      <div className="text-center text-xs text-slate-400 mt-8 font-medium">
+        Thank you for your business.
+      </div>
+    </div>
+  )
+}
+
+function LetterPreview({ fields, template, documentData, formatDate }) {
+  const customFields = (documentData.customFields || []).filter(cf => cf.label || cf.value)
+  return (
+    <div className="text-left font-serif leading-relaxed text-slate-800 space-y-6 max-w-2xl mx-auto px-4 py-8">
+      <div className="text-sm font-sans mb-12 text-slate-500 flex justify-between items-start border-b border-slate-200 pb-6">
+        <div>
+          <div className="font-bold text-brand-navy uppercase tracking-widest">{template?.name || 'Official Letter'}</div>
+          {documentData.uniqueCode && (
+            <div>Ref: #{documentData.uniqueCode}</div>
+          )}
+        </div>
+        <div className="text-right">
+          <div>{formatDate(fields.date) || '[Date]'}</div>
+        </div>
+      </div>
+
+      <div className="text-base">
+        <p>Dear <strong>{fields.name || '[Recipient Name]'}</strong>,</p>
+      </div>
+
+      <div className="text-base space-y-4">
+        <p>This letter is to officially confirm the details regarding the aforementioned subject. Please find the relevant information documented below.</p>
+      </div>
+
+      <div className="bg-slate-50 border-l-4 border-brand-pink p-6 my-8 space-y-3 font-sans text-sm shadow-sm">
+        {(template?.fields || []).map((def) => {
+          const val = fields[def.id]
+          if (def.id === 'name' || def.id === 'date') return null
+          return (
+            <div key={def.id} className="grid grid-cols-3 gap-4 border-b border-slate-200 last:border-0 pb-2 last:pb-0">
+              <span className="text-slate-500 font-medium col-span-1">{def.label}</span>
+              <span className="font-bold text-brand-navy col-span-2">{val || `[${def.label}]`}</span>
+            </div>
+          )
+        })}
+        {customFields.map((cf) => (
+          <div key={cf.id} className="grid grid-cols-3 gap-4 border-b border-slate-200 last:border-0 pb-2 last:pb-0">
+            <span className="text-slate-500 font-medium col-span-1">{cf.label || '—'}</span>
+            <span className="font-bold text-brand-navy col-span-2">{cf.value || '—'}</span>
+          </div>
+        ))}
+      </div>
+
+      <div className="text-base mt-8">
+        <p>Should you require any further validation, please use the reference code provided at the top of this document at our official verification portal.</p>
+      </div>
+
+      <div className="mt-16 pt-8">
+        <p className="mb-8">Sincerely,</p>
+        <div className="w-48 border-b border-slate-300 mb-2"></div>
+        <p className="font-bold text-brand-navy">Authorized Representative</p>
+        <p className="text-sm text-slate-500">Global Issuing Authority</p>
+      </div>
     </div>
   )
 }

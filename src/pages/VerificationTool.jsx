@@ -179,7 +179,7 @@ export default function VerificationTool({ initialCode = '' }) {
           </div>
           <h1 className="text-5xl sm:text-7xl font-black text-brand-navy tracking-tight leading-[1.1] mb-6">
             Verify the <br className="hidden sm:block" />
-            <span className="text-transparent bg-clip-text bg-gradient-to-r from-brand-pink via-pink-500 to-rose-400">
+            <span className="text-brand-pink">
               Unforgeable Truth.
             </span>
           </h1>
@@ -196,10 +196,9 @@ export default function VerificationTool({ initialCode = '' }) {
           className="max-w-3xl mx-auto relative z-20"
         >
           <div className="relative group">
-            {/* Glowing border effect */}
-            <div className={`absolute -inset-1 rounded-[2.5rem] blur-xl opacity-50 transition-all duration-500 ${isVerifying ? 'bg-brand-pink/40 animate-pulse' : inputCode.length === 8 ? 'bg-brand-pink/30' : 'bg-slate-300/50 group-hover:bg-brand-pink/20'}`} />
+            <div className={`absolute -inset-1 rounded-2xl blur-lg opacity-40 transition-all duration-500 ${isVerifying ? 'bg-brand-pink/20 animate-pulse' : inputCode.length === 8 ? 'bg-brand-pink/10' : 'bg-transparent'}`} />
 
-            <div className="relative bg-white/90 backdrop-blur-2xl border border-slate-200/50 rounded-[2rem] p-4 sm:p-6 shadow-2xl shadow-slate-200/50 flex flex-col sm:flex-row items-center gap-4">
+            <div className="relative bg-white border border-slate-200 rounded-2xl p-4 sm:p-6 shadow-sm flex flex-col sm:flex-row items-center gap-4">
               <div className="relative flex-1 w-full flex items-center">
                 <Search className={`absolute left-6 w-8 h-8 transition-colors duration-500 ${isVerifying ? 'text-brand-pink animate-pulse' : 'text-slate-400 group-focus-within:text-brand-pink'}`} />
                 <input
@@ -223,7 +222,7 @@ export default function VerificationTool({ initialCode = '' }) {
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
                       exit={{ opacity: 0, scale: 0.8 }}
-                      className="flex items-center gap-3 px-6 py-4 rounded-xl bg-brand-pink/10 border border-brand-pink/20 text-brand-pink font-bold"
+                      className="flex items-center gap-3 px-6 py-4 rounded-xl bg-pink-50 border border-pink-100 text-brand-pink font-bold"
                     >
                       <Loader2 className="w-6 h-6 animate-spin" />
                       <span className="tracking-widest uppercase">Scanning Ledger</span>
@@ -233,7 +232,7 @@ export default function VerificationTool({ initialCode = '' }) {
                       key="ready"
                       initial={{ opacity: 0, scale: 0.8 }}
                       animate={{ opacity: 1, scale: 1 }}
-                      className="flex items-center justify-center w-16 h-16 rounded-full bg-gradient-to-br from-brand-pink to-pink-600 shadow-[0_0_30px_rgba(236,72,153,0.4)]"
+                      className="flex items-center justify-center w-16 h-16 rounded-xl bg-brand-pink shadow-sm"
                     >
                       <CheckCircle2 className="w-8 h-8 text-white" />
                     </motion.div>
@@ -242,7 +241,7 @@ export default function VerificationTool({ initialCode = '' }) {
                       key="counter"
                       initial={{ opacity: 0 }}
                       animate={{ opacity: 1 }}
-                      className="px-6 py-3 rounded-xl bg-slate-100 border border-slate-200 font-mono text-xl font-bold text-slate-400"
+                      className="px-6 py-3 rounded-xl bg-slate-50 border border-slate-200 font-mono text-xl font-bold text-slate-400"
                     >
                       {inputCode.length}/8
                     </motion.div>
@@ -258,7 +257,7 @@ export default function VerificationTool({ initialCode = '' }) {
                 initial={{ opacity: 0, y: -20, height: 0 }}
                 animate={{ opacity: 1, y: 0, height: 'auto' }}
                 exit={{ opacity: 0, y: -20, height: 0 }}
-                className="mt-6 flex items-center justify-center gap-3 text-red-600 bg-red-50 border border-red-100 py-4 px-6 rounded-2xl mx-10 backdrop-blur-md shadow-sm"
+                className="mt-6 flex items-center justify-center gap-3 text-red-600 bg-red-50 border border-red-100 py-4 px-6 rounded-2xl mx-10 shadow-sm"
               >
                 <AlertCircle className="w-6 h-6" />
                 <span className="font-bold tracking-wide">{errorMessage}</span>
@@ -279,16 +278,16 @@ export default function VerificationTool({ initialCode = '' }) {
               className="mt-16 relative z-10"
             >
               {verificationResult.valid ? (
-                <div className="relative group rounded-[2.5rem] overflow-hidden bg-white/80 backdrop-blur-3xl border border-slate-200 shadow-[0_30px_100px_-20px_rgba(236,72,153,0.15)]">
+                <div className="relative group rounded-2xl overflow-hidden bg-white border border-slate-200 shadow-sm">
                   {/* Glowing certificate background */}
-                  <div className="absolute top-0 right-0 w-full h-[500px] bg-gradient-to-br from-brand-pink/10 via-rose-400/5 to-transparent blur-3xl pointer-events-none" />
+                  <div className="absolute top-0 right-0 w-full h-[500px] bg-brand-soft/30 pointer-events-none" />
 
                   <div className="p-8 sm:p-16 relative z-10">
                     <div className="flex flex-col items-center mb-12 text-center">
                       <div className="relative w-28 h-28 mb-8">
-                        <div className="absolute inset-0 bg-brand-pink rounded-full blur-2xl opacity-30 animate-pulse" />
-                        <div className="relative w-full h-full rounded-full bg-gradient-to-b from-brand-pink to-pink-600 p-[2px]">
-                          <div className="w-full h-full rounded-full bg-white flex items-center justify-center border-4 border-pink-100">
+                        <div className="absolute inset-0 bg-brand-pink rounded-full blur-xl opacity-10 animate-pulse" />
+                        <div className="relative w-full h-full rounded-2xl bg-brand-pink p-[2px]">
+                          <div className="w-full h-full rounded-2xl bg-white flex items-center justify-center">
                             <ShieldCheck className="w-12 h-12 text-brand-pink" />
                           </div>
                         </div>
@@ -300,7 +299,7 @@ export default function VerificationTool({ initialCode = '' }) {
                     </div>
 
                     <div className="grid grid-cols-1 lg:grid-cols-2 gap-8 lg:gap-12">
-                      <div className="bg-slate-50/80 rounded-[2rem] p-8 border border-slate-100 backdrop-blur-md shadow-sm">
+                      <div className="bg-slate-50 rounded-2xl p-8 border border-slate-200 shadow-sm">
                         <div className="space-y-8">
                           <div>
                             <p className="text-xs font-black text-slate-400 uppercase tracking-[0.2em] mb-3 flex items-center gap-2">
@@ -320,7 +319,7 @@ export default function VerificationTool({ initialCode = '' }) {
                         </div>
                       </div>
 
-                      <div className="bg-white rounded-[2rem] p-8 border border-slate-100 shadow-sm relative overflow-hidden">
+                      <div className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm relative overflow-hidden">
                         <div className="absolute -right-8 -bottom-8 opacity-[0.03] text-brand-navy">
                           <Fingerprint className="w-48 h-48" />
                         </div>
@@ -359,13 +358,13 @@ export default function VerificationTool({ initialCode = '' }) {
                   </div>
                 </div>
               ) : (
-                <div className="p-16 text-center bg-white/90 backdrop-blur-2xl rounded-[2.5rem] border border-red-100 shadow-2xl shadow-red-500/10 relative overflow-hidden">
+                <div className="p-16 text-center bg-white rounded-2xl border border-red-200 shadow-sm relative overflow-hidden">
                   <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[300px] h-[300px] bg-red-50 rounded-full blur-[80px] pointer-events-none" />
 
                   <motion.div
                     initial={{ scale: 0 }}
                     animate={{ scale: 1 }}
-                    className="w-28 h-28 bg-red-50 rounded-full flex items-center justify-center mx-auto mb-8 border-4 border-red-100"
+                    className="w-28 h-28 bg-red-50 rounded-2xl flex items-center justify-center mx-auto mb-8 border border-red-100"
                   >
                     <AlertCircle className="w-12 h-12 text-red-500" />
                   </motion.div>
@@ -375,7 +374,7 @@ export default function VerificationTool({ initialCode = '' }) {
                   </p>
                   <button
                     onClick={handleReset}
-                    className="px-8 py-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-black text-sm tracking-widest rounded-full transition-all flex items-center gap-3 mx-auto uppercase hover:scale-105"
+                    className="px-8 py-4 bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-black text-sm tracking-widest rounded-xl transition-all flex items-center gap-3 mx-auto uppercase hover:scale-105"
                   >
                     <RefreshCw className="w-4 h-4" />
                     Reset Scanner
@@ -432,8 +431,8 @@ export default function VerificationTool({ initialCode = '' }) {
               )}
 
               <div className="mt-16 text-center">
-                <div className="inline-flex items-center gap-4 px-8 py-4 rounded-[2rem] bg-white border border-slate-200 shadow-xl shadow-brand-pink/5">
-                  <div className="w-3 h-3 rounded-full bg-brand-pink animate-[pulse_2s_ease-in-out_infinite] shadow-[0_0_15px_rgba(236,72,153,0.6)]" />
+                <div className="inline-flex items-center gap-4 px-8 py-4 rounded-2xl bg-white border border-slate-200 shadow-sm">
+                  <div className="w-3 h-3 rounded-full bg-brand-pink" />
                   <p className="text-sm font-black tracking-widest uppercase text-slate-500">
                     <span className="text-brand-navy text-lg mr-2">{stats.total_verified.toLocaleString()}</span>
                     Records Secured
@@ -449,10 +448,9 @@ export default function VerificationTool({ initialCode = '' }) {
                 { icon: Lock, title: "Cryptographic Hashing", desc: "Every document is hashed using AES-256 protocols, making forged replicas mathematically impossible." },
                 { icon: Database, title: "Immutable Ledger", desc: "Issued documents are permanently recorded in an append-only structure that cannot be altered or deleted." }
               ].map((feature, i) => (
-                <div key={i} className="bg-white/80 backdrop-blur-md rounded-[2rem] p-8 border border-slate-200 shadow-sm relative overflow-hidden flex flex-col items-center text-center group hover:-translate-y-2 hover:shadow-xl transition-all duration-500">
-                  <div className="absolute top-0 right-0 w-32 h-32 bg-brand-pink/10 rounded-full blur-[30px] -translate-y-1/2 translate-x-1/2 group-hover:bg-brand-pink/20 transition-colors" />
-                  <div className="w-16 h-16 rounded-2xl bg-brand-soft border border-brand-pink/20 flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 group-hover:bg-brand-pink/10 transition-all duration-500">
-                    <feature.icon className="w-8 h-8 text-brand-pink opacity-80 group-hover:opacity-100" />
+                <div key={i} className="bg-white rounded-2xl p-8 border border-slate-200 shadow-sm relative overflow-hidden flex flex-col items-center text-center group hover:-translate-y-1 transition-all">
+                  <div className="w-16 h-16 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center mb-6 shadow-sm group-hover:scale-110 transition-all">
+                    <feature.icon className="w-8 h-8 text-brand-pink" />
                   </div>
                   <h3 className="text-xl font-bold text-brand-navy mb-4">{feature.title}</h3>
                   <p className="text-slate-500 leading-relaxed text-sm">

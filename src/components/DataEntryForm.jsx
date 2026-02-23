@@ -181,20 +181,20 @@ function SectionCard({ step, icon: Icon, title, description, children, accent = 
     <motion.div
       initial={{ opacity: 0, y: 8 }}
       animate={{ opacity: 1, y: 0 }}
-      className={`rounded-2xl border overflow-hidden ${accent ? 'border-pink-100 bg-pink-50/30' : 'border-slate-100 bg-white'}`}
+      className={`rounded-2xl border ${accent ? 'border-pink-200 bg-pink-50/50' : 'border-slate-200 bg-white'}`}
     >
-      <div className={`px-5 py-4 flex items-center gap-3 border-b ${accent ? 'border-pink-100 bg-pink-50/50' : 'border-slate-100 bg-slate-50/60'}`}>
+      <div className={`px-5 py-4 flex items-center gap-3 border-b ${accent ? 'border-pink-200 bg-pink-50' : 'border-slate-100 bg-slate-50'}`}>
         {step && (
           <span className="w-6 h-6 rounded-full bg-brand-pink text-white flex items-center justify-center text-[11px] font-black shrink-0">
             {step}
           </span>
         )}
-        <div className={`p-1.5 rounded-lg ${accent ? 'bg-pink-100' : 'bg-slate-100'}`}>
+        <div className={`p-1.5 rounded-lg ${accent ? 'bg-pink-100' : 'bg-white border border-slate-200 shadow-sm'}`}>
           <Icon className={`w-4 h-4 ${accent ? 'text-brand-pink' : 'text-slate-500'}`} />
         </div>
         <div className="flex-1 min-w-0">
           <h3 className="text-sm font-bold text-brand-navy">{title}</h3>
-          {description && <p className="text-[11px] text-slate-400 mt-0.5">{description}</p>}
+          {description && <p className="text-[11px] text-slate-500 mt-0.5">{description}</p>}
         </div>
       </div>
       <div className="p-5">
@@ -403,14 +403,14 @@ export default function DataEntryForm({
       </AnimatePresence>
 
       {/* Header */}
-      <div className="px-6 sm:px-8 py-5 border-b border-slate-100 bg-gradient-to-r from-white to-pink-50/30">
+      <div className="px-6 sm:px-8 py-5 border-b border-slate-200 bg-white">
         <div className="flex items-start gap-4">
-          <div className="w-11 h-11 rounded-xl bg-gradient-to-br from-brand-pink to-pink-600 flex items-center justify-center shadow-lg shadow-brand-pink/20 shrink-0">
-            <PenLine className="w-5 h-5 text-white" />
+          <div className="w-11 h-11 rounded-xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0">
+            <PenLine className="w-5 h-5 text-slate-600" />
           </div>
           <div>
             <h2 className="text-xl font-black text-brand-navy tracking-tight">Create Document</h2>
-            <p className="text-sm text-slate-400 mt-0.5">Fill in the details to generate your document</p>
+            <p className="text-sm text-slate-500 mt-0.5">Fill in the details to generate your document</p>
           </div>
         </div>
       </div>
@@ -659,11 +659,11 @@ export default function DataEntryForm({
         <motion.button
           type="submit"
           disabled={isGenerating}
-          className={`w-full h-14 rounded-2xl text-white font-bold tracking-wide text-sm transition-all shadow-lg relative overflow-hidden ${isGenerating
-            ? 'bg-slate-200 cursor-not-allowed shadow-none text-slate-400'
-            : 'bg-gradient-to-r from-brand-navy to-brand-pink hover:shadow-xl hover:shadow-brand-pink/20'
+          className={`w-full h-14 rounded-xl text-white font-bold tracking-wide text-sm transition-all shadow-sm ${isGenerating
+            ? 'bg-slate-200 cursor-not-allowed text-slate-400 border border-slate-300'
+            : 'bg-brand-navy hover:bg-slate-800 border border-brand-navy'
             }`}
-          whileHover={!isGenerating ? { y: -2 } : {}}
+          whileHover={!isGenerating ? { y: -1 } : {}}
           whileTap={!isGenerating ? { scale: 0.99 } : {}}
         >
           {isGenerating ? (

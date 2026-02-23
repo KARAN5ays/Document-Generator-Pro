@@ -12,26 +12,26 @@ export default {
       },
       colors: {
         brand: {
-          navy: '#0F172A',
-          pink: '#EC4899',
-          'pink-light': '#F9A8D4',
-          'pink-dark': '#BE185D',
-          slate: '#334155',
-          soft: '#F8FAFC',
+          navy: '#1e293b', // Lighter navy (slate-800) for better contrast on white
+          pink: '#e11d48', // The exact dev.8peaks.cloud pink (rose-600)
+          'pink-light': '#fda4af',
+          'pink-dark': '#be123c',
+          slate: '#475569',
+          soft: '#f8fafc',
         }
       },
       borderRadius: {
-        'card': '1.25rem',
-        'card-lg': '1.5rem',
+        'card': '0.75rem', // Tighter, enterprise-style rounding
+        'card-lg': '1rem',
       },
       boxShadow: {
-        'card': '0 4px 6px -1px rgb(0 0 0 / 0.05), 0 2px 4px -2px rgb(0 0 0 / 0.05)',
-        'card-hover': '0 10px 15px -3px rgb(0 0 0 / 0.08), 0 4px 6px -4px rgb(0 0 0 / 0.05)',
-        'elevated': '0 25px 50px -12px rgb(0 0 0 / 0.12)',
+        'card': '0 1px 3px 0 rgb(0 0 0 / 0.1), 0 1px 2px -1px rgb(0 0 0 / 0.1)', // Flatter shadow
+        'card-hover': '0 4px 6px -1px rgb(0 0 0 / 0.1), 0 2px 4px -2px rgb(0 0 0 / 0.1)',
+        'elevated': '0 10px 15px -3px rgb(0 0 0 / 0.1), 0 4px 6px -4px rgb(0 0 0 / 0.1)',
       },
       spacing: {
-        'page': '1.5rem',   // 24px - base page padding
-        'section': '1.5rem', // section vertical spacing
+        'page': '1.5rem',
+        'section': '1.5rem',
       }
     },
   },

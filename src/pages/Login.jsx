@@ -1,9 +1,10 @@
 import { useState } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
-import { Lock, User, Shield, ArrowRight, Loader2, AlertCircle, FileText, CheckCircle2 } from 'lucide-react'
+import { Lock, User, Shield, ArrowRight, Loader2, AlertCircle, FileText, CheckCircle2, Search } from 'lucide-react'
 import API from '../api/client'
 
 export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify }) {
+    const [verifyCode, setVerifyCode] = useState('')
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
     const [error, setError] = useState('')
@@ -69,6 +70,44 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                                 </motion.div>
                             ))}
                         </div>
+
+                        {/* Verification Input in Left Panel */}
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ delay: 0.5, duration: 0.5 }}
+                            className="mt-16"
+                        >
+                            <label className="block text-sm font-bold text-slate-300 uppercase tracking-widest mb-3">
+                                Verify a Document
+                            </label>
+                            <div className="relative group max-w-sm">
+                                <div className="absolute -inset-1 bg-gradient-to-r from-brand-pink to-pink-600 rounded-xl blur opacity-20 group-hover:opacity-40 transition duration-500"></div>
+                                <div className="relative flex items-center bg-brand-navy/50 backdrop-blur-sm border border-slate-700 rounded-xl p-1">
+                                    <Search className="absolute left-4 w-5 h-5 text-slate-400 group-focus-within:text-brand-pink transition-colors" />
+                                    <input
+                                        type="text"
+                                        placeholder="ENTER 8-DIGIT CODE"
+                                        value={verifyCode}
+                                        onChange={(e) => setVerifyCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8))}
+                                        className="w-full bg-transparent text-white placeholder-slate-500 font-mono font-bold tracking-widest pl-12 pr-4 py-3 outline-none"
+                                        spellCheck={false}
+                                        autoComplete="off"
+                                    />
+                                    <button
+                                        onClick={() => {
+                                            if (verifyCode.length === 8) {
+                                                onSwitchToVerify(verifyCode)
+                                            }
+                                        }}
+                                        disabled={verifyCode.length < 8}
+                                        className="absolute right-2 px-4 py-2 bg-brand-pink hover:bg-pink-600 disabled:bg-slate-700 disabled:text-slate-400 text-white text-xs font-bold rounded-lg transition-all"
+                                    >
+                                        Verify
+                                    </button>
+                                </div>
+                            </div>
+                        </motion.div>
                     </motion.div>
                 </div>
             </div>
@@ -188,23 +227,6 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                                     </button>
                                 </p>
                             </motion.div>
-                        </div>
-
-                        {/* New Public Verification CTA bottom banner */}
-                        <div className="bg-slate-50 border-t border-slate-100 p-6 flex flex-col items-center justify-center text-center">
-                            <div className="w-12 h-12 bg-white rounded-full shadow-sm flex items-center justify-center mb-3">
-                                <Shield className="w-6 h-6 text-emerald-500" />
-                            </div>
-                            <h3 className="text-slate-800 font-bold mb-1">Have a document to verify?</h3>
-                            <p className="text-slate-500 text-sm mb-4">You do not need an account to verify authentic documents.</p>
-
-                            <button
-                                onClick={onSwitchToVerify}
-                                className="px-6 py-2.5 bg-white border-2 border-slate-200 text-slate-700 font-bold text-sm rounded-xl hover:border-emerald-500 hover:text-emerald-600 transition-all flex items-center gap-2 group"
-                            >
-                                Verify a Document
-                                <ArrowRight className="w-4 h-4 group-hover:translate-x-1 transition-transform" />
-                            </button>
                         </div>
                     </div>
                 </motion.div>

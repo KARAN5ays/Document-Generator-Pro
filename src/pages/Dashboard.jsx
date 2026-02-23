@@ -149,30 +149,29 @@ export default function Dashboard({ onNavigate }) {
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="relative overflow-hidden rounded-3xl bg-brand-navy p-8 text-white shadow-2xl shadow-brand-navy/20 group"
+                className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8"
             >
-                <div className="absolute top-0 right-0 w-[500px] h-[500px] bg-brand-pink/20 rounded-full blur-3xl -translate-y-1/2 translate-x-1/3 pointer-events-none transition-transform duration-700 group-hover:scale-110" />
-                <div className="absolute bottom-0 left-0 w-64 h-64 bg-cyan-500/10 rounded-full blur-3xl translate-y-1/3 -translate-x-1/3 pointer-events-none transition-transform duration-700 group-hover:scale-125" />
-
-                <div className="relative z-10 flex flex-col md:flex-row md:items-center justify-between gap-6">
+                <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
-                        <div className="flex items-center gap-2 mb-3">
-                            <span className="px-3 py-1 rounded-full bg-white/10 text-xs font-semibold backdrop-blur-sm border border-white/10 flex items-center gap-1.5">
-                                <Sparkles className="w-3 h-3 text-brand-pink" />
+                        <div className="flex items-center gap-2 mb-2">
+                            <span className="text-xs font-semibold text-brand-pink flex items-center gap-1.5 uppercase tracking-wider">
+                                <Sparkles className="w-3.5 h-3.5" />
                                 {getGreeting()}
                             </span>
                         </div>
-                        <h1 className="text-3xl md:text-4xl font-bold tracking-tight mb-2">Welcome Back</h1>
-                        <p className="text-slate-300 max-w-lg text-lg">
+                        <h1 className="text-2xl md:text-3xl font-black text-brand-navy tracking-tight mb-2">
+                            Welcome Back, {localStorage.getItem('username') || 'User'}
+                        </h1>
+                        <p className="text-slate-500 max-w-lg text-sm font-medium">
                             Ready to create something amazing today? Your document suite is ready.
                         </p>
                     </div>
-                    <div className="flex items-center gap-3">
+                    <div className="flex flex-shrink-0">
                         <button
                             onClick={() => onNavigate?.('generate')}
-                            className="bg-brand-pink hover:bg-pink-600 text-white px-6 py-3 rounded-xl font-semibold shadow-lg shadow-brand-pink/25 transition-all flex items-center gap-2"
+                            className="bg-brand-pink hover:bg-pink-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all flex items-center gap-2"
                         >
-                            <FilePlus className="w-5 h-5" />
+                            <FilePlus className="w-4 h-4" />
                             Create New
                         </button>
                     </div>
@@ -187,16 +186,13 @@ export default function Dashboard({ onNavigate }) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.08 }}
-                        className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-lg hover:shadow-slate-200/50 hover:border-slate-300 hover:-translate-y-1 transition-all duration-300 group cursor-default"
+                        className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 group cursor-default"
                     >
                         <div className="flex justify-between items-start mb-4">
-                            <div className={`p-3 rounded-xl ${stat.bg} ${stat.color} group-hover:scale-110 transition-transform duration-300 shadow-sm`}>
-                                <stat.icon className="w-6 h-6" />
-                            </div>
-                            {i === 0 && <span className="flex h-2 w-2 rounded-full bg-emerald-500 ring-4 ring-emerald-50 mt-1.5 animate-pulse" />}
+                            <div className="text-sm font-semibold text-slate-500 transition-colors">{stat.label}</div>
+                            {i === 0 && <span className="flex h-2 w-2 rounded-full bg-emerald-500 ring-4 ring-emerald-50 mt-1 animate-pulse" />}
                         </div>
-                        <div className="text-3xl font-bold text-brand-navy mb-0.5 tabular-nums tracking-tight">{(stat.value || 0).toLocaleString()}</div>
-                        <div className="text-sm font-medium text-slate-500 group-hover:text-slate-600 transition-colors">{stat.label}</div>
+                        <div className="text-3xl font-black text-brand-navy tabular-nums tracking-tight">{(stat.value || 0).toLocaleString()}</div>
                     </motion.div>
                 ))}
             </div>
@@ -294,42 +290,40 @@ export default function Dashboard({ onNavigate }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.25 }}
-                    className="bg-gradient-to-br from-slate-900 to-brand-navy text-white p-6 rounded-2xl shadow-sm flex flex-col"
+                    className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col"
                 >
-                    <div className="flex items-center gap-3 mb-6">
-                        <div className="p-2.5 bg-white/10 rounded-xl">
-                            <Server className="w-5 h-5 text-emerald-400" />
-                        </div>
-                        <div>
-                            <h3 className="font-bold">System Status</h3>
-                            <p className="text-xs text-white/50">Real-time infrastructure metrics</p>
-                        </div>
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-bold text-brand-navy flex items-center gap-2">
+                            <Server className="w-5 h-5 text-emerald-500" />
+                            System Status
+                        </h3>
+                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Metrics</span>
                     </div>
 
-                    <div className="space-y-4 flex-1">
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                    <div className="space-y-3 flex-1">
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
                             <div className="flex items-center gap-3">
                                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-sm font-medium text-white/90">API Gateway</span>
+                                <span className="text-sm font-semibold text-slate-700">API Gateway</span>
                             </div>
                             <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                         </div>
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
                             <div className="flex items-center gap-3">
                                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-sm font-medium text-white/90">Database</span>
+                                <span className="text-sm font-semibold text-slate-700">Database</span>
                             </div>
                             <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                         </div>
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-white/5 border border-white/5">
+                        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
                             <div className="flex items-center gap-3">
                                 <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-sm font-medium text-white/90">Verification Node</span>
+                                <span className="text-sm font-semibold text-slate-700">Verification Node</span>
                             </div>
                             <CheckCircle2 className="w-4 h-4 text-emerald-500" />
                         </div>
                     </div>
-                    <div className="mt-6 text-xs text-center text-white/40 font-mono">
+                    <div className="mt-4 text-[11px] text-center text-slate-400 font-mono font-medium">
                         Last check: {new Date().toLocaleTimeString()}
                     </div>
                 </motion.div>

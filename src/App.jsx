@@ -201,7 +201,7 @@ export default function App() {
               transition={{ duration: 0.3 }}
               className="mt-8"
             >
-              <VerificationTool initialCode="" />
+              <VerificationTool initialCode={verifyPreFillCode} />
             </motion.div>
           </div>
         </ErrorBoundary>
@@ -212,7 +212,10 @@ export default function App() {
       <Login
         onLogin={handleLogin}
         onSwitchToRegister={() => setAuthView('register')}
-        onSwitchToVerify={() => setAuthView('publicVerify')}
+        onSwitchToVerify={(code) => {
+          setVerifyPreFillCode(code || '')
+          setAuthView('publicVerify')
+        }}
       />
     ) : (
       <Register
