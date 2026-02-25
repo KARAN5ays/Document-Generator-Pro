@@ -51,7 +51,7 @@ import { extractFieldsFromHTML } from '../utils/templateFields'
 
 const ckStyles = `
   .ck-editor__editable_inline {
-    min-height: 400px;
+    min-height: 900px;
     padding: 0 1rem !important;
   }
   .ck-editor {
@@ -317,15 +317,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
               <p className="text-sm text-slate-400">
                 {search ? 'Try a different name.' : 'Click "+ Add Template" to design your first template.'}
               </p>
-              {!search && (
-                <button
-                  onClick={openCreate}
-                  className="mt-3 flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-pink text-white font-bold text-sm shadow-lg shadow-brand-pink/20 hover:bg-pink-600 transition-all"
-                >
-                  <Plus className="w-4 h-4" />
-                  Add Template
-                </button>
-              )}
+
             </div>
           ) : (
             <div className="overflow-x-auto">
@@ -424,7 +416,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-[1200px] mx-auto pb-20 px-0"
+      className="max-w-full mx-auto pb-20 px-0"
     >
 
       <style dangerouslySetInnerHTML={{ __html: ckStyles }} />
@@ -499,12 +491,12 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
         </label>
 
         {editLoading ? (
-          <div className="h-[400px] bg-slate-50/50 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-4">
+          <div className="h-[900px] bg-slate-50/50 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-4">
             <Loader2 className="w-8 h-8 animate-spin text-brand-pink" />
             <p className="text-sm font-semibold text-slate-600">Loading editor...</p>
           </div>
         ) : (
-          <div className="ckeditor-wrapper border border-slate-200 rounded-xl overflow-hidden min-h-[400px]">
+          <div className="ckeditor-wrapper border border-slate-200 rounded-xl overflow-hidden min-h-[900px]">
             <CKEditor
               onReady={(editor) => {
                 console.log('CKEditor is ready!', editor)
