@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import DataEntryForm from './components/DataEntryForm'
-import { extractFieldsFromHTML } from './utils/puckFields'
+import { extractFieldsFromHTML } from './utils/templateFields'
 import PdfPreviewer from './components/PdfPreviewer'
 import VerificationTool from './pages/VerificationTool'
 import Sidebar from './components/Sidebar'
@@ -153,7 +153,7 @@ export default function App() {
       const response = await API.get('document-types/', config)
       const data = response.data.map(t => ({
         ...t,
-        fields: getFieldsForTemplate(t) // fields_schema or derived from ui_config
+        fields: getFieldsForTemplate(t) // fields_schema
       }))
       setTemplates(data)
       if (data.length > 0) {

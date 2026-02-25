@@ -47,7 +47,7 @@ import {
 } from 'ckeditor5'
 import 'ckeditor5/ckeditor5.css'
 import API from '../api/client'
-import { extractFieldsFromHTML } from '../utils/puckFields'
+import { extractFieldsFromHTML } from '../utils/templateFields'
 
 const ckStyles = `
   .ck-editor__editable_inline {
@@ -217,7 +217,6 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
         name,
         fields_schema: extractedFields,
         template_html: templateHtml,
-        ui_config: {},
         template_file: config.default_template_file || 'backendapp/base_universal_template.html',
       }
       const headers = { Authorization: `Bearer ${token}` }

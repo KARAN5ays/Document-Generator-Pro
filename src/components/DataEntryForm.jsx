@@ -18,7 +18,7 @@ import {
   ListPlus,
 } from 'lucide-react'
 import API from '../api/client'
-import { extractDynamicFields } from '../utils/puckFields'
+import { extractDynamicFields } from '../utils/templateFields'
 
 // ─── Table Editor ─────────────────────────────────────────────────────────────
 
@@ -223,7 +223,10 @@ export default function DataEntryForm({
     templates.find((t) => t.id === documentData.templateId) || templates[0] || null
 
   const allTemplateFields = selectedTemplate?.fields || selectedTemplate?.fields_schema || []
-  const hasDynamicHtmlFields = allTemplateFields.some((f) => !!f.isDynamicHtmlField) || !!selectedTemplate?.template_html
+  // Frontend-only detection: system templates start with '{%' (Django tags), custom ones have clean HTML
+  const isDjangoTemplate = selectedTemplate?.template_html?.trimStart().startsWith('{%')
+  const isCKEditorTemplate = !!selectedTemplate?.template_html && !isDjangoTemplate
+  const hasDynamicHtmlFields = isCKEditorTemplate && (allTemplateFields.some((f) => !!f.isDynamicHtmlField) || !!selectedTemplate?.template_html)
 
   const userFields = (() => {
     if (!selectedTemplate) return []

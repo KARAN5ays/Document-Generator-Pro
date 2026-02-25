@@ -12,7 +12,7 @@ import {
   FileText
 } from 'lucide-react'
 import API, { getBackendOrigin } from '../api/client'
-import { injectFieldsIntoHTML } from '../utils/puckFields'
+import { injectFieldsIntoHTML } from '../utils/templateFields'
 
 
 
@@ -22,6 +22,12 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
   const template =
     templates?.find((t) => t.id === documentData.templateId) || templates?.[0] || null
   const fields = documentData.fields || {}
+
+  // Detect custom (CKEditor) templates purely on the frontend:
+  // System templates always start with Django tags `{%` in their template_html.
+  // Custom templates have clean HTML (no Django tags).
+  const isDjangoTemplate = template?.template_html?.trimStart().startsWith('{%')
+  const isCKEditorTemplate = !!template?.template_html && !isDjangoTemplate
 
   // Always show preview when a template is selected.
   // This ensures custom fields (and partial fills) are visible in real-time.
@@ -133,93 +139,99 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
             )}
           </AnimatePresence>
         </div>
-
       </div>
 
+
       <div className="p-6 sm:p-8 lg:p-10 flex justify-center bg-brand-soft/30 min-h-[500px]">
-        <motion.div
-          ref={printRef}
-          className={`w-full bg-white shadow-card overflow-hidden print-shadow relative ${template?.template_html ? 'rounded-none' : 'rounded-2xl border border-slate-200'
-            } ${template?.layout === 'idcard' ? 'max-w-sm' :
-              template?.layout === 'certificate' ? 'max-w-4xl' : 'max-w-xl'
-            }`}
-          style={{ minHeight: template?.layout === 'certificate' ? '580px' : '800px' }}
-          whileHover={{ y: -2, shadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
-          transition={{ type: 'spring', stiffness: 200, damping: 25 }}
-        >
-          {hasValidData ? (
+        {(() => {
+          return (
             <motion.div
-              key={`${documentData.templateId || 'template'}-${documentData.uniqueCode || 'preview'}`}
-              initial={{ opacity: 0, y: 10 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{ duration: 0.4, ease: 'easeOut' }}
-              className={template?.template_html ? "w-full min-h-full" : "p-10"}
+              ref={printRef}
+              className={`w-full bg-white shadow-card overflow-hidden print-shadow relative rounded-2xl border border-slate-200
+                ${template?.layout === 'idcard' ? 'max-w-sm' :
+                  template?.layout === 'certificate' ? 'max-w-4xl' : 'max-w-xl'
+                }`}
+              style={{ minHeight: template?.layout === 'certificate' ? '580px' : '800px' }}
+              whileHover={{ y: -2, shadow: "0 10px 15px -3px rgba(0, 0, 0, 0.1)" }}
+              transition={{ type: 'spring', stiffness: 200, damping: 25 }}
             >
-              {!template?.template_html && (
-                <div className={`bg-slate-50 border-b border-slate-100 -m-10 -mb-8 p-10 rounded-t-lg relative overflow-hidden`}>
-                  <div className="relative z-10 flex justify-between items-start">
-                    <div>
-                      <div className="flex items-center gap-2 text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">
-                        <Zap className="w-3 h-3 text-brand-pink" />
-                        System Template
+              {hasValidData ? (
+                <motion.div
+                  key={`${documentData.templateId || 'template'}-${documentData.uniqueCode || 'preview'}`}
+                  initial={{ opacity: 0, y: 10 }}
+                  animate={{ opacity: 1, y: 0 }}
+                  transition={{ duration: 0.4, ease: 'easeOut' }}
+                  className="p-10"
+                >
+                  {/* Inner content: custom templates render exact CKEditor HTML; system templates use layout components */}
+                  {isCKEditorTemplate ? (
+                    <div
+                      dangerouslySetInnerHTML={{ __html: injectFieldsIntoHTML(template?.template_html || '', fields) }}
+                    />
+                  ) : (
+                    <>
+                      <div className={`bg-slate-50 border-b border-slate-100 -m-10 -mb-8 p-10 rounded-t-lg relative overflow-hidden`}>
+                        <div className="relative z-10 flex justify-between items-start">
+                          <div>
+                            <div className="flex items-center gap-2 text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">
+                              <Zap className="w-3 h-3 text-brand-pink" />
+                              System Template
+                            </div>
+                            <h1 className="text-3xl font-black text-brand-navy tracking-tight uppercase">
+                              {template?.name || 'Document'}
+                            </h1>
+                          </div>
+                          {documentData.uniqueCode && (
+                            <div className="px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-sm">
+                              <p className="text-slate-600 text-[10px] font-mono tracking-widest font-bold">
+                                # {documentData.uniqueCode}
+                              </p>
+                            </div>
+                          )}
+                        </div>
                       </div>
-                      <h1 className="text-3xl font-black text-brand-navy tracking-tight uppercase">
-                        {template?.name || 'Document'}
-                      </h1>
-                    </div>
-                    {documentData.uniqueCode && (
-                      <div className="px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-sm">
-                        <p className="text-slate-600 text-[10px] font-mono tracking-widest font-bold">
-                          # {documentData.uniqueCode}
-                        </p>
+
+                      {/* Layout components */}
+                      <div className="pt-12">
+                        {template?.layout === 'certificate' ? (
+                          <CertificatePreview fields={fields} template={template} documentData={documentData} formatDate={formatDate} />
+                        ) : template?.layout === 'receipt' ? (
+                          <ReceiptPreview fields={fields} documentData={documentData} formatDate={formatDate} formatAmount={formatAmount} />
+                        ) : template?.layout === 'letter' || template?.name?.toLowerCase().includes('letter') ? (
+                          <LetterPreview fields={fields} template={template} documentData={documentData} formatDate={formatDate} />
+                        ) : (
+                          <DefaultPreview fields={fields} template={template} documentData={documentData} />
+                        )}
                       </div>
-                    )}
-                  </div>
-                </div>
-              )}
 
-              {/* Layout components */}
-              <div className={template?.template_html ? "" : "pt-12"}>
-                {template?.template_html ? (
-                  <div
-                    className="p-10 prose max-w-none"
-                    dangerouslySetInnerHTML={{ __html: injectFieldsIntoHTML(template.template_html, fields) }}
-                  />
-                ) : template?.layout === 'certificate' ? (
-                  <CertificatePreview fields={fields} template={template} documentData={documentData} formatDate={formatDate} />
-                ) : template?.layout === 'receipt' ? (
-                  <ReceiptPreview fields={fields} documentData={documentData} formatDate={formatDate} formatAmount={formatAmount} />
-                ) : template?.layout === 'letter' || template?.name?.toLowerCase().includes('letter') ? (
-                  <LetterPreview fields={fields} template={template} documentData={documentData} formatDate={formatDate} />
-                ) : (
-                  <DefaultPreview fields={fields} template={template} documentData={documentData} />
-                )}
-              </div>
-
-              {!template?.template_html && documentData.uniqueCode && (
-                <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
-                  <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
-                    <ExternalLink className="w-3 h-3 text-brand-pink" />
-                    <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                      Verify at docgen.enterprise/verify
-                    </span>
+                      {documentData.uniqueCode && (
+                        <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
+                          <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
+                            <ExternalLink className="w-3 h-3 text-brand-pink" />
+                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
+                              Verify at docgen.enterprise/verify
+                            </span>
+                          </div>
+                          <p className="font-mono font-bold text-brand-navy text-xs tracking-widest opacity-30">
+                            {documentData.uniqueCode}
+                          </p>
+                        </div>
+                      )}
+                    </>
+                  )}
+                </motion.div>
+              ) : (
+                <div className="p-10 flex flex-col items-center justify-center min-h-[500px] text-center">
+                  <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
+                    <FileText className="w-10 h-10 text-slate-300" />
                   </div>
-                  <p className="font-mono font-bold text-brand-navy text-xs tracking-widest opacity-30">
-                    {documentData.uniqueCode}
-                  </p>
+                  <h3 className="text-lg font-semibold text-slate-500 mb-2">Preview will appear here</h3>
+                  <p className="text-sm text-slate-400 max-w-[260px]">Fill in the form on the left and your document preview will show here in real time</p>
                 </div>
               )}
             </motion.div>
-          ) : (
-            <div className="p-10 flex flex-col items-center justify-center min-h-[500px] text-center">
-              <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
-                <FileText className="w-10 h-10 text-slate-300" />
-              </div>
-              <h3 className="text-lg font-semibold text-slate-500 mb-2">Preview will appear here</h3>
-              <p className="text-sm text-slate-400 max-w-[260px]">Fill in the form on the left and your document preview will show here in real time</p>
-            </div>
-          )}
-        </motion.div>
+          )
+        })()}
       </div>
     </motion.section>
   )
