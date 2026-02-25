@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
 import DataEntryForm from './components/DataEntryForm'
-import { extractFieldsFromPuckContent } from './utils/puckFields'
+import { extractFieldsFromHTML } from './utils/puckFields'
 import PdfPreviewer from './components/PdfPreviewer'
 import VerificationTool from './pages/VerificationTool'
 import Sidebar from './components/Sidebar'
@@ -134,18 +134,17 @@ export default function App() {
     return () => window.removeEventListener('auth:logout', onLogout)
   }, [])
 
-  // Extract editable fields: fields_schema (saved) or from Puck ui_config for user-created templates
+  // Extract editable fields: fields_schema (saved) or from template_html
   const getFieldsForTemplate = (t) => {
     if (t.fields_schema && Array.isArray(t.fields_schema) && t.fields_schema.length > 0) {
       return t.fields_schema
     }
-    // Derive from ui_config (Puck) - headers, text, fonts, tables, DynamicFields, etc.
-    const rawContent = t.ui_config?.content
+    const rawContent = t.template_html
     if (!rawContent) return []
-    return extractFieldsFromPuckContent(rawContent)
+    return extractFieldsFromHTML(rawContent)
   }
 
-  const fetchTemplates = async () => {
+  const fetchTemplates = async (idToSelect = null) => {
     try {
       setIsLoading(true)
       const config = {
@@ -159,6 +158,9 @@ export default function App() {
       setTemplates(data)
       if (data.length > 0) {
         setDocumentData(prev => {
+          if (idToSelect) {
+            return { ...prev, templateId: idToSelect }
+          }
           const exists = data.some(t => t.id === prev.templateId)
           if (exists && prev.templateId !== null) return prev
           return { ...prev, templateId: data[0].id }
@@ -335,9 +337,11 @@ export default function App() {
               {activeView === 'builder' && (
                 <TemplateBuilder
                   token={token}
-                  onTemplateCreated={() => {
+                  onTemplateCreated={(newId) => {
+                    fetchTemplates(newId)
+                  }}
+                  onTemplateDeleted={() => {
                     fetchTemplates()
-                    setActiveView('generate')
                   }}
                   onCancel={() => setActiveView('dashboard')}
                 />

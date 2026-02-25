@@ -18,7 +18,7 @@ import {
   ListPlus,
 } from 'lucide-react'
 import API from '../api/client'
-import { extractDynamicFields, extractTableSchemas } from '../utils/puckFields'
+import { extractDynamicFields } from '../utils/puckFields'
 
 // ─── Table Editor ─────────────────────────────────────────────────────────────
 
@@ -217,29 +217,26 @@ export default function DataEntryForm({
   const [errors, setErrors] = useState({})
   const [isGenerating, setIsGenerating] = useState(false)
   const [success, setSuccess] = useState(false)
+  const prevTemplateId = useRef(null)
 
   const selectedTemplate =
     templates.find((t) => t.id === documentData.templateId) || templates[0] || null
 
   const allTemplateFields = selectedTemplate?.fields || selectedTemplate?.fields_schema || []
-  const hasPuckFields = allTemplateFields.some((f) => !!f.puckPath) || !!selectedTemplate?.ui_config?.content
+  const hasDynamicHtmlFields = allTemplateFields.some((f) => !!f.isDynamicHtmlField) || !!selectedTemplate?.template_html
 
   const userFields = (() => {
     if (!selectedTemplate) return []
-    if (!hasPuckFields) return allTemplateFields
+    if (!hasDynamicHtmlFields) return allTemplateFields
     return allTemplateFields.filter(
-      (f) => f.puckPath?.type === 'DynamicField'
+      (f) => f.isDynamicHtmlField
     )
   })()
 
-  const tableSchemas = (() => {
-    if (!hasPuckFields || !selectedTemplate?.ui_config?.content) return []
-    return extractTableSchemas(selectedTemplate.ui_config.content)
-  })()
+  const tableSchemas = [] // Tables are rendered inside CKEditor directly
 
-  const prevTemplateId = useRef(null)
   useEffect(() => {
-    if (!selectedTemplate || !hasPuckFields) return
+    if (!selectedTemplate || !hasDynamicHtmlFields) return
     if (prevTemplateId.current === selectedTemplate.id) return
     prevTemplateId.current = selectedTemplate.id
 
@@ -368,7 +365,7 @@ export default function DataEntryForm({
     )
   }
 
-  const stepCount = (userFields.length > 0 ? 1 : 0) + (tableSchemas.length > 0 && !hasPuckFields ? 1 : 0) + 1
+  const stepCount = (userFields.length > 0 ? 1 : 0) + (tableSchemas.length > 0 && !hasDynamicHtmlFields ? 1 : 0) + 1
 
   return (
     <motion.section
@@ -448,7 +445,7 @@ export default function DataEntryForm({
             <ChevronDown className="absolute right-4 top-1/2 -translate-y-1/2 w-4 h-4 text-slate-400 pointer-events-none" />
           </div>
 
-          {hasPuckFields && (
+          {hasDynamicHtmlFields && (
             <motion.div
               initial={{ opacity: 0, y: 4 }}
               animate={{ opacity: 1, y: 0 }}
@@ -456,7 +453,7 @@ export default function DataEntryForm({
             >
               <Lock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
               <p className="text-xs text-amber-800 font-medium leading-relaxed">
-                This is a custom template — its design is locked. Fill in the fields below to personalise it. To change the design, go to{' '}
+                This template's layout is set in the Template Builder. Fill in the variables below to personalise it. To change the design, go to{' '}
                 <span className="font-bold text-amber-700">Template Builder → Edit</span>.
               </p>
             </motion.div>
@@ -468,10 +465,10 @@ export default function DataEntryForm({
           <SectionCard
             step="②"
             icon={FileText}
-            title={hasPuckFields ? 'Template Fields' : 'Your Information'}
+            title={hasDynamicHtmlFields ? 'Template Fields' : 'Your Information'}
             description="Fill in the details for your document"
           >
-            {hasPuckFields ? (
+            {hasDynamicHtmlFields && false ? (
               /* Puck template: show field values as read-only */
               <div className="rounded-xl border border-slate-100 divide-y divide-slate-100 overflow-hidden">
                 {userFields.map((def) => (
@@ -561,7 +558,7 @@ export default function DataEntryForm({
         )}
 
         {/* Table Editors — only for system templates */}
-        {!hasPuckFields && tableSchemas.length > 0 && (
+        {!hasDynamicHtmlFields && tableSchemas.length > 0 && (
           <>
             {tableSchemas.map((schema, ti) => (
               <SectionCard
@@ -583,17 +580,17 @@ export default function DataEntryForm({
           </>
         )}
 
-        {/* No editable fields message for Puck templates */}
-        {userFields.length === 0 && hasPuckFields && (
+        {/* No editable fields message for Custom templates */}
+        {userFields.length === 0 && hasDynamicHtmlFields && (
           <div className="text-center py-8 border-2 border-dashed border-slate-200 rounded-xl text-slate-400">
             <Wand2 className="w-7 h-7 mx-auto mb-2 opacity-50" />
             <p className="text-sm font-semibold">No user-fillable fields</p>
-            <p className="text-xs mt-1 opacity-75">Add DynamicField components in the Template Builder.</p>
+            <p className="text-xs mt-1 opacity-75">Add {'{{ Variables }}'} in the Template Builder to see them here.</p>
           </div>
         )}
 
         {/* Custom Fields — only for system/built-in templates */}
-        {!hasPuckFields && (
+        {!hasDynamicHtmlFields && (
           <SectionCard
             icon={ListPlus}
             title="Custom Fields"

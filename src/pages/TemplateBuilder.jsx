@@ -4,82 +4,82 @@ import {
   Save,
   Loader2,
   ArrowLeft,
-  Sparkles,
   Trash2,
   FileText,
   Pencil,
-  X,
   Plus,
   CheckCircle2,
   AlertCircle,
   Search,
   LayoutTemplate,
   Database,
+  Type
 } from 'lucide-react'
-import { Puck } from '@measured/puck'
-import '@measured/puck/puck.css'
+import { CKEditor } from '@ckeditor/ckeditor5-react'
+import {
+  ClassicEditor,
+  Essentials,
+  Autoformat,
+  Bold,
+  Italic,
+  Underline,
+  Strikethrough,
+  BlockQuote,
+  Heading,
+  Link,
+  List,
+  Paragraph,
+  Indent,
+  IndentBlock,
+  Table,
+  TableToolbar,
+  TableColumnResize,
+  TableProperties,
+  TableCellProperties,
+  MediaEmbed,
+  Undo,
+  Font,
+  Highlight,
+  Alignment,
+  HorizontalLine,
+  SpecialCharacters,
+  SpecialCharactersEssentials
+} from 'ckeditor5'
+import 'ckeditor5/ckeditor5.css'
 import API from '../api/client'
-import { puckConfig } from '../components/puck.config'
-import { extractFieldsFromPuckContent } from '../utils/puckFields'
+import { extractFieldsFromHTML } from '../utils/puckFields'
 
-const puckCustomStyles = `
-  [data-puck-viewport-controls],
-  .Puck-viewportControls,
-  button[aria-label*="viewport"],
-  div[class*="ViewportControls"],
-  div[class*="viewportControls"] {
-    display: none !important;
+const ckStyles = `
+  .ck-editor__editable_inline {
+    min-height: 400px;
+    padding: 0 1rem !important;
   }
-  .Puck { font-family: 'Inter', system-ui, sans-serif !important; font-size: 14px !important; }
-  [class*="SideBar"], [class*="ComponentList"], [class*="sideBar"], [class*="componentList"] {
-    min-width: 220px !important; font-size: 13px !important;
+  .ck-editor {
+    width: 100% !important;
   }
-  [class*="ComponentList"] button, [class*="componentList"] button, [class*="draggable"] {
-    font-size: 13px !important; font-weight: 600 !important;
-    padding: 10px 14px !important; border-radius: 8px !important;
+  .ck-toolbar {
+    border-top-left-radius: 0.75rem !important;
+    border-top-right-radius: 0.75rem !important;
+    border: 1px solid #e2e8f0 !important;
+    background-color: #f8fafc !important;
   }
-  [class*="PuckFields"], [class*="puckFields"], [class*="Fields"], [class*="FieldLabel"], [class*="fieldLabel"] {
-    font-size: 13px !important; font-weight: 500 !important;
+  .ck-content {
+    border-bottom-left-radius: 0.75rem !important;
+    border-bottom-right-radius: 0.75rem !important;
+    border: 1px solid #e2e8f0 !important;
+    border-top: none !important;
   }
-  [class*="Input"], [class*="input"] input, [class*="input"] textarea, [class*="input"] select {
-    font-size: 13px !important; padding: 8px 10px !important; border-radius: 6px !important;
+  /* Fix Lucide icon alignment in editor */
+  .ck-editor__editable blockquote {
+    border-left: 4px solid #db2777;
+    background: #fdf2f8;
+    padding: 1rem;
+    font-style: italic;
   }
-  [class*="ObjectField"] > legend, [class*="objectField"] > legend,
-  [class*="FieldWrapper"] label, [class*="fieldWrapper"] label {
-    font-size: 12px !important; font-weight: 700 !important;
-    text-transform: uppercase !important; letter-spacing: 0.06em !important;
-    color: #64748b !important; margin-bottom: 4px !important;
-  }
-  [class*="Frame"], [class*="frame"], iframe { min-height: 78vh !important; }
-  [class*="CanvasArea"], [class*="canvasArea"] {
-    background: #f8fafc !important; padding: 24px !important;
-  }
-  [class*="CanvasArea"] *, [class*="canvasArea"] *, .component-preview * {
-    font-size: 14px; line-height: 1.6;
-  }
-  [class*="CanvasArea"] table, [class*="canvasArea"] table {
-    width: 100% !important; border-collapse: collapse !important;
-    font-size: 13px !important; font-weight: 500 !important;
-  }
-  [class*="CanvasArea"] th, [class*="canvasArea"] th {
-    background: #fdf2f8 !important; color: #db2777 !important;
-    font-size: 11px !important; font-weight: 700 !important;
-    text-transform: uppercase !important; letter-spacing: 0.07em !important;
-    padding: 10px 14px !important; border: 1px solid #fbcfe8 !important;
-  }
-  [class*="CanvasArea"] td, [class*="canvasArea"] td {
-    padding: 9px 14px !important; border: 1px solid #e2e8f0 !important;
-    font-size: 13px !important; color: #1e293b !important;
-  }
-  [class*="CanvasArea"] tr:nth-child(even) td, [class*="canvasArea"] tr:nth-child(even) td {
-    background: #f8fafc !important;
-  }
-  [class*="Puck--header"], [class*="puck--header"], header[class*="Puck"] {
-    font-size: 14px !important; font-weight: 600 !important; min-height: 52px !important;
-  }
-  [class*="Puck--header"] button[class*="primary"], [class*="puck--header"] button[class*="primary"] {
-    font-size: 13px !important; font-weight: 700 !important;
-    padding: 8px 20px !important; border-radius: 8px !important;
+  
+  /* Make CKEditor popups appear above our modals */
+  .ck.ck-balloon-panel {
+    z-index: 9999 !important;
   }
 `
 
@@ -87,16 +87,16 @@ const FALLBACK_CONFIG = {
   default_html: '',
   help_texts: { template_name_placeholder: 'e.g. Event Ticket, Invoice, Certificate...' },
 }
-const EMPTY_PUCK = { content: [], root: {} }
+const EMPTY_HTML = ''
 
-export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) {
+export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDeleted, onCancel }) {
   // 'list' | 'editor'
   const [view, setView] = useState('list')
   const [search, setSearch] = useState('')
 
   // Editor state
   const [name, setName] = useState('')
-  const [puckData, setPuckData] = useState(EMPTY_PUCK)
+  const [templateHtml, setTemplateHtml] = useState(EMPTY_HTML)
   const [editingTemplate, setEditingTemplate] = useState(null)
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [editLoading, setEditLoading] = useState(false)
@@ -141,7 +141,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
 
   const openCreate = () => {
     setName('')
-    setPuckData(EMPTY_PUCK)
+    setTemplateHtml(EMPTY_HTML)
     setEditingTemplate(null)
     setError(null)
     setSuccess(null)
@@ -160,16 +160,16 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
         headers: { Authorization: `Bearer ${token}` }
       })
       const full = res.data
-      const uiConfig = full.ui_config && Object.keys(full.ui_config).length > 0 ? full.ui_config : EMPTY_PUCK
+      const htmlContent = full.template_html || EMPTY_HTML
       setName(full.name || '')
-      setPuckData(uiConfig)
+      setTemplateHtml(htmlContent)
       setEditingTemplate({ ...full, _loadedAt: Date.now() })
     } catch (err) {
       console.error('Failed to load template for edit', err)
       setError('Could not load template. Please try again.')
-      const uiConfig = template.ui_config && Object.keys(template.ui_config).length > 0 ? template.ui_config : EMPTY_PUCK
+      const htmlContent = template.template_html || EMPTY_HTML
       setName(template.name || '')
-      setPuckData(uiConfig)
+      setTemplateHtml(htmlContent)
       setEditingTemplate({ ...template, _loadedAt: Date.now() })
     } finally {
       setEditLoading(false)
@@ -180,7 +180,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
     setView('list')
     setEditingTemplate(null)
     setName('')
-    setPuckData(EMPTY_PUCK)
+    setTemplateHtml(EMPTY_HTML)
     setError(null)
     setSuccess(null)
   }
@@ -193,6 +193,9 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
         headers: { Authorization: `Bearer ${token}` }
       })
       setTemplates(prev => prev.filter(t => t.id !== id))
+      if (onTemplateDeleted) {
+        onTemplateDeleted(id)
+      }
     } catch (err) {
       const msg = err.response?.data?.detail || err.response?.data?.message
       alert(msg || 'Failed to delete template.')
@@ -204,15 +207,17 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
     setError(null)
     setSuccess(null)
     if (!name.trim()) return setError('Template name is required')
+    if (!templateHtml.trim()) return setError('Template content is required')
 
-    const extractedFields = extractFieldsFromPuckContent(puckData.content)
+    const extractedFields = extractFieldsFromHTML(templateHtml)
+
     setIsSubmitting(true)
     try {
       const payload = {
         name,
         fields_schema: extractedFields,
-        template_html: '',
-        ui_config: puckData,
+        template_html: templateHtml,
+        ui_config: {},
         template_file: config.default_template_file || 'backendapp/base_universal_template.html',
       }
       const headers = { Authorization: `Bearer ${token}` }
@@ -221,16 +226,18 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
         await API.patch(`document-types/${editingTemplate.id}/`, payload, { headers })
         setSuccess('Template updated successfully!')
         setTemplates(prev =>
-          prev.map(t => t.id === editingTemplate.id ? { ...t, name, ui_config: puckData } : t)
+          prev.map(t => t.id === editingTemplate.id ? { ...t, name, template_html: templateHtml } : t)
         )
-        setEditingTemplate(prev => ({ ...prev, name, ui_config: puckData }))
+        setEditingTemplate(prev => ({ ...prev, name, template_html: templateHtml }))
+        if (onTemplateCreated) onTemplateCreated(editingTemplate.id) // re-use for syncing updates
       } else {
-        await API.post('document-types/', payload, { headers })
+        const res = await API.post('document-types/', payload, { headers })
         setSuccess('Template created successfully!')
+        setEditingTemplate(res.data)
         fetchTemplates()
-        setTimeout(() => {
-          closeEditor()
-        }, 1500)
+        if (onTemplateCreated) {
+          onTemplateCreated(res.data.id)
+        }
       }
     } catch (err) {
       setError(err.response?.data?.detail || `Failed to ${editingTemplate ? 'update' : 'create'} template.`)
@@ -335,9 +342,6 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
                 <tbody className="divide-y divide-slate-100">
                   <AnimatePresence initial={false}>
                     {filtered.map((t) => {
-                      const componentCount = Array.isArray(t.ui_config?.content)
-                        ? t.ui_config.content.length
-                        : 0
                       return (
                         <motion.tr
                           key={t.id}
@@ -371,12 +375,8 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
                           {/* Components */}
                           <td className="px-6 py-4">
                             <span className="text-sm text-slate-500">
-                              {componentCount > 0 ? (
-                                <span className="font-semibold text-brand-navy">{componentCount}</span>
-                              ) : (
-                                <span className="text-slate-300">—</span>
-                              )}
-                              {componentCount > 0 && <span className="text-slate-400 ml-1">block{componentCount !== 1 ? 's' : ''}</span>}
+                              <span className="font-semibold text-brand-navy">Text</span>
+                              <span className="text-slate-400 ml-1">Template</span>
                             </span>
                           </td>
 
@@ -425,9 +425,10 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
     <motion.div
       initial={{ opacity: 0, y: 10 }}
       animate={{ opacity: 1, y: 0 }}
-      className="max-w-[1600px] mx-auto pb-20 px-0"
+      className="max-w-[1200px] mx-auto pb-20 px-0"
     >
-      <style dangerouslySetInnerHTML={{ __html: puckCustomStyles }} />
+
+      <style dangerouslySetInnerHTML={{ __html: ckStyles }} />
 
       {/* Editor Header */}
       <div className="mb-6 bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-5 flex items-center justify-between gap-4 flex-wrap">
@@ -491,24 +492,69 @@ export default function TemplateBuilder({ token, onTemplateCreated, onCancel }) 
         />
       </div>
 
-      {/* Puck Editor */}
-      <div
-        className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden relative mb-5"
-        style={{ minHeight: '85vh' }}
-      >
-        {editLoading && (
-          <div className="absolute inset-0 z-20 bg-white/90 backdrop-blur-sm flex flex-col items-center justify-center gap-4">
-            <Loader2 className="w-10 h-10 animate-spin text-brand-pink" />
-            <p className="text-sm font-semibold text-slate-600">Loading template...</p>
+      {/* CK Editor */}
+      <div className="mb-5 bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-5">
+        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 flex justify-between items-center">
+          <span><Type className="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" /> Template Content</span>
+          <span className="text-brand-pink font-medium lowercase normal-case tracking-normal">Use {"{{ VariableName }}"} to insert dynamic fields</span>
+        </label>
+
+        {editLoading ? (
+          <div className="h-[400px] bg-slate-50/50 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-4">
+            <Loader2 className="w-8 h-8 animate-spin text-brand-pink" />
+            <p className="text-sm font-semibold text-slate-600">Loading editor...</p>
+          </div>
+        ) : (
+          <div className="ckeditor-wrapper border border-slate-200 rounded-xl overflow-hidden min-h-[400px]">
+            <CKEditor
+              onReady={(editor) => {
+                console.log('CKEditor is ready!', editor)
+              }}
+              editor={ClassicEditor}
+              data={templateHtml}
+              onChange={(event, editor) => {
+                const data = editor.getData()
+                setTemplateHtml(data)
+              }}
+              config={{
+                licenseKey: 'GPL',
+                plugins: [
+                  Essentials, Autoformat, Bold, Italic, Underline, Strikethrough,
+                  BlockQuote, Heading, Link, List, Paragraph, Indent, IndentBlock,
+                  Table, TableToolbar, TableColumnResize, TableProperties, TableCellProperties,
+                  MediaEmbed, Undo, Font, Highlight, Alignment, HorizontalLine,
+                  SpecialCharacters, SpecialCharactersEssentials
+                ],
+                toolbar: {
+                  items: [
+                    'heading', '|',
+                    'bold', 'italic', 'underline', 'strikethrough', 'link', 'bulletedList', 'numberedList', '|',
+                    'outdent', 'indent', '|',
+                    'blockQuote', 'insertTable', 'mediaEmbed', 'undo', 'redo', '|',
+                    'fontSize', 'fontFamily', 'fontColor', 'fontBackgroundColor', 'highlight', '|',
+                    'alignment', 'horizontalLine', 'specialCharacters'
+                  ]
+                },
+                table: {
+                  contentToolbar: [
+                    'tableColumn', 'tableRow', 'mergeTableCells', 'tableProperties', 'tableCellProperties'
+                  ]
+                },
+                heading: {
+                  options: [
+                    { model: 'paragraph', title: 'Paragraph', class: 'ck-heading_paragraph' },
+                    { model: 'heading1', view: 'h1', title: 'Heading 1', class: 'ck-heading_heading1' },
+                    { model: 'heading2', view: 'h2', title: 'Heading 2', class: 'ck-heading_heading2' },
+                    { model: 'heading3', view: 'h3', title: 'Heading 3', class: 'ck-heading_heading3' },
+                    { model: 'heading4', view: 'h4', title: 'Heading 4', class: 'ck-heading_heading4' },
+                    { model: 'heading5', view: 'h5', title: 'Heading 5', class: 'ck-heading_heading5' },
+                    { model: 'heading6', view: 'h6', title: 'Heading 6', class: 'ck-heading_heading6' }
+                  ]
+                }
+              }}
+            />
           </div>
         )}
-        <Puck
-          key={editingTemplate?._loadedAt ?? 'new'}
-          config={{ ...puckConfig, viewports: [{ width: 1280, label: 'Desktop' }] }}
-          data={puckData}
-          onChange={setPuckData}
-          onPublish={() => handleSubmit()}
-        />
       </div>
 
       {/* Save Button */}

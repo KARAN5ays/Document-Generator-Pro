@@ -1,0 +1,15 @@
+{
+  "name": "ckeditor5-custom-build",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "ckeditor5": "^39.0.2"
+  }
+}
