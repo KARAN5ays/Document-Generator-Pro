@@ -12,6 +12,8 @@ import Register from './pages/Register'
 import TemplateBuilder from './pages/TemplateBuilder'
 import YourDocuments from './pages/YourDocuments'
 import SettingsView from './pages/SettingsView'
+import BulkIssuance from './pages/BulkIssuance'
+import AssetManager from './pages/AssetManager'
 import API from './api/client'
 
 
@@ -70,6 +72,28 @@ export default function App() {
   const [token, setToken] = useState(() => {
     return localStorage.getItem('token') || null
   })
+
+  // On mount: if URL contains ?verify=CODE (from QR scan), open verify page with code pre-filled.
+  // Works for both logged-in users (goes to 'verify' view) and public visitors (goes to publicVerify).
+  useEffect(() => {
+    const params = new URLSearchParams(window.location.search)
+    const code = params.get('verify')
+    if (code) {
+      const clean = code.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 8)
+      if (clean.length === 8) {
+        setVerifyPreFillCode(clean)
+        // Route: logged-in → sidebar verify view; public → publicVerify (no login needed)
+        const hasToken = !!localStorage.getItem('token')
+        if (hasToken) {
+          setActiveView('verify')
+        } else {
+          setAuthView('publicVerify')
+        }
+        // Clean the URL without reloading
+        window.history.replaceState({}, '', window.location.pathname)
+      }
+    }
+  }, [])
 
   // Handle successful login
   const handleLogin = (newToken) => {
@@ -349,6 +373,14 @@ export default function App() {
 
               {activeView === 'settings' && (
                 <SettingsView userProfile={userProfile} />
+              )}
+
+              {activeView === 'bulk' && (
+                <BulkIssuance token={token} />
+              )}
+
+              {activeView === 'assets' && (
+                <AssetManager token={token} />
               )}
             </motion.div>
           </AnimatePresence>

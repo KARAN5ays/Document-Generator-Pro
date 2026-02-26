@@ -9,7 +9,9 @@ import {
     FolderOpen,
     User,
     Settings,
-    ChevronUp
+    ChevronUp,
+    Users,
+    Image
 } from 'lucide-react'
 
 const NAV_GROUPS = [
@@ -21,6 +23,13 @@ const NAV_GROUPS = [
             { id: 'documents', label: 'Your Documents', icon: FolderOpen },
             { id: 'verify', label: 'Verify Document', icon: ShieldCheck },
             { id: 'builder', label: 'Template Builder', icon: FileEdit },
+        ]
+    },
+    {
+        label: 'Tools',
+        items: [
+            { id: 'bulk', label: 'Bulk Issuance', icon: Users },
+            { id: 'assets', label: 'Asset Manager', icon: Image },
         ]
     }
 ]

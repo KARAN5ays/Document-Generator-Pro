@@ -13,6 +13,7 @@ import {
 } from 'lucide-react'
 import API, { getBackendOrigin } from '../api/client'
 import { injectFieldsIntoHTML } from '../utils/templateFields'
+import VerifyQR from './VerifyQR'
 
 
 
@@ -182,10 +183,8 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
                             </h1>
                           </div>
                           {documentData.uniqueCode && (
-                            <div className="px-3 py-1.5 bg-white rounded-lg border border-slate-200 shadow-sm">
-                              <p className="text-slate-600 text-[10px] font-mono tracking-widest font-bold">
-                                # {documentData.uniqueCode}
-                              </p>
+                            <div className="shrink-0">
+                              <VerifyQR trackingCode={documentData.uniqueCode} size={56} showLabel={false} />
                             </div>
                           )}
                         </div>
@@ -205,16 +204,8 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
                       </div>
 
                       {documentData.uniqueCode && (
-                        <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col items-center gap-4">
-                          <div className="flex items-center gap-2 px-4 py-2 bg-slate-50 rounded-full border border-slate-100">
-                            <ExternalLink className="w-3 h-3 text-brand-pink" />
-                            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">
-                              Verify at docgen.enterprise/verify
-                            </span>
-                          </div>
-                          <p className="font-mono font-bold text-brand-navy text-xs tracking-widest opacity-30">
-                            {documentData.uniqueCode}
-                          </p>
+                        <div className="mt-12 pt-8 border-t border-slate-100 flex flex-col items-center gap-3">
+                          <VerifyQR trackingCode={documentData.uniqueCode} size={88} />
                         </div>
                       )}
                     </>
@@ -311,7 +302,9 @@ function ReceiptPreview({ fields, documentData, formatDate, formatAmount }) {
         </div>
         <h3 className="text-xl font-black text-brand-navy uppercase tracking-widest mb-1">Official Receipt</h3>
         {documentData.uniqueCode && (
-          <p className="text-xs text-slate-500 font-mono tracking-widest">#{documentData.uniqueCode}</p>
+          <div className="flex justify-center mt-2">
+            <VerifyQR trackingCode={documentData.uniqueCode} size={64} />
+          </div>
         )}
       </div>
 
@@ -360,7 +353,9 @@ function LetterPreview({ fields, template, documentData, formatDate }) {
         <div>
           <div className="font-bold text-brand-navy uppercase tracking-widest">{template?.name || 'Official Letter'}</div>
           {documentData.uniqueCode && (
-            <div>Ref: #{documentData.uniqueCode}</div>
+            <div className="shrink-0">
+              <VerifyQR trackingCode={documentData.uniqueCode} size={52} showLabel={false} />
+            </div>
           )}
         </div>
         <div className="text-right">
