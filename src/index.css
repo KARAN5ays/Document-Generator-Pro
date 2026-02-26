@@ -10,7 +10,7 @@
 
   body {
     @apply bg-[#F8FAFC] text-[#334155] antialiased;
-    font-family: 'Inter', system-ui, sans-serif;
+    font-family: 'Outfit', system-ui, sans-serif;
     min-height: 100vh;
     overflow-x: hidden;
   }
