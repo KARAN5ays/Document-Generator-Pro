@@ -92,7 +92,7 @@ export default function Sidebar({ activeView, onViewChange, onLogout, isOpen = f
                             <Layers className="text-white w-6 h-6" />
                         </div>
                         <div>
-                            <h1 className="text-xl font-bold tracking-tight text-brand-navy leading-none">DocGen</h1>
+                            <h1 className="text-xl font-bold tracking-tight text-brand-navy leading-none">Dastavez</h1>
                             <p className="text-[10px] text-slate-500 uppercase tracking-widest font-bold flex items-center gap-1 mt-1">
                                 <span className="w-1.5 h-1.5 rounded-full bg-emerald-500 inline-block"></span>
                                 Tech Cloud

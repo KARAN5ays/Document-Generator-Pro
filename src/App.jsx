@@ -175,10 +175,13 @@ export default function App() {
         headers: { Authorization: `Bearer ${token}` }
       }
       const response = await API.get('document-types/', config)
-      const data = response.data.map(t => ({
-        ...t,
-        fields: getFieldsForTemplate(t) // fields_schema
-      }))
+      const systemNamesKeywords = ['certificate', 'receipt', 'ticket', 'letter', 'id card']
+      const data = response.data
+        .filter(t => !t.name || !systemNamesKeywords.includes(t.name.trim().toLowerCase()))
+        .map(t => ({
+          ...t,
+          fields: getFieldsForTemplate(t) // fields_schema
+        }))
       setTemplates(data)
       if (data.length > 0) {
         setDocumentData(prev => {

@@ -91,7 +91,6 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
   })
 
 
-
   return (
     <motion.section
       initial={{ opacity: 0, scale: 0.98 }}

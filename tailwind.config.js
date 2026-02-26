@@ -7,15 +7,15 @@ export default {
   theme: {
     extend: {
       fontFamily: {
-        sans: ['Inter', 'system-ui', 'sans-serif'],
+        sans: ['Outfit', 'system-ui', 'sans-serif'],
         serif: ['Playfair Display', 'Georgia', 'serif'],
       },
       colors: {
         brand: {
           navy: '#1e293b', // Lighter navy (slate-800) for better contrast on white
-          pink: '#e11d48', // The exact dev.8peaks.cloud pink (rose-600)
-          'pink-light': '#fda4af',
-          'pink-dark': '#be123c',
+          pink: '#ec4899', // True pink (pink-500)
+          'pink-light': '#fbcfe8',
+          'pink-dark': '#db2777',
           slate: '#475569',
           soft: '#f8fafc',
         }

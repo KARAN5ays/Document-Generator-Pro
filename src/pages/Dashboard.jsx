@@ -34,7 +34,9 @@ import {
     Cell,
     RadialBarChart,
     RadialBar,
-    Legend
+    Legend,
+    BarChart,
+    Bar
 } from 'recharts'
 import API from '../api/client'
 
@@ -97,28 +99,28 @@ export default function Dashboard({ onNavigate }) {
 
     const STATS = [
         { label: 'Total Documents', value: statsData.total_documents, icon: FileCheck, color: 'text-brand-pink', bg: 'bg-pink-50' },
-        { label: 'Verified', value: statsData.verified_documents, icon: ShieldCheck, color: 'text-emerald-600', bg: 'bg-emerald-50' },
-        { label: 'Active Users', value: statsData.active_users, icon: Users, color: 'text-indigo-600', bg: 'bg-indigo-50' },
-        { label: 'Alerts', value: statsData.verification_alerts, icon: AlertCircle, color: 'text-amber-600', bg: 'bg-amber-50' },
+        { label: 'Verified', value: statsData.verified_documents, icon: ShieldCheck, color: 'text-brand-pink', bg: 'bg-pink-50' },
+        { label: 'Active Users', value: statsData.active_users, icon: Users, color: 'text-brand-pink', bg: 'bg-pink-50' },
+        { label: 'Alerts', value: statsData.verification_alerts, icon: AlertCircle, color: 'text-brand-pink', bg: 'bg-pink-50' },
     ]
 
     const trends = statsData.trends || []
 
     // Verification Success Data (Mocked/Derived)
     const verificationData = [
-        { name: 'Valid', value: statsData.verified_documents || 1, color: '#10b981' }, // Emerald 500
-        { name: 'Invalid', value: statsData.verification_alerts || 0, color: '#f59e0b' }, // Amber 500
+        { name: 'Valid', value: statsData.verified_documents || 1, color: '#ec4899' }, // Pink
+        { name: 'Invalid', value: statsData.verification_alerts || 0, color: '#fbcfe8' }, // Light Pink
     ]
     const totalVerifications = verificationData.reduce((acc, curr) => acc + curr.value, 0)
     const verificationSuccessRate = Math.round((verificationData[0].value / totalVerifications) * 100) || 0
 
-    // Quota Usage Data (Mocked)
-    const quotaData = [
-        {
-            name: 'Documents',
-            uv: 80, // Mock percentage
-            fill: '#ec4899', // Brand Pink
-        }
+    // Bar Chart Data
+    const barChartData = [
+        { name: 'Total', Generated: 8, Verified: 2 },
+        { name: 'Pending', Generated: 1, Verified: 0 },
+        { name: 'Submitted', Generated: 0, Verified: 0 },
+        { name: 'Processed', Generated: 6, Verified: 1 },
+        { name: 'Rejected', Generated: 1, Verified: 1 },
     ]
 
     const getGreeting = () => {
@@ -190,42 +192,70 @@ export default function Dashboard({ onNavigate }) {
                     >
                         <div className="flex justify-between items-start mb-4">
                             <div className="text-sm font-semibold text-slate-500 transition-colors">{stat.label}</div>
-                            {i === 0 && <span className="flex h-2 w-2 rounded-full bg-emerald-500 ring-4 ring-emerald-50 mt-1 animate-pulse" />}
+                            {i === 0 && <span className="flex h-2 w-2 rounded-full bg-pink-500 ring-4 ring-pink-50 mt-1 animate-pulse" />}
                         </div>
                         <div className="text-3xl font-black text-brand-navy tabular-nums tracking-tight">{(stat.value || 0).toLocaleString()}</div>
                     </motion.div>
                 ))}
             </div>
 
-            {/* Advanced Widgets Row */}
+            {/* Middle Row: Bar & Pie Charts */}
             <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
-                {/* Verification Success Chart */}
+                {/* Bar Chart */}
                 <motion.div
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 }}
+                    className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col"
+                >
+                    <div className="flex items-center justify-between mb-4">
+                        <h3 className="font-bold text-brand-navy flex items-center gap-2">
+                            <FileText className="w-5 h-5 text-brand-pink" />
+                            Document Status
+                        </h3>
+                    </div>
+                    <div className="flex-1 w-full min-h-[250px] pt-4">
+                        <ResponsiveContainer width="100%" height="100%">
+                            <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
+                                <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11 }} dy={10} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11 }} dx={-10} />
+                                <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
+                                <Legend wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }} />
+                                <Bar dataKey="Generated" fill="#ec4899" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                                <Bar dataKey="Verified" fill="#fbcfe8" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                            </BarChart>
+                        </ResponsiveContainer>
+                    </div>
+                </motion.div>
+
+                {/* Pie Chart */}
+                <motion.div
+                    initial={{ opacity: 0, y: 20 }}
+                    animate={{ opacity: 1, y: 0 }}
+                    transition={{ delay: 0.2 }}
                     className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col"
                 >
                     <div className="flex items-center justify-between mb-2">
                         <h3 className="font-bold text-brand-navy flex items-center gap-2">
-                            <ShieldCheck className="w-5 h-5 text-emerald-500" />
+                            <ShieldCheck className="w-5 h-5 text-brand-pink" />
                             Verification Success
                         </h3>
                     </div>
-                    <div className="flex-1 flex items-center justify-center relative">
+                    <div className="flex-1 flex items-center justify-center relative min-h-[250px]">
                         <div className="absolute inset-0 flex items-center justify-center flex-col pointer-events-none">
                             <span className="text-3xl font-bold text-brand-navy">{verificationSuccessRate}%</span>
                             <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">Success</span>
                         </div>
-                        <div className="w-full h-[200px]">
+                        <div className="w-full h-full">
                             <ResponsiveContainer width="100%" height="100%">
                                 <PieChart>
                                     <Pie
                                         data={verificationData}
                                         cx="50%"
                                         cy="50%"
-                                        innerRadius={60}
-                                        outerRadius={80}
+                                        innerRadius={70}
+                                        outerRadius={90}
                                         paddingAngle={5}
                                         dataKey="value"
                                         startAngle={90}
@@ -246,85 +276,6 @@ export default function Dashboard({ onNavigate }) {
                                 <span className="text-sm text-slate-600 font-medium">{d.name}</span>
                             </div>
                         ))}
-                    </div>
-                </motion.div>
-
-                {/* Quota Usage */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.2 }}
-                    className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col"
-                >
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-bold text-brand-navy flex items-center gap-2">
-                            <Database className="w-5 h-5 text-brand-pink" />
-                            Quota Usage
-                        </h3>
-                        <span className="text-xs font-bold px-2 py-1 bg-pink-50 text-brand-pink rounded-lg">Pro Plan</span>
-                    </div>
-                    <div className="flex-1 flex flex-col justify-center">
-                        <div className="mb-6">
-                            <div className="flex justify-between text-sm mb-2">
-                                <span className="text-slate-600 font-medium">Documents generated</span>
-                                <span className="text-brand-navy font-bold">{statsData.total_documents} / 1,000</span>
-                            </div>
-                            <div className="h-3 w-full bg-slate-100 rounded-full overflow-hidden">
-                                <motion.div
-                                    initial={{ width: 0 }}
-                                    animate={{ width: `${Math.min((statsData.total_documents / 1000) * 100, 100)}%` }}
-                                    transition={{ duration: 1, delay: 0.5 }}
-                                    className="h-full bg-brand-pink rounded-full"
-                                />
-                            </div>
-                        </div>
-
-                    </div>
-                    <button className="mt-4 w-full py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold text-sm hover:bg-slate-50 transition-colors">
-                        Manage Plan
-                    </button>
-                </motion.div>
-
-                {/* System Health / Status */}
-                <motion.div
-                    initial={{ opacity: 0, y: 20 }}
-                    animate={{ opacity: 1, y: 0 }}
-                    transition={{ delay: 0.25 }}
-                    className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col"
-                >
-                    <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-bold text-brand-navy flex items-center gap-2">
-                            <Server className="w-5 h-5 text-emerald-500" />
-                            System Status
-                        </h3>
-                        <span className="text-xs font-bold text-slate-400 uppercase tracking-wider">Metrics</span>
-                    </div>
-
-                    <div className="space-y-3 flex-1">
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                            <div className="flex items-center gap-3">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-sm font-semibold text-slate-700">API Gateway</span>
-                            </div>
-                            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        </div>
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                            <div className="flex items-center gap-3">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-sm font-semibold text-slate-700">Database</span>
-                            </div>
-                            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        </div>
-                        <div className="flex items-center justify-between p-3 rounded-xl bg-slate-50 border border-slate-100">
-                            <div className="flex items-center gap-3">
-                                <div className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse" />
-                                <span className="text-sm font-semibold text-slate-700">Verification Node</span>
-                            </div>
-                            <CheckCircle2 className="w-4 h-4 text-emerald-500" />
-                        </div>
-                    </div>
-                    <div className="mt-4 text-[11px] text-center text-slate-400 font-mono font-medium">
-                        Last check: {new Date().toLocaleTimeString()}
                     </div>
                 </motion.div>
             </div>
@@ -422,7 +373,7 @@ export default function Dashboard({ onNavigate }) {
                         className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6"
                     >
                         <h3 className="font-bold text-brand-navy mb-4 flex items-center gap-2">
-                            <Zap className="w-4 h-4 text-amber-500 fill-amber-500" />
+                            <Zap className="w-4 h-4 text-brand-pink fill-brand-pink" />
                             Quick Actions
                         </h3>
                         <div className="space-y-3">
@@ -436,7 +387,7 @@ export default function Dashboard({ onNavigate }) {
                                 </div>
                             </button>
                             <button onClick={() => onNavigate?.('verify')} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 group text-left">
-                                <div className="w-10 h-10 rounded-lg bg-emerald-50 flex items-center justify-center text-emerald-600 group-hover:scale-110 transition-transform">
+                                <div className="w-10 h-10 rounded-lg bg-pink-50 flex items-center justify-center text-brand-pink group-hover:scale-110 transition-transform">
                                     <ShieldCheck className="w-5 h-5" />
                                 </div>
                                 <div>
@@ -445,7 +396,7 @@ export default function Dashboard({ onNavigate }) {
                                 </div>
                             </button>
                             <button onClick={() => onNavigate?.('builder')} className="w-full flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors border border-transparent hover:border-slate-100 group text-left">
-                                <div className="w-10 h-10 rounded-lg bg-indigo-50 flex items-center justify-center text-indigo-600 group-hover:scale-110 transition-transform">
+                                <div className="w-10 h-10 rounded-lg bg-pink-50 flex items-center justify-center text-brand-pink group-hover:scale-110 transition-transform">
                                     <FolderOpen className="w-5 h-5" />
                                 </div>
                                 <div>
@@ -483,7 +434,7 @@ export default function Dashboard({ onNavigate }) {
                                             <p className="text-sm font-semibold text-slate-700 truncate">{doc.document_type_name || 'Document'}</p>
                                             <p className="text-xs text-slate-400 font-mono truncate">#{doc.tracking_field}</p>
                                         </div>
-                                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-emerald-100 text-emerald-700 uppercase">
+                                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-pink-100 text-brand-pink uppercase">
                                             Valid
                                         </span>
                                     </div>

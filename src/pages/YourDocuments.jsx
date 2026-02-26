@@ -17,9 +17,11 @@ import {
   Linkedin,
   Twitter,
   Hash,
-  ChevronDown
+  Download,
+  Loader2
 } from 'lucide-react'
 import API from '../api/client'
+import PdfPreviewer from '../components/PdfPreviewer'
 
 function formatDate(dateStr) {
   if (!dateStr) return '—'
@@ -180,7 +182,43 @@ function ShareModal({ doc, onClose }) {
 }
 
 function DetailsModal({ doc, onClose, onShare }) {
-  const metadataRows = getMetadataRows(doc?.metadata)
+  const [pdfUrl, setPdfUrl] = useState(null)
+  const [isLoadingPdf, setIsLoadingPdf] = useState(true)
+
+  useEffect(() => {
+    let objectUrl = null;
+    const loadPdf = async () => {
+      try {
+        setIsLoadingPdf(true)
+        // Request the PDF blob from the generate endpoint using the tracking code
+        const res = await API.get(`documents/${doc.tracking_field}/download/`, {
+          responseType: 'blob'
+        })
+        objectUrl = URL.createObjectURL(res.data)
+        setPdfUrl(objectUrl)
+      } catch (err) {
+        console.error('Failed to load PDF preview in modal', err)
+      } finally {
+        setIsLoadingPdf(false)
+      }
+    }
+    if (doc?.tracking_field) loadPdf()
+
+    return () => {
+      if (objectUrl) URL.revokeObjectURL(objectUrl)
+    }
+  }, [doc])
+
+  const handleDownload = () => {
+    if (pdfUrl) {
+      const link = document.createElement('a')
+      link.href = pdfUrl
+      link.download = `${doc.document_type_name}_${doc.tracking_field}.pdf`
+      document.body.appendChild(link)
+      link.click()
+      link.remove()
+    }
+  }
 
   return (
     <motion.div
@@ -189,83 +227,106 @@ function DetailsModal({ doc, onClose, onShare }) {
       animate={{ opacity: 1 }}
       exit={{ opacity: 0 }}
       onClick={onClose}
-      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/50 backdrop-blur-sm"
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 md:p-8 bg-black/60 backdrop-blur-sm"
     >
       <motion.div
-        initial={{ opacity: 0, scale: 0.95 }}
-        animate={{ opacity: 1, scale: 1 }}
-        exit={{ opacity: 0, scale: 0.95 }}
+        initial={{ opacity: 0, scale: 0.95, y: 20 }}
+        animate={{ opacity: 1, scale: 1, y: 0 }}
+        exit={{ opacity: 0, scale: 0.95, y: 20 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-lg bg-white rounded-2xl shadow-card border border-slate-200 overflow-hidden"
+        className="w-full max-w-4xl max-h-[90vh] flex flex-col bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden"
       >
-        <div className="p-6">
-          <div className="flex items-start justify-between gap-4 mb-6">
-            <div className="flex items-center gap-4">
-              <div className="w-14 h-14 rounded-2xl bg-slate-50 border border-slate-200 flex items-center justify-center shrink-0">
-                <FileText className="w-7 h-7 text-slate-500" />
-              </div>
-              <div>
-                <h2 className="text-xl font-bold text-brand-navy">
-                  {doc?.document_type_name || 'Document'}
-                </h2>
-                <div className="flex items-center gap-2 mt-1 text-sm text-slate-500 font-mono">
-                  <Hash className="w-4 h-4 text-slate-400" />
+        {/* Header */}
+        <div className="shrink-0 p-6 pb-4 border-b border-slate-100 flex items-start justify-between bg-slate-50/50">
+          <div className="flex items-center gap-4">
+            <div className="w-12 h-12 rounded-2xl bg-white border border-slate-200 flex items-center justify-center shrink-0 shadow-sm">
+              <FileText className="w-6 h-6 text-brand-pink" />
+            </div>
+            <div>
+              <h2 className="text-xl font-bold text-brand-navy leading-tight">
+                {doc?.document_type_name || 'Document View'}
+              </h2>
+              <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs">
+                <span className="font-mono text-slate-500 bg-slate-100 px-2 py-0.5 rounded flex items-center gap-1">
+                  <Hash className="w-3 h-3" />
                   {doc?.tracking_field}
-                </div>
-                <span className={`inline-block mt-2 px-2.5 py-1 rounded-full text-[10px] font-bold uppercase ${doc?.status === 'valid' ? 'bg-pink-100 text-pink-700' : 'bg-slate-100 text-slate-600'
-                  }`}>
-                  {doc?.status || '—'}
+                </span>
+                <span className="text-slate-400 flex items-center gap-1">
+                  <Calendar className="w-3 h-3" />
+                  {formatDate(doc?.created_at)}
                 </span>
               </div>
             </div>
-            <div className="flex items-center">
-              <button
-                onClick={() => onShare?.(doc)}
-                className="p-2 rounded-xl hover:bg-pink-50 text-slate-500 hover:text-brand-pink transition-colors mr-2"
-                title="Share Document"
-              >
-                <Share2 className="w-5 h-5" />
-              </button>
-              <button
-                onClick={onClose}
-                className="p-2 rounded-xl hover:bg-slate-100 text-slate-500 hover:text-brand-navy transition-colors"
-                aria-label="Close"
-              >
-                <X className="w-5 h-5" />
-              </button>
-            </div>
           </div>
-          <div className="flex items-center gap-2 text-sm text-slate-500 mb-4 pb-4 border-b border-slate-100">
-            <Calendar className="w-4 h-4 text-brand-pink" />
-            Created: {formatDate(doc?.created_at)}
+          <div className="flex items-center gap-2">
+            <button
+              onClick={() => onShare?.(doc)}
+              className="p-2.5 rounded-xl bg-white border border-slate-200 hover:bg-pink-50 text-slate-500 hover:text-brand-pink hover:border-pink-200 transition-all shadow-sm"
+              title="Share Document"
+            >
+              <Share2 className="w-4 h-4" />
+            </button>
+            <button
+              onClick={handleDownload}
+              disabled={!pdfUrl || isLoadingPdf}
+              className="p-2.5 rounded-xl bg-brand-navy hover:bg-slate-800 text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 px-4 font-bold text-sm"
+              title="Download PDF"
+            >
+              <Download className="w-4 h-4" />
+              Download
+            </button>
+            <div className="w-px h-8 bg-slate-200 mx-1" />
+            <button
+              onClick={onClose}
+              className="p-2.5 rounded-xl bg-white border border-slate-200 hover:bg-slate-100 text-slate-500 hover:text-brand-navy transition-all shadow-sm"
+              aria-label="Close"
+            >
+              <X className="w-4 h-4" />
+            </button>
           </div>
-          <div className="space-y-3">
-            <h3 className="text-sm font-bold text-brand-navy uppercase tracking-wider">Document Details</h3>
-            {metadataRows.length > 0 ? (
-              <div className="space-y-2.5 rounded-xl bg-pink-50/50 border border-pink-100 p-4">
-                {metadataRows.map((row, i) => (
-                  <div key={i} className="flex justify-between items-start gap-4 text-sm">
-                    <span className="text-slate-500 shrink-0">{row.label}:</span>
-                    <span className="text-brand-navy font-medium text-right break-words">
-                      {row.value || '—'}
-                    </span>
-                  </div>
-                ))}
-              </div>
-            ) : (
-              <p className="text-sm text-slate-500 italic py-4">No additional details</p>
-            )}
+        </div>
 
-            <div className="pt-4 mt-4 border-t border-slate-100 flex justify-end">
-              <button
-                onClick={() => doc.onDelete?.(doc)}
-                className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50 rounded-xl transition-colors"
-              >
-                <Trash2 className="w-4 h-4" />
-                Delete Document
-              </button>
+        {/* Content Body: PDF Preview */}
+        <div className="flex-1 overflow-auto bg-slate-100/50 relative p-6">
+          {isLoadingPdf ? (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
+              <Loader2 className="w-8 h-8 animate-spin mb-4 text-brand-pink" />
+              <p className="font-medium">Loading Document View...</p>
             </div>
-          </div>
+          ) : pdfUrl ? (
+            <div className="h-full min-h-[500px] w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
+              <iframe
+                src={`${pdfUrl}#toolbar=0`}
+                className="w-full h-full border-none"
+                title="Document PDF Preview"
+              />
+            </div>
+          ) : (
+            <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
+              <AlertTriangle className="w-8 h-8 mb-4 text-slate-300" />
+              <p className="font-medium">Failed to load document preview</p>
+            </div>
+          )}
+        </div>
+
+        {/* Footer Actions */}
+        <div className="shrink-0 p-4 border-t border-slate-100 bg-white flex justify-between items-center">
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase ${doc?.status === 'valid' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
+            }`}>
+            <span className={`w-1.5 h-1.5 rounded-full ${doc?.status === 'valid' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
+            {doc?.status || 'Unknown Status'}
+          </span>
+
+          <button
+            onClick={() => {
+              onClose();
+              doc.onDelete?.(doc);
+            }}
+            className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50 hover:text-red-600 rounded-xl transition-colors"
+          >
+            <Trash2 className="w-4 h-4" />
+            Delete Document
+          </button>
         </div>
       </motion.div>
     </motion.div>

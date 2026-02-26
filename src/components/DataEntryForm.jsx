@@ -213,6 +213,7 @@ export default function DataEntryForm({
   onSubmit,
   onAddTemplate,
   token,
+  isLoading,
 }) {
   const [errors, setErrors] = useState({})
   const [isGenerating, setIsGenerating] = useState(false)
@@ -356,7 +357,7 @@ export default function DataEntryForm({
     }
   }
 
-  if (templates.length === 0) {
+  if (isLoading) {
     return (
       <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm">
         <div className="w-14 h-14 bg-pink-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
@@ -364,6 +365,23 @@ export default function DataEntryForm({
         </div>
         <p className="text-slate-500 font-semibold">Loading templates...</p>
         <p className="text-xs text-slate-400 mt-1">Please wait while we fetch your document types</p>
+      </div>
+    )
+  }
+
+  if (templates.length === 0) {
+    return (
+      <div className="bg-white rounded-2xl border border-slate-200 p-12 text-center shadow-sm flex flex-col items-center">
+        <div className="w-16 h-16 bg-pink-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
+          <LayoutTemplate className="w-8 h-8 text-brand-pink" />
+        </div>
+        <h3 className="text-lg font-bold text-brand-navy mb-2">No Templates Found</h3>
+        <p className="text-slate-500 font-medium mb-6 max-w-sm">
+          You haven't created any document templates yet. Build your first template to start generating documents.
+        </p>
+        <div className="px-6 py-3 bg-pink-50 text-brand-pink rounded-xl font-bold border border-pink-100">
+          Use the Template Builder in the sidebar to create one.
+        </div>
       </div>
     )
   }
