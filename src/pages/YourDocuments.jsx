@@ -18,7 +18,9 @@ import {
   Twitter,
   Hash,
   Download,
-  Loader2
+  Loader2,
+  Database,
+  RefreshCw
 } from 'lucide-react'
 import API from '../api/client'
 import PdfPreviewer from '../components/PdfPreviewer'
@@ -184,30 +186,35 @@ function ShareModal({ doc, onClose }) {
 function DetailsModal({ doc, onClose, onShare }) {
   const [pdfUrl, setPdfUrl] = useState(null)
   const [isLoadingPdf, setIsLoadingPdf] = useState(true)
+  const [isRegenerating, setIsRegenerating] = useState(false)
+
+  const loadPdf = async (force = false) => {
+    if (force) setIsRegenerating(true)
+    else setIsLoadingPdf(true)
+
+    try {
+      const url = `documents/${doc.tracking_field}/download/${force ? '?force=true' : ''}`
+      const response = await API.get(url, {
+        responseType: 'blob'
+      })
+      const blob = new Blob([response.data], { type: 'application/pdf' })
+      const objectUrl = URL.createObjectURL(blob)
+      if (pdfUrl) URL.revokeObjectURL(pdfUrl)
+      setPdfUrl(objectUrl)
+    } catch (err) {
+      console.error('Failed to load PDF preview in modal', err)
+    } finally {
+      setIsLoadingPdf(false)
+      setIsRegenerating(false)
+    }
+  }
 
   useEffect(() => {
-    let objectUrl = null;
-    const loadPdf = async () => {
-      try {
-        setIsLoadingPdf(true)
-        // Request the PDF blob from the generate endpoint using the tracking code
-        const res = await API.get(`documents/${doc.tracking_field}/download/`, {
-          responseType: 'blob'
-        })
-        objectUrl = URL.createObjectURL(res.data)
-        setPdfUrl(objectUrl)
-      } catch (err) {
-        console.error('Failed to load PDF preview in modal', err)
-      } finally {
-        setIsLoadingPdf(false)
-      }
-    }
     if (doc?.tracking_field) loadPdf()
-
     return () => {
-      if (objectUrl) URL.revokeObjectURL(objectUrl)
+      if (pdfUrl) URL.revokeObjectURL(pdfUrl)
     }
-  }, [doc])
+  }, [doc?.tracking_field])
 
   const handleDownload = () => {
     if (pdfUrl) {
@@ -268,7 +275,7 @@ function DetailsModal({ doc, onClose, onShare }) {
             </button>
             <button
               onClick={handleDownload}
-              disabled={!pdfUrl || isLoadingPdf}
+              disabled={!pdfUrl || isLoadingPdf || isRegenerating}
               className="p-2.5 rounded-xl bg-brand-navy hover:bg-slate-800 text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 px-4 font-bold text-sm"
               title="Download PDF"
             >
@@ -294,12 +301,55 @@ function DetailsModal({ doc, onClose, onShare }) {
               <p className="font-medium">Loading Document View...</p>
             </div>
           ) : pdfUrl ? (
-            <div className="h-full min-h-[500px] w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden">
-              <iframe
-                src={`${pdfUrl}#toolbar=0`}
-                className="w-full h-full border-none"
-                title="Document PDF Preview"
-              />
+            <div className="h-full min-h-[500px] w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col md:flex-row">
+              <div className="flex-1 border-r border-slate-100 flex flex-col h-full relative">
+                {isRegenerating && (
+                  <div className="absolute inset-0 bg-white/80 z-20 flex flex-col items-center justify-center gap-3">
+                    <Loader2 className="w-8 h-8 animate-spin text-brand-pink" />
+                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Regenerating...</p>
+                  </div>
+                )}
+                <iframe
+                  src={`${pdfUrl}#toolbar=0`}
+                  className="w-full h-full border-none"
+                  title="Document PDF Preview"
+                />
+              </div>
+
+              <div className="w-full md:w-72 bg-slate-50 overflow-y-auto p-5 shrink-0 h-full max-h-[500px] md:max-h-full">
+                <div className="flex items-center justify-between mb-4">
+                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                    <Database className="w-3 h-3 text-brand-pink" />
+                    Document Data
+                  </h4>
+                  <button
+                    onClick={() => loadPdf(true)}
+                    disabled={isRegenerating}
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white border border-slate-200 text-[9px] font-black text-slate-500 hover:text-brand-pink hover:border-pink-200 transition-all active:scale-95 disabled:opacity-50"
+                  >
+                    <RefreshCw className={`w-2.5 h-2.5 ${isRegenerating ? 'animate-spin' : ''}`} />
+                    Refresh
+                  </button>
+                </div>
+                <div className="space-y-4">
+                  {getMetadataRows(doc?.metadata).length === 0 ? (
+                    <div className="py-8 text-center bg-white rounded-xl border border-slate-200 border-dashed">
+                      <p className="text-xs text-slate-400">No data fields found</p>
+                    </div>
+                  ) : (
+                    getMetadataRows(doc?.metadata).map((row, i) => (
+                      <div key={i} className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
+                        <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                          {row.label}
+                        </label>
+                        <p className="text-sm font-semibold text-brand-navy break-words leading-relaxed">
+                          {row.value}
+                        </p>
+                      </div>
+                    ))
+                  )}
+                </div>
+              </div>
             </div>
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50">

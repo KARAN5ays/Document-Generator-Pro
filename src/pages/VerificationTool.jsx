@@ -7,12 +7,28 @@ import {
   FileText,
   Calendar,
   RefreshCw,
+  Database,
+  Hash
 } from 'lucide-react'
 import API from '../api/client'
 
 function sanitizeCode(str) {
   if (!str || typeof str !== 'string') return ''
   return str.replace(/[^A-Za-z0-9]/g, '').toUpperCase().slice(0, 8)
+}
+
+function getMetadataRows(metadata) {
+  if (!metadata) return []
+  return Object.entries(metadata)
+    .filter(([key, value]) => {
+      // Filter out internal or redundant keys
+      const internalKeys = ['custom_fields', 'customFields', 'grade', 'items']
+      return !internalKeys.includes(key) && value !== null && value !== undefined && value !== ''
+    })
+    .map(([key, value]) => ({
+      label: key.replace(/_/g, ' ').replace(/\b\w/g, (l) => l.toUpperCase()),
+      value: String(value),
+    }))
 }
 
 function timeAgo(dateStr) {
@@ -295,6 +311,27 @@ export default function VerificationTool({ initialCode = '' }) {
                       </p>
                       <p className="text-sm font-bold text-brand-navy truncate">{formatDate(verificationResult.document?.created_at)}</p>
                     </div>
+
+                    {getMetadataRows(verificationResult.document?.metadata).length > 0 && (
+                      <div className="mt-6 pt-6 border-t border-slate-100">
+                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                          <Database className="w-3.5 h-3.5 text-brand-pink" />
+                          Verification Details
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {getMetadataRows(verificationResult.document?.metadata).map((row, i) => (
+                            <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm transition-all hover:border-brand-pink/30 hover:shadow-md group">
+                              <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-brand-pink transition-colors">
+                                {row.label}
+                              </label>
+                              <p className="text-sm font-bold text-brand-navy break-words">
+                                {row.value}
+                              </p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    )}
                   </div>
 
                   <div className="mt-8 relative z-10">
