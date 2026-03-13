@@ -301,13 +301,6 @@ export default function App() {
   return (
     <ErrorBoundary>
       <div className="min-h-screen bg-brand-soft">
-        <Navbar
-          username={userProfile?.name || "Loading..."}
-          notificationCount={0}
-          onLogout={handleLogout}
-          onToggleSidebar={() => setSidebarOpen((v) => !v)}
-        />
-
         <Sidebar
           activeView={activeView}
           onViewChange={handleViewChange}
@@ -318,8 +311,8 @@ export default function App() {
           role={userProfile?.role || "User"}
         />
 
-        {/* Main content: pt-24 clears fixed navbar (h-16) + 32px visual gap */}
-        <main className="lg:ml-64 pt-24 min-h-screen pb-24 px-4 sm:px-6 lg:px-8 transition-all overflow-x-hidden">
+        {/* Main content: sidebar is 260px wide, so offset accordingly */}
+        <main className="lg:ml-[260px] pt-8 min-h-screen pb-24 px-6 sm:px-8 lg:px-10 transition-all overflow-x-hidden">
           <AnimatePresence mode="wait">
             <motion.div
               key={activeView}
@@ -327,26 +320,50 @@ export default function App() {
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.2 }}
-              className="max-w-[1600px] mx-auto pt-6 lg:pt-8"
+              className="max-w-[1600px] mx-auto"
             >
               {activeView === 'generate' && (
-                <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 items-start">
-                  <DataEntryForm
-                    templates={templates}
-                    documentData={documentData}
-                    token={token}
-                    onUpdate={handleDocumentUpdate}
-                    onSubmit={handleBackendResponse}
-                    onAddTemplate={handleAddTemplate}
-                  />
-                  <div className="sticky top-28">
-                    <PdfPreviewer
-                      documentData={documentData}
-                      templates={templates}
-                      onUpdate={handleDocumentUpdate}
-                    />
+                templates.length === 0 ? (
+                  <div className="flex flex-col items-center justify-center py-24 text-center">
+                    <div className="w-24 h-24 rounded-3xl bg-gradient-to-br from-pink-100 to-purple-50 flex items-center justify-center mb-6 shadow-sm border border-pink-100">
+                      <svg className="w-12 h-12 text-brand-pink" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={1.5}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M19.5 14.25v-2.625a3.375 3.375 0 00-3.375-3.375h-1.5A1.125 1.125 0 0113.5 7.125v-1.5a3.375 3.375 0 00-3.375-3.375H8.25m0 12.75h7.5m-7.5 3H12M10.5 2.25H5.625c-.621 0-1.125.504-1.125 1.125v17.25c0 .621.504 1.125 1.125 1.125h12.75c.621 0 1.125-.504 1.125-1.125V11.25a9 9 0 00-9-9z" />
+                      </svg>
+                    </div>
+                    <h2 className="text-2xl font-black text-brand-navy mb-3 tracking-tight">No Templates Yet</h2>
+                    <p className="text-slate-500 max-w-sm mb-8 text-sm leading-relaxed">
+                      You need at least one template to create documents. Head over to the Template Builder to design your first one.
+                    </p>
+                    <button
+                      onClick={() => handleViewChange('builder')}
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl bg-brand-pink text-white font-bold shadow-md shadow-brand-pink/20 hover:bg-pink-700 active:scale-95 transition-all text-sm"
+                    >
+                      <svg className="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor" strokeWidth={2}>
+                        <path strokeLinecap="round" strokeLinejoin="round" d="M12 4.5v15m7.5-7.5h-15" />
+                      </svg>
+                      Go to Template Builder
+                    </button>
+                    <p className="mt-4 text-xs text-slate-400">Templates you create will appear here automatically.</p>
                   </div>
-                </div>
+                ) : (
+                  <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 items-start">
+                    <DataEntryForm
+                      templates={templates}
+                      documentData={documentData}
+                      token={token}
+                      onUpdate={handleDocumentUpdate}
+                      onSubmit={handleBackendResponse}
+                      onAddTemplate={handleAddTemplate}
+                    />
+                    <div className="sticky top-28">
+                      <PdfPreviewer
+                        documentData={documentData}
+                        templates={templates}
+                        onUpdate={handleDocumentUpdate}
+                      />
+                    </div>
+                  </div>
+                )
               )}
 
               {activeView === 'dashboard' && (

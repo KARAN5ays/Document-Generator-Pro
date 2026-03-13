@@ -81,7 +81,7 @@ export default function Sidebar({ activeView, onViewChange, onLogout, isOpen = f
                 `}
             >
                 {/* Brand Section - same height as navbar */}
-                <div className="h-16 px-6 border-b border-slate-200 flex items-center shrink-0">
+                <div className="h-16 px-6 border-0 border-slate-200 flex items-center shrink-0">
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}

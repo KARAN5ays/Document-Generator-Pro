@@ -608,16 +608,16 @@ export default function YourDocuments({ onNavigate }) {
       {/* Modern Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-3xl font-extrabold text-brand-navy tracking-tight">Your Documents</h1>
+          <h1 className="text-2xl font-extrabold text-brand-purple tracking-tight">Your Documents</h1>
           <p className="text-slate-500 font-medium mt-1">Manage, verify, and share your generated documents.</p>
         </div>
 
         <button
           type="button"
           onClick={() => onNavigate?.('generate')}
-          className="inline-flex items-center gap-2 px-6 py-3.5 rounded-xl bg-brand-pink hover:bg-pink-600 text-white font-bold shadow-lg shadow-brand-pink/25 hover:-translate-y-0.5 transition-all"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-pink hover:bg-pink-600 text-white font-bold shadow-sm hover:shadow-md transition-all text-sm"
         >
-          <FileText className="w-5 h-5" />
+          <FileText className="w-4 h-4" />
           Create New Document
         </button>
       </div>
