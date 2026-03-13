@@ -209,7 +209,7 @@ export default function VerificationTool({ initialCode = '' }) {
               </div>
 
               <div className="text-center mt-6 mb-12">
-                <h2 className="text-4xl font-black text-slate-800 tracking-tight">Document Verification</h2>
+                <h2 className="text-4xl font-bold text-slate-800 tracking-tight">Document Verification</h2>
                 <p className="text-lg font-medium text-slate-500 mt-4 mx-auto max-w-md">
                   Enter the 8-digit tracking code found on the document:
                 </p>
@@ -223,7 +223,7 @@ export default function VerificationTool({ initialCode = '' }) {
                     value={digit}
                     onChange={e => handleDigitChange(i, e.target.value)}
                     onKeyDown={e => handleKeyDown(i, e)}
-                    className="w-14 h-16 sm:w-20 sm:h-24 bg-white text-center text-3xl sm:text-4xl font-black border-2 border-slate-200 rounded-2xl focus:border-brand-pink focus:outline-none focus:ring-4 focus:ring-brand-pink/10 transition-all text-brand-navy shadow-sm"
+                    className="w-14 h-16 sm:w-20 sm:h-24 bg-white text-center text-3xl sm:text-4xl font-bold border-2 border-slate-200 rounded-2xl focus:border-brand-pink focus:outline-none focus:ring-4 focus:ring-brand-pink/10 transition-all text-brand-navy shadow-sm"
                     maxLength={2}
                     autoComplete="off"
                     spellCheck="false"
@@ -248,7 +248,7 @@ export default function VerificationTool({ initialCode = '' }) {
                 <button
                   onClick={handleVerifyClick}
                   disabled={isVerifying}
-                  className="w-full bg-brand-pink text-white font-black py-5 sm:py-6 rounded-2xl hover:bg-pink-600 active:scale-[0.98] transition-all shadow-md shadow-brand-pink/25 flex justify-center items-center gap-2 text-lg tracking-wide"
+                  className="w-full bg-brand-pink text-white font-bold py-5 sm:py-6 rounded-2xl hover:bg-pink-600 active:scale-[0.98] transition-all shadow-md shadow-brand-pink/25 flex justify-center items-center gap-2 text-lg tracking-wide"
                 >
                   {isVerifying ? (
                     <>
@@ -290,7 +290,7 @@ export default function VerificationTool({ initialCode = '' }) {
                       </div>
                     </div>
 
-                    <h2 className="text-2xl font-black text-brand-navy mb-2 tracking-tight mt-6">Authentic Record Verified</h2>
+                    <h2 className="text-2xl font-bold text-brand-navy mb-2 tracking-tight mt-6">Authentic Record Verified</h2>
                     <p className="text-brand-pink font-mono font-bold tracking-widest text-sm bg-pink-50 px-4 py-1.5 rounded-lg border border-pink-100">
                       ID: {inputCode}
                     </p>
@@ -298,14 +298,14 @@ export default function VerificationTool({ initialCode = '' }) {
 
                   <div className="space-y-4 relative z-10 w-full">
                     <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 flex items-center justify-between">
-                      <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                      <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                         <FileText className="w-3.5 h-3.5 text-brand-pink" />
                         Type
                       </p>
                       <p className="text-sm font-bold text-brand-navy truncate">{verificationResult.document?.template_type}</p>
                     </div>
                     <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 flex items-center justify-between">
-                      <p className="text-[11px] font-black text-slate-400 uppercase tracking-widest flex items-center gap-2">
+                      <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
                         <Calendar className="w-3.5 h-3.5 text-brand-pink" />
                         Issued
                       </p>
@@ -314,14 +314,14 @@ export default function VerificationTool({ initialCode = '' }) {
 
                     {getMetadataRows(verificationResult.document?.metadata).length > 0 && (
                       <div className="mt-6 pt-6 border-t border-slate-100">
-                        <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
+                        <h4 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
                           <Database className="w-3.5 h-3.5 text-brand-pink" />
                           Verification Details
                         </h4>
                         <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
                           {getMetadataRows(verificationResult.document?.metadata).map((row, i) => (
                             <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm transition-all hover:border-brand-pink/30 hover:shadow-md group">
-                              <label className="block text-[9px] font-black text-slate-400 uppercase tracking-widest mb-1 group-hover:text-brand-pink transition-colors">
+                              <label className="block text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1 group-hover:text-brand-pink transition-colors">
                                 {row.label}
                               </label>
                               <p className="text-sm font-bold text-brand-navy break-words">
@@ -355,7 +355,7 @@ export default function VerificationTool({ initialCode = '' }) {
                       </div>
                     </div>
 
-                    <h3 className="text-2xl font-black text-brand-navy mb-3 tracking-tight mt-6">Record Not Found</h3>
+                    <h3 className="text-2xl font-bold text-brand-navy mb-3 tracking-tight mt-6">Record Not Found</h3>
                     <p className="text-slate-500 font-medium text-sm mx-auto mb-8 leading-relaxed max-w-[260px]">
                       No authentic record matches the code <span className="font-mono text-red-500 font-bold bg-white px-1.5 py-0.5 rounded border border-red-100">{inputCode}</span> in our ledger.
                     </p>

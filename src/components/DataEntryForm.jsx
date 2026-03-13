@@ -185,7 +185,7 @@ function SectionCard({ step, icon: Icon, title, description, children, accent = 
     >
       <div className={`px-5 py-4 flex items-center gap-3 border-b ${accent ? 'border-pink-200 bg-pink-50' : 'border-slate-100 bg-slate-50'}`}>
         {step && (
-          <span className="w-6 h-6 rounded-full bg-brand-pink text-white flex items-center justify-center text-[11px] font-black shrink-0">
+          <span className="w-6 h-6 rounded-full bg-brand-pink text-white flex items-center justify-center text-[11px] font-bold shrink-0">
             {step}
           </span>
         )}
@@ -427,7 +427,7 @@ export default function DataEntryForm({
             <PenLine className="w-5 h-5 text-slate-600" />
           </div>
           <div>
-            <h2 className="text-xl font-black text-brand-navy tracking-tight">Create Document</h2>
+            <h2 className="text-xl font-bold text-brand-navy tracking-tight">Create Document</h2>
             <p className="text-sm text-slate-500 mt-0.5">Fill in the details to generate your document</p>
           </div>
         </div>

@@ -306,7 +306,7 @@ function DetailsModal({ doc, onClose, onShare }) {
                 {isRegenerating && (
                   <div className="absolute inset-0 bg-white/80 z-20 flex flex-col items-center justify-center gap-3">
                     <Loader2 className="w-8 h-8 animate-spin text-brand-pink" />
-                    <p className="text-[10px] font-black text-slate-500 uppercase tracking-widest">Regenerating...</p>
+                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Regenerating...</p>
                   </div>
                 )}
                 <iframe
@@ -318,14 +318,14 @@ function DetailsModal({ doc, onClose, onShare }) {
 
               <div className="w-full md:w-72 bg-slate-50 overflow-y-auto p-5 shrink-0 h-full max-h-[500px] md:max-h-full">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-[10px] font-black text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                  <h4 className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
                     <Database className="w-3 h-3 text-brand-pink" />
                     Document Data
                   </h4>
                   <button
                     onClick={() => loadPdf(true)}
                     disabled={isRegenerating}
-                    className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white border border-slate-200 text-[9px] font-black text-slate-500 hover:text-brand-pink hover:border-pink-200 transition-all active:scale-95 disabled:opacity-50"
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white border border-slate-200 text-[9px] font-semibold text-slate-500 hover:text-brand-pink hover:border-pink-200 transition-all active:scale-95 disabled:opacity-50"
                   >
                     <RefreshCw className={`w-2.5 h-2.5 ${isRegenerating ? 'animate-spin' : ''}`} />
                     Refresh
@@ -389,7 +389,7 @@ function DocumentsTable({ documents, onViewDetails, onShare, onDelete }) {
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-slate-50 border-b border-slate-100 text-[11px] font-bold text-slate-400 uppercase tracking-wider backdrop-blur-sm sticky top-0 z-10">
+            <tr className="bg-slate-100 border-b border-slate-100 text-[11px] font-semibold text-brand-black uppercase tracking-wider backdrop-blur-sm sticky top-0 z-10">
               <th className="px-6 py-4">Document</th>
               <th className="px-6 py-4">Tracking ID</th>
               <th className="px-6 py-4">Created</th>
@@ -410,7 +410,7 @@ function DocumentsTable({ documents, onViewDetails, onShare, onDelete }) {
                     <div className="w-9 h-9 rounded-lg bg-pink-50 border border-pink-100 flex items-center justify-center text-brand-pink font-bold shrink-0">
                       <FileText className="w-4 h-4" />
                     </div>
-                    <div className="font-bold text-brand-navy">{doc.document_type_name || 'Document'}</div>
+                    <div className="font-semibold text-brand-navy">{doc.document_type_name || 'Document'}</div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -608,8 +608,8 @@ export default function YourDocuments({ onNavigate }) {
       {/* Modern Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-2xl font-extrabold text-brand-purple tracking-tight">Your Documents</h1>
-          <p className="text-slate-500 font-medium mt-1">Manage, verify, and share your generated documents.</p>
+          <h1 className="text-xl  text-brand-purple tracking-tight">Your Documents</h1>
+          <p className="text-slate-500 font-light mt-1">Manage, verify, and share your generated documents.</p>
         </div>
 
         <button

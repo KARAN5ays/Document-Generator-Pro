@@ -156,12 +156,12 @@ export default function Dashboard({ onNavigate }) {
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
                         <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-semibold text-brand-pink flex items-center gap-1.5 uppercase tracking-wider">
+                            <span className="text-xs font-semibold text-brand-purple flex items-center gap-1.5 uppercase tracking-wider">
                                 <Sparkles className="w-3.5 h-3.5" />
                                 {getGreeting()}
                             </span>
                         </div>
-                        <h1 className="text-2xl md:text-3xl font-black text-brand-navy tracking-tight mb-2">
+                        <h1 className="text-2xl md:text-3xl font-semibold text-brand-navy tracking-tight mb-2">
                             Welcome Back, {localStorage.getItem('username') || 'User'}
                         </h1>
                         <p className="text-slate-500 max-w-lg text-sm font-medium">
@@ -194,7 +194,7 @@ export default function Dashboard({ onNavigate }) {
                             <div className="text-sm font-semibold text-slate-500 transition-colors">{stat.label}</div>
                             {i === 0 && <span className="flex h-2 w-2 rounded-full bg-pink-500 ring-4 ring-pink-50 mt-1 animate-pulse" />}
                         </div>
-                        <div className="text-3xl font-black text-brand-navy tabular-nums tracking-tight">{(stat.value || 0).toLocaleString()}</div>
+                        <div className="text-3xl font-semibold text-brand-navy tabular-nums tracking-tight">{(stat.value || 0).toLocaleString()}</div>
                     </motion.div>
                 ))}
             </div>

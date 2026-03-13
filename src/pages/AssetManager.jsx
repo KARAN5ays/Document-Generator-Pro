@@ -119,7 +119,7 @@ export default function AssetManager({ token }) {
                     <Image className="w-7 h-7 text-white" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-black text-brand-navy tracking-tight">Asset Manager</h1>
+                    <h1 className="text-2xl font-bold text-brand-navy tracking-tight">Asset Manager</h1>
                     <p className="text-slate-500 mt-0.5">Store logos, signatures & stamps — ready to grab in Template Builder</p>
                 </div>
             </div>

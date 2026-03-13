@@ -265,7 +265,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
               <span>/</span>
               <span className="font-semibold text-brand-purple">Templates</span>
             </div>
-            <h1 className="text-2xl font-black text-brand-navy tracking-tight">Template Builder</h1>
+            <h1 className="text-2xl font-semibold text-brand-navy tracking-tight">Template Builder</h1>
           </div>
           <button
             onClick={openCreate}
@@ -436,7 +436,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
             <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">
               {editingTemplate ? 'Editing' : 'New Template'}
             </p>
-            <h1 className="text-lg font-black text-brand-navy tracking-tight">
+            <h1 className="text-lg font-bold text-brand-navy tracking-tight">
               {editingTemplate ? editingTemplate.name : 'Template Builder'}
             </h1>
           </div>
