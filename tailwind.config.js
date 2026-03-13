@@ -13,9 +13,11 @@ export default {
       colors: {
         brand: {
           navy: '#1e293b', // Lighter navy (slate-800) for better contrast on white
-          pink: '#ec4899', // True pink (pink-500)
-          'pink-light': '#fbcfe8',
-          'pink-dark': '#db2777',
+          pink: '#e6007a', // Vibrant magenta/pink from reference images
+          'pink-light': '#fdf2f8',
+          'pink-dark': '#c8006a',
+          purple: '#472C6A', // Deep purple for logo
+          'purple-dark': '#341355',
           slate: '#475569',
           soft: '#f8fafc',
         }

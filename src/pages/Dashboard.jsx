@@ -108,8 +108,8 @@ export default function Dashboard({ onNavigate }) {
 
     // Verification Success Data (Mocked/Derived)
     const verificationData = [
-        { name: 'Valid', value: statsData.verified_documents || 1, color: '#ec4899' }, // Pink
-        { name: 'Invalid', value: statsData.verification_alerts || 0, color: '#fbcfe8' }, // Light Pink
+        { name: 'Valid', value: statsData.verified_documents || 1, color: '#7CB5EC' }, // Light Blue
+        { name: 'Invalid', value: statsData.verification_alerts || 0, color: '#F7A35C' }, // Light Orange
     ]
     const totalVerifications = verificationData.reduce((acc, curr) => acc + curr.value, 0)
     const verificationSuccessRate = Math.round((verificationData[0].value / totalVerifications) * 100) || 0
@@ -222,8 +222,8 @@ export default function Dashboard({ onNavigate }) {
                                 <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11 }} dx={-10} />
                                 <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                                 <Legend wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }} />
-                                <Bar dataKey="Generated" fill="#ec4899" radius={[4, 4, 0, 0]} maxBarSize={40} />
-                                <Bar dataKey="Verified" fill="#fbcfe8" radius={[4, 4, 0, 0]} maxBarSize={40} />
+                                <Bar dataKey="Generated" fill="#7CB5EC" radius={[0, 0, 0, 0]} maxBarSize={40} />
+                                <Bar dataKey="Verified" fill="#71C9CE" radius={[0, 0, 0, 0]} maxBarSize={40} />
                             </BarChart>
                         </ResponsiveContainer>
                     </div>
@@ -262,7 +262,7 @@ export default function Dashboard({ onNavigate }) {
                                         endAngle={-270}
                                     >
                                         {verificationData.map((entry, index) => (
-                                            <Cell key={`cell-${index}`} fill={entry.color} stroke="none" cornerRadius={10} />
+                                            <Cell key={`cell-${index}`} fill={entry.color} stroke="#ffffff" strokeWidth={2} />
                                         ))}
                                     </Pie>
                                 </PieChart>
@@ -416,7 +416,7 @@ export default function Dashboard({ onNavigate }) {
                     >
                         <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
                             <h3 className="font-bold text-sm text-brand-navy uppercase tracking-wider">Recent Activity</h3>
-                            <button onClick={() => onNavigate?.('documents')} className="text-xs font-semibold text-brand-pink hover:text-pink-600">View All</button>
+                            <button onClick={() => onNavigate?.('documents')} className="text-xs font-semibold text-brand-purple hover:text-purple-900">View All</button>
                         </div>
                         <div className="divide-y divide-slate-50">
                             {recentDocs.length === 0 ? (

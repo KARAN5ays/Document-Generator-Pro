@@ -260,10 +260,10 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
         {/* Page Header */}
         <div className="flex items-center justify-between mb-6 gap-4 flex-wrap">
           <div>
-            <div className="flex items-center gap-2 text-sm text-slate-400 mb-1">
+            <div className="flex items-center gap-2 text-sm text-brand-purple mb-1">
               <button onClick={onCancel} className="hover:text-brand-pink transition-colors">Dashboard</button>
               <span>/</span>
-              <span className="font-semibold text-slate-600">Templates</span>
+              <span className="font-semibold text-brand-purple">Templates</span>
             </div>
             <h1 className="text-2xl font-black text-brand-navy tracking-tight">Template Builder</h1>
           </div>
