@@ -39,10 +39,10 @@ export default function VerifyQR({ trackingCode, size = 96, showLabel = true }) 
 
             {showLabel && (
                 <div className="text-center">
-                    <p className="text-[9px] font-black uppercase tracking-[0.2em] text-slate-400">
+                    <p className="text-[9px] font-normal uppercase tracking-[0.2em] text-slate-400">
                         Scan to Verify
                     </p>
-                    <p className="font-mono text-[9px] font-bold text-slate-300 tracking-widest mt-0.5">
+                    <p className="font-mono text-[9px] font-normal text-slate-300 tracking-widest mt-0.5">
                         {trackingCode}
                     </p>
                 </div>

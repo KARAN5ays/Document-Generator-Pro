@@ -184,38 +184,35 @@ export default function VerificationTool({ initialCode = '' }) {
   const inputCode = codeDigits.join('')
 
   return (
-    <div className="relative min-h-[calc(100vh-64px)] w-full bg-slate-50/50 text-slate-800 overflow-y-auto font-sans selection:bg-brand-pink/30 block pt-8 sm:pt-12 px-4 pb-20">
-      {/* Background Effects */}
-      <div className="fixed inset-0 z-0 pointer-events-none">
-        <div className="absolute top-[-10%] left-[-10%] w-[40%] h-[40%] bg-brand-pink/5 rounded-full blur-[120px]" />
-        <div className="absolute bottom-[-10%] right-[-10%] w-[50%] h-[50%] bg-pink-500/5 rounded-full blur-[150px]" />
+    <div className="min-h-[calc(100vh-64px)] w-full bg-slate-50 text-slate-800 font-sans selection:bg-brand-pink/30 flex items-center justify-center py-12 px-4 relative overflow-hidden">
+      {/* Subtle Background Effects */}
+      <div className="absolute inset-0 z-0 pointer-events-none">
+        <div className="absolute -top-[20%] -left-[10%] w-[50%] h-[50%] bg-brand-pink/5 rounded-full blur-[100px]" />
+        <div className="absolute -bottom-[20%] -right-[10%] w-[50%] h-[50%] bg-slate-300/20 rounded-full blur-[100px]" />
       </div>
 
-      <div className="relative z-10 w-full max-w-4xl mx-auto">
+      <div className="w-full max-w-2xl mx-auto relative z-10 flex flex-col items-center">
         <AnimatePresence mode="wait">
           {!verificationResult ? (
             <motion.div
               key="input-form"
-              initial={{ opacity: 0, scale: 0.95 }}
-              animate={{ opacity: 1, scale: 1 }}
-              exit={{ opacity: 0, scale: 0.95, y: -20 }}
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
               transition={{ duration: 0.3 }}
-              className="bg-white rounded-[2rem] shadow-[0_15px_60px_-15px_rgba(0,0,0,0.05)] p-8 sm:p-12 relative border border-slate-100 mt-10"
+              className="bg-white rounded-xl shadow-sm p-8 sm:p-12 border border-slate-200 w-full"
             >
-              <div className="absolute -top-10 left-1/2 -translate-x-1/2">
-                <div className="w-20 h-20 rounded-t-[2.5rem] rounded-b-[2rem] bg-brand-pink text-white flex items-center justify-center shadow-lg shadow-brand-pink/30 mx-auto">
-                  <ShieldCheck className="w-10 h-10" />
+              <div className="text-center mb-10">
+                <div className="flex justify-center mb-4">
+                  <ShieldCheck className="w-12 h-12 text-brand-pink" strokeWidth={1.5} />
                 </div>
-              </div>
-
-              <div className="text-center mt-6 mb-12">
-                <h2 className="text-4xl font-bold text-slate-800 tracking-tight">Document Verification</h2>
-                <p className="text-lg font-medium text-slate-500 mt-4 mx-auto max-w-md">
-                  Enter the 8-digit tracking code found on the document:
+                <h2 className="text-3xl text-slate-800 tracking-tight font-normal">Document Verification</h2>
+                <p className="text-base text-slate-500 mt-3 font-normal">
+                  Enter the 8-digit tracking code found on the document
                 </p>
               </div>
 
-              <div className="flex justify-center gap-3 sm:gap-4 mb-12 px-4 sm:px-12" onPaste={handlePaste}>
+              <div className="flex justify-center gap-2 sm:gap-4 mb-8" onPaste={handlePaste}>
                 {codeDigits.map((digit, i) => (
                   <input
                     key={i}
@@ -223,7 +220,7 @@ export default function VerificationTool({ initialCode = '' }) {
                     value={digit}
                     onChange={e => handleDigitChange(i, e.target.value)}
                     onKeyDown={e => handleKeyDown(i, e)}
-                    className="w-14 h-16 sm:w-20 sm:h-24 bg-white text-center text-3xl sm:text-4xl font-bold border-2 border-slate-200 rounded-2xl focus:border-brand-pink focus:outline-none focus:ring-4 focus:ring-brand-pink/10 transition-all text-brand-navy shadow-sm"
+                    className="w-12 h-16 sm:w-16 sm:h-20 bg-slate-50 text-center text-3xl font-light border border-slate-200 rounded-lg focus:border-brand-pink focus:outline-none focus:ring-1 focus:ring-brand-pink transition-colors text-brand-navy"
                     maxLength={2}
                     autoComplete="off"
                     spellCheck="false"
@@ -234,97 +231,89 @@ export default function VerificationTool({ initialCode = '' }) {
               <AnimatePresence>
                 {errorMessage && (
                   <motion.div
-                    initial={{ opacity: 0, height: 0, mb: 0 }}
-                    animate={{ opacity: 1, height: 'auto', mb: 20 }}
-                    exit={{ opacity: 0, height: 0, mb: 0 }}
-                    className="text-center text-xs font-bold text-red-500 pb-2"
+                    initial={{ opacity: 0, height: 0 }}
+                    animate={{ opacity: 1, height: 'auto' }}
+                    exit={{ opacity: 0, height: 0 }}
+                    className="text-center text-sm text-red-500 mb-6 font-normal"
                   >
                     {errorMessage}
                   </motion.div>
                 )}
               </AnimatePresence>
 
-              <div className="px-4 sm:px-16 pb-4">
+              <div className="max-w-md mx-auto">
                 <button
                   onClick={handleVerifyClick}
                   disabled={isVerifying}
-                  className="w-full bg-brand-pink text-white font-bold py-5 sm:py-6 rounded-2xl hover:bg-pink-600 active:scale-[0.98] transition-all shadow-md shadow-brand-pink/25 flex justify-center items-center gap-2 text-lg tracking-wide"
+                  className="w-full bg-brand-pink text-white py-4 rounded-lg hover:bg-pink-600 transition-colors flex justify-center items-center gap-2 text-lg font-normal"
                 >
                   {isVerifying ? (
                     <>
-                      <Loader2 className="w-6 h-6 animate-spin" />
+                      <Loader2 className="w-5 h-5 animate-spin" />
                       Verifying...
                     </>
                   ) : (
-                    'Confirm'
+                    'Confirm Code'
                   )}
                 </button>
               </div>
 
-              <div className="mt-8 flex flex-col items-center gap-5">
-                <button onClick={handleReset} className="text-base font-bold text-brand-pink hover:text-pink-600 transition-colors">
-                  Wrong document? Go back
+              <div className="mt-8 flex flex-col items-center gap-4">
+                <button onClick={handleReset} className="text-sm text-slate-500 hover:text-brand-pink transition-colors font-normal">
+                  Clear input
                 </button>
-                <div className="text-sm text-slate-500 font-medium pb-4">
-                  Didn't find the code? <button className="text-brand-pink hover:underline font-bold">Resend Code</button>
-                </div>
               </div>
             </motion.div>
           ) : (
             <motion.div
               key={verificationResult.valid ? 'valid' : 'invalid'}
-              initial={{ opacity: 0, scale: 0.95, y: 20 }}
-              animate={{ opacity: 1, scale: 1, y: 0 }}
-              exit={{ opacity: 0, scale: 0.95 }}
-              transition={{ type: "spring", stiffness: 100, damping: 20 }}
-              className="mt-10"
+              initial={{ opacity: 0, y: 10 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -10 }}
+              transition={{ duration: 0.3 }}
+              className="w-full"
             >
               {verificationResult.valid ? (
-                <div className="bg-white rounded-[2rem] shadow-[0_15px_60px_-15px_rgba(0,0,0,0.05)] p-8 sm:p-10 relative overflow-hidden border border-slate-100">
-                  <div className="absolute top-0 right-0 w-full h-full bg-brand-soft/10 pointer-events-none" />
-
-                  <div className="flex flex-col items-center mb-8 text-center relative z-10">
-                    <div className="absolute -top-16 left-1/2 -translate-x-1/2">
-                      <div className="w-20 h-20 rounded-t-[2.5rem] rounded-b-[2rem] bg-emerald-500 text-white flex items-center justify-center shadow-lg shadow-emerald-500/30 mx-auto">
-                        <ShieldCheck className="w-10 h-10" />
-                      </div>
+                <div className="bg-white rounded-xl shadow-sm p-8 sm:p-12 border border-slate-200 w-full">
+                  <div className="text-center mb-10">
+                    <div className="flex justify-center mb-4">
+                      <ShieldCheck className="w-16 h-16 text-emerald-500" strokeWidth={1.5} />
                     </div>
-
-                    <h2 className="text-2xl font-bold text-brand-navy mb-2 tracking-tight mt-6">Authentic Record Verified</h2>
-                    <p className="text-brand-pink font-mono font-bold tracking-widest text-sm bg-pink-50 px-4 py-1.5 rounded-lg border border-pink-100">
+                    <h2 className="text-3xl text-brand-navy tracking-tight font-normal mb-2">Authentic Record Verified</h2>
+                    <p className="text-emerald-600/80 font-mono text-sm tracking-wider font-normal bg-emerald-50 inline-block px-3 py-1 rounded">
                       ID: {inputCode}
                     </p>
                   </div>
 
-                  <div className="space-y-4 relative z-10 w-full">
-                    <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 flex items-center justify-between">
-                      <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <FileText className="w-3.5 h-3.5 text-brand-pink" />
-                        Type
+                  <div className="space-y-4 max-w-lg mx-auto">
+                    <div className="flex items-center justify-between py-4 border-b border-slate-100">
+                      <p className="text-sm text-slate-500 flex items-center gap-2 font-normal">
+                        <FileText className="w-4 h-4 text-slate-400" strokeWidth={1.5} />
+                        Document Type
                       </p>
-                      <p className="text-sm font-bold text-brand-navy truncate">{verificationResult.document?.template_type}</p>
+                      <p className="text-base text-brand-navy font-normal">{verificationResult.document?.template_type}</p>
                     </div>
-                    <div className="bg-slate-50 rounded-2xl p-5 border border-slate-100 flex items-center justify-between">
-                      <p className="text-[11px] font-semibold text-slate-400 uppercase tracking-widest flex items-center gap-2">
-                        <Calendar className="w-3.5 h-3.5 text-brand-pink" />
-                        Issued
+                    <div className="flex items-center justify-between py-4 border-b border-slate-100">
+                      <p className="text-sm text-slate-500 flex items-center gap-2 font-normal">
+                        <Calendar className="w-4 h-4 text-slate-400" strokeWidth={1.5} />
+                        Issued Date
                       </p>
-                      <p className="text-sm font-bold text-brand-navy truncate">{formatDate(verificationResult.document?.created_at)}</p>
+                      <p className="text-base text-brand-navy font-normal">{formatDate(verificationResult.document?.created_at)}</p>
                     </div>
 
                     {getMetadataRows(verificationResult.document?.metadata).length > 0 && (
-                      <div className="mt-6 pt-6 border-t border-slate-100">
-                        <h4 className="text-[10px] font-semibold text-slate-400 uppercase tracking-widest mb-4 flex items-center gap-2">
-                          <Database className="w-3.5 h-3.5 text-brand-pink" />
+                      <div className="pt-6">
+                        <h4 className="text-sm text-slate-500 mb-4 flex items-center gap-2 font-normal">
+                          <Database className="w-4 h-4 text-slate-400" strokeWidth={1.5} />
                           Verification Details
                         </h4>
-                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                           {getMetadataRows(verificationResult.document?.metadata).map((row, i) => (
-                            <div key={i} className="bg-white p-4 rounded-xl border border-slate-200 shadow-sm transition-all hover:border-brand-pink/30 hover:shadow-md group">
-                              <label className="block text-[9px] font-semibold text-slate-400 uppercase tracking-widest mb-1 group-hover:text-brand-pink transition-colors">
+                            <div key={i} className="bg-slate-50 p-4 rounded-lg border border-slate-100">
+                              <label className="block text-xs text-slate-500 mb-1 font-normal">
                                 {row.label}
                               </label>
-                              <p className="text-sm font-bold text-brand-navy break-words">
+                              <p className="text-sm text-slate-800 break-words font-normal">
                                 {row.value}
                               </p>
                             </div>
@@ -334,34 +323,29 @@ export default function VerificationTool({ initialCode = '' }) {
                     )}
                   </div>
 
-                  <div className="mt-8 relative z-10">
+                  <div className="mt-10 max-w-sm mx-auto">
                     <button
                       onClick={handleReset}
-                      className="w-full bg-slate-50 border border-slate-200 text-slate-600 hover:bg-slate-100 font-bold py-4 rounded-2xl transition-all shadow-sm flex justify-center items-center gap-2 uppercase tracking-widest text-[13px]"
+                      className="w-full bg-white border border-slate-200 text-slate-600 hover:bg-slate-50 py-3 rounded-lg transition-colors flex justify-center items-center gap-2 text-sm font-normal"
                     >
                       <RefreshCw className="w-4 h-4" />
-                      Verify Another
+                      Verify Another Document
                     </button>
                   </div>
                 </div>
               ) : (
-                <div className="bg-white rounded-[2rem] shadow-[0_15px_60px_-15px_rgba(0,0,0,0.05)] p-8 sm:p-12 text-center relative overflow-hidden border border-red-100">
-                  <div className="absolute top-0 left-1/2 -translate-x-1/2 w-full h-full bg-red-50/50 pointer-events-none" />
-
-                  <div className="relative z-10 pt-4">
-                    <div className="absolute -top-16 left-1/2 -translate-x-1/2">
-                      <div className="w-20 h-20 rounded-t-[2.5rem] rounded-b-[2rem] bg-red-500 text-white flex items-center justify-center shadow-lg shadow-red-500/30 mx-auto">
-                        <AlertCircle className="w-10 h-10" />
-                      </div>
-                    </div>
-
-                    <h3 className="text-2xl font-bold text-brand-navy mb-3 tracking-tight mt-6">Record Not Found</h3>
-                    <p className="text-slate-500 font-medium text-sm mx-auto mb-8 leading-relaxed max-w-[260px]">
-                      No authentic record matches the code <span className="font-mono text-red-500 font-bold bg-white px-1.5 py-0.5 rounded border border-red-100">{inputCode}</span> in our ledger.
-                    </p>
+                <div className="bg-white rounded-xl shadow-sm p-8 sm:p-12 text-center border border-red-100 w-full">
+                  <div className="flex justify-center mb-6">
+                    <AlertCircle className="w-16 h-16 text-red-500" strokeWidth={1.5} />
+                  </div>
+                  <h3 className="text-2xl text-brand-navy tracking-tight mb-3 font-normal">Record Not Found</h3>
+                  <p className="text-slate-500 font-normal text-base max-w-sm mx-auto mb-8">
+                    No authentic record matches the code <span className="font-mono text-red-500 font-normal">{inputCode}</span> in our ledger.
+                  </p>
+                  <div className="max-w-xs mx-auto">
                     <button
                       onClick={handleReset}
-                      className="w-full bg-slate-50 hover:bg-slate-100 border border-slate-200 text-slate-700 font-bold text-[13px] tracking-widest rounded-2xl py-4 transition-all flex items-center justify-center gap-2 uppercase"
+                      className="w-full bg-white border border-slate-200 text-slate-700 hover:bg-slate-50 rounded-lg py-3 transition-colors flex items-center justify-center gap-2 text-sm font-normal"
                     >
                       <RefreshCw className="w-4 h-4" />
                       Try Again
@@ -372,8 +356,47 @@ export default function VerificationTool({ initialCode = '' }) {
             </motion.div>
           )}
         </AnimatePresence>
-      </div>
 
+        {/* Informational Elements (Trust Indicators) */}
+        {!verificationResult && (
+          <motion.div
+            initial={{ opacity: 0 }}
+            animate={{ opacity: 1 }}
+            transition={{ delay: 0.2, duration: 0.5 }}
+            className="mt-12 grid grid-cols-1 md:grid-cols-3 gap-8 text-center max-w-3xl mx-auto px-4"
+          >
+            <div className="flex flex-col items-center gap-3">
+              <div className="bg-white p-3.5 rounded-full shadow-sm border border-slate-100/50">
+                <ShieldCheck className="w-5 h-5 text-brand-pink" strokeWidth={1.5} />
+              </div>
+              <div>
+                <h4 className="text-sm text-slate-700 font-normal mb-1">Secure Verification</h4>
+                <p className="text-[13px] text-slate-400 font-light">Cryptographically secured document checking</p>
+              </div>
+            </div>
+            
+            <div className="flex flex-col items-center gap-3">
+              <div className="bg-white p-3.5 rounded-full shadow-sm border border-slate-100/50">
+                <Database className="w-5 h-5 text-brand-pink" strokeWidth={1.5} />
+              </div>
+              <div>
+                <h4 className="text-sm text-slate-700 font-normal mb-1">Immutable Records</h4>
+                <p className="text-[13px] text-slate-400 font-light">Tamper-proof storage of authenticity</p>
+              </div>
+            </div>
+
+            <div className="flex flex-col items-center gap-3">
+              <div className="bg-white p-3.5 rounded-full shadow-sm border border-slate-100/50">
+                <FileText className="w-5 h-5 text-brand-pink" strokeWidth={1.5} />
+              </div>
+              <div>
+                <h4 className="text-sm text-slate-700 font-normal mb-1">Instant Results</h4>
+                <p className="text-[13px] text-slate-400 font-light">Real-time digital status of your documents</p>
+              </div>
+            </div>
+          </motion.div>
+        )}
+      </div>
     </div>
   )
 }
