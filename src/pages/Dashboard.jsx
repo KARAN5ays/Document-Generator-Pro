@@ -214,7 +214,7 @@ export default function Dashboard({ onNavigate }) {
                             Document Status
                         </h3>
                     </div>
-                    <div className="flex-1 w-full min-h-[250px] pt-4">
+                    <div className="w-full h-[250px] pt-4">
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
@@ -242,7 +242,7 @@ export default function Dashboard({ onNavigate }) {
                             Verification Success
                         </h3>
                     </div>
-                    <div className="flex-1 flex items-center justify-center relative min-h-[250px]">
+                    <div className="w-full h-[250px] relative flex items-center justify-center mt-2">
                         <div className="absolute inset-0 flex items-center justify-center flex-col pointer-events-none">
                             <span className="text-3xl font-bold text-brand-navy">{verificationSuccessRate}%</span>
                             <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">Success</span>
@@ -307,7 +307,7 @@ export default function Dashboard({ onNavigate }) {
                     </div>
 
                     {trends.length === 0 ? (
-                        <div className="flex-1 min-h-[320px] flex flex-col items-center justify-center p-8">
+                        <div className="h-[320px] flex flex-col items-center justify-center p-8">
                             <div className="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center mb-6">
                                 <Activity className="w-10 h-10 text-slate-300" />
                             </div>
@@ -321,7 +321,7 @@ export default function Dashboard({ onNavigate }) {
                             </button>
                         </div>
                     ) : (
-                        <div className="flex-1 min-h-[320px] w-full p-6 lg:p-8 pt-4">
+                        <div className="w-full h-[320px] p-6 lg:p-8 pt-4">
                             <ResponsiveContainer width="100%" height="100%">
                                 <AreaChart data={trends} margin={{ top: 20, right: 20, left: 0, bottom: 10 }}>
                                     <defs>
