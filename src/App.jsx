@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react'
 import { motion, AnimatePresence } from 'framer-motion'
+import { FilePlus, FolderOpen } from 'lucide-react'
 import DataEntryForm from './components/DataEntryForm'
 import { extractFieldsFromHTML } from './utils/templateFields'
 import PdfPreviewer from './components/PdfPreviewer'
@@ -331,9 +332,26 @@ export default function App() {
 
               {activeView === 'generate' && (
                 templates.length === 0 ? (
-                  <div className="flex flex-col items-center justify-center py-24 text-center">
-                    {/* ... (keep existing empty state) ... */}
-                  </div>
+                  <motion.div
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="w-full flex flex-col items-center justify-center py-32 text-center"
+                  >
+                      <div className="w-24 h-24 rounded-full bg-slate-50 flex items-center justify-center mb-6">
+                          <FilePlus className="w-12 h-12 text-slate-300" />
+                      </div>
+                      <h2 className="text-3xl font-light text-brand-navy tracking-tight mb-3">No templates available</h2>
+                      <p className="text-slate-500 font-light max-w-md mx-auto mb-8">
+                          You haven't created any document templates yet. Head over to the Template Builder to create your first template and start generating documents.
+                      </p>
+                      <button
+                          onClick={() => handleViewChange('builder')}
+                          className="px-8 py-3.5 bg-brand-pink text-white rounded-[1.25rem] font-light hover:bg-pink-600 transition-all shadow-md hover:-translate-y-0.5 shadow-pink-500/20 flex items-center gap-2 mx-auto"
+                      >
+                          <FolderOpen className="w-5 h-5" />
+                          Go to Template Builder
+                      </button>
+                  </motion.div>
                 ) : (
                   <div className="grid grid-cols-1 xl:grid-cols-2 gap-6 lg:gap-8 xl:gap-10 items-start">
                     <DataEntryForm
