@@ -42,7 +42,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-pink to-pink-600 flex items-center justify-center shadow-lg shadow-brand-pink/30">
                             <FileText className="w-6 h-6 text-white" />
                         </div>
-                        <span className="text-xl font-bold text-white tracking-tight">DocGen</span>
+                        <span className="text-xl font-light text-white tracking-tight">DocGen</span>
                     </div>
                     <motion.div
                         initial={{ opacity: 0, y: 20 }}
@@ -50,7 +50,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                         transition={{ delay: 0.2, duration: 0.5 }}
                         className="max-w-md"
                     >
-                        <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight mb-6">
+                        <h1 className="text-4xl xl:text-5xl font-light text-white leading-tight mb-6">
                             Create & verify documents in seconds
                         </h1>
                         <p className="text-slate-400 text-lg leading-relaxed mb-12">
@@ -78,7 +78,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                             transition={{ delay: 0.5, duration: 0.5 }}
                             className="mt-16"
                         >
-                            <label className="block text-sm font-bold text-slate-300 uppercase tracking-widest mb-3">
+                            <label className="block text-sm font-light text-slate-300 uppercase tracking-widest mb-3">
                                 Verify a Document
                             </label>
                             <div className="relative group max-w-sm">
@@ -90,7 +90,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                                         placeholder="ENTER 8-DIGIT CODE"
                                         value={verifyCode}
                                         onChange={(e) => setVerifyCode(e.target.value.toUpperCase().replace(/[^A-Z0-9]/g, '').slice(0, 8))}
-                                        className="w-full bg-transparent text-white placeholder-slate-500 font-mono font-bold tracking-widest pl-12 pr-4 py-3 outline-none"
+                                        className="w-full bg-transparent text-white placeholder-slate-500 font-mono font-light tracking-widest pl-12 pr-4 py-3 outline-none"
                                         spellCheck={false}
                                         autoComplete="off"
                                     />
@@ -101,7 +101,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                                             }
                                         }}
                                         disabled={verifyCode.length < 8}
-                                        className="absolute right-2 px-4 py-2 bg-brand-pink hover:bg-pink-600 disabled:bg-slate-700 disabled:text-slate-400 text-white text-xs font-bold rounded-lg transition-all"
+                                        className="absolute right-2 px-4 py-2 bg-brand-pink hover:bg-pink-600 disabled:bg-slate-700 disabled:text-slate-400 text-white text-xs font-light rounded-lg transition-all"
                                     >
                                         Verify
                                     </button>
@@ -124,10 +124,10 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-pink to-pink-600 flex items-center justify-center">
                             <FileText className="w-5 h-5 text-white" />
                         </div>
-                        <span className="text-lg font-bold text-brand-navy">DocGen</span>
+                        <span className="text-lg font-light text-brand-navy">DocGen</span>
                     </div>
 
-                    <div className="bg-white rounded-2xl shadow-card border border-slate-200 overflow-hidden">
+                    <div className="bg-white/95 backdrop-blur-md rounded-[1.25rem] shadow-card border border-slate-100/80 overflow-hidden transition-smooth">
                         <div className="p-6 sm:p-8">
                             <motion.div
                                 key="login"
@@ -138,7 +138,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                                     <div className="w-12 h-12 rounded-2xl bg-gradient-to-br from-brand-pink/10 to-pink-50 flex items-center justify-center mb-4">
                                         <User className="w-6 h-6 text-brand-pink" />
                                     </div>
-                                    <h2 className="text-2xl font-bold text-brand-navy">Welcome back</h2>
+                                    <h2 className="text-2xl font-light text-brand-navy">Welcome back</h2>
                                     <p className="text-slate-500 mt-1">Sign in to your DocGen account</p>
                                 </div>
 
@@ -158,7 +158,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                                     </AnimatePresence>
 
                                     <div>
-                                        <label className="block text-sm font-medium text-slate-700 mb-2">Username</label>
+                                        <label className="block text-sm font-light text-slate-700 mb-2">Username</label>
                                         <div className="relative">
                                             <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                             <input
@@ -174,7 +174,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
 
                                     <div>
                                         <div className="flex justify-between items-center mb-2">
-                                            <label className="block text-sm font-medium text-slate-700">Password</label>
+                                            <label className="block text-sm font-light text-slate-700">Password</label>
                                             <button type="button" className="text-xs text-brand-pink hover:underline">
                                                 Forgot password?
                                             </button>
@@ -195,7 +195,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                                     <motion.button
                                         type="submit"
                                         disabled={isLoading}
-                                        className={`w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 transition-all ${isLoading
+                                        className={`w-full py-4 rounded-xl font-light flex items-center justify-center gap-2 transition-all ${isLoading
                                             ? 'bg-slate-200 text-slate-500 cursor-not-allowed'
                                             : 'bg-brand-navy hover:bg-slate-800 text-white shadow-lg shadow-slate-900/20 hover:shadow-xl'
                                             }`}
@@ -221,7 +221,7 @@ export default function Login({ onLogin, onSwitchToRegister, onSwitchToVerify })
                                     <button
                                         type="button"
                                         onClick={onSwitchToRegister}
-                                        className="font-semibold text-brand-pink hover:underline"
+                                        className="font-light text-brand-pink hover:underline"
                                     >
                                         Create account
                                     </button>

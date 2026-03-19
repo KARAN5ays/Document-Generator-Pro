@@ -46,7 +46,7 @@ function timeAgo(dateStr) {
   return date.toLocaleDateString()
 }
 
-export default function VerificationTool({ initialCode = '' }) {
+export default function VerificationTool({ initialCode = '', onNavigate }) {
   const [codeDigits, setCodeDigits] = useState(() => {
     const init = sanitizeCode(initialCode).padEnd(8, '').split('')
     return init.length === 8 ? init : Array(8).fill('')
@@ -199,8 +199,7 @@ export default function VerificationTool({ initialCode = '' }) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
-              className="bg-white rounded-xl shadow-sm p-8 sm:p-12 border border-slate-200 w-full"
+              className="bg-white/90 backdrop-blur-md rounded-[1.25rem] shadow-card p-8 sm:p-12 border border-slate-100/80 w-full transition-smooth"
             >
               <div className="text-center mb-10">
                 <div className="flex justify-center mb-4">
@@ -270,11 +269,10 @@ export default function VerificationTool({ initialCode = '' }) {
               initial={{ opacity: 0, y: 10 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -10 }}
-              transition={{ duration: 0.3 }}
               className="w-full"
             >
               {verificationResult.valid ? (
-                <div className="bg-white rounded-xl shadow-sm p-8 sm:p-12 border border-slate-200 w-full">
+                <div className="bg-white/90 backdrop-blur-md rounded-[1.25rem] shadow-card p-8 sm:p-12 border border-slate-100/80 w-full transition-smooth">
                   <div className="text-center mb-10">
                     <div className="flex justify-center mb-4">
                       <ShieldCheck className="w-16 h-16 text-emerald-500" strokeWidth={1.5} />
@@ -334,7 +332,7 @@ export default function VerificationTool({ initialCode = '' }) {
                   </div>
                 </div>
               ) : (
-                <div className="bg-white rounded-xl shadow-sm p-8 sm:p-12 text-center border border-red-100 w-full">
+                <div className="bg-white/90 backdrop-blur-md rounded-[1.25rem] shadow-card p-8 sm:p-12 text-center border border-red-100/50 w-full transition-smooth">
                   <div className="flex justify-center mb-6">
                     <AlertCircle className="w-16 h-16 text-red-500" strokeWidth={1.5} />
                   </div>
@@ -374,7 +372,7 @@ export default function VerificationTool({ initialCode = '' }) {
                 <p className="text-[13px] text-slate-400 font-light">Cryptographically secured document checking</p>
               </div>
             </div>
-            
+
             <div className="flex flex-col items-center gap-3">
               <div className="bg-white p-3.5 rounded-full shadow-sm border border-slate-100/50">
                 <Database className="w-5 h-5 text-brand-pink" strokeWidth={1.5} />

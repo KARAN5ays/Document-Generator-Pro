@@ -71,9 +71,9 @@ export default function Register({ onSwitchToLogin, onLogin }) {
                         <div className="w-12 h-12 rounded-xl bg-gradient-to-br from-brand-pink to-pink-600 flex items-center justify-center shadow-lg shadow-brand-pink/30">
                             <FileText className="w-6 h-6 text-white" />
                         </div>
-                        <span className="text-xl font-bold text-white tracking-tight">DocGen</span>
+                        <span className="text-xl font-light text-white tracking-tight">DocGen</span>
                     </div>
-                    <h1 className="text-4xl xl:text-5xl font-bold text-white leading-tight mb-6">
+                    <h1 className="text-4xl xl:text-5xl font-light text-white leading-tight mb-6">
                         Join DocGen today
                     </h1>
                     <p className="text-slate-400 text-lg leading-relaxed max-w-md">
@@ -92,12 +92,12 @@ export default function Register({ onSwitchToLogin, onLogin }) {
                         <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-brand-pink to-pink-600 flex items-center justify-center">
                             <FileText className="w-5 h-5 text-white" />
                         </div>
-                        <span className="text-lg font-bold text-brand-navy">DocGen</span>
+                        <span className="text-lg font-light text-brand-navy">DocGen</span>
                     </div>
 
-                    <div className="bg-white rounded-2xl shadow-card border border-slate-200 overflow-hidden">
+                    <div className="bg-white/95 backdrop-blur-md rounded-[1.25rem] shadow-card border border-slate-100/80 overflow-hidden transition-smooth">
                         <div className="px-8 pt-10 pb-6">
-                            <h2 className="text-2xl font-bold text-brand-navy">Create account</h2>
+                            <h2 className="text-2xl font-light text-brand-navy">Create account</h2>
                             <p className="text-slate-500 mt-1">Join DocGen and get started today</p>
                         </div>
 
@@ -110,7 +110,7 @@ export default function Register({ onSwitchToLogin, onLogin }) {
                             )}
 
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-2">Full Name</label>
+                                <label className="block text-sm font-light text-slate-700 mb-2">Full Name</label>
                                 <div className="relative">
                                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                     <input
@@ -125,7 +125,7 @@ export default function Register({ onSwitchToLogin, onLogin }) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-2">Email Address</label>
+                                <label className="block text-sm font-light text-slate-700 mb-2">Email Address</label>
                                 <div className="relative">
                                     <Mail className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                     <input
@@ -140,7 +140,7 @@ export default function Register({ onSwitchToLogin, onLogin }) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-2">Username</label>
+                                <label className="block text-sm font-light text-slate-700 mb-2">Username</label>
                                 <div className="relative">
                                     <User className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                     <input
@@ -155,7 +155,7 @@ export default function Register({ onSwitchToLogin, onLogin }) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-2">Password</label>
+                                <label className="block text-sm font-light text-slate-700 mb-2">Password</label>
                                 <div className="relative">
                                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                     <input
@@ -171,7 +171,7 @@ export default function Register({ onSwitchToLogin, onLogin }) {
                             </div>
 
                             <div>
-                                <label className="block text-sm font-medium text-slate-700 mb-2">Confirm Password</label>
+                                <label className="block text-sm font-light text-slate-700 mb-2">Confirm Password</label>
                                 <div className="relative">
                                     <Lock className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                     <input
@@ -201,7 +201,7 @@ export default function Register({ onSwitchToLogin, onLogin }) {
                             <motion.button
                                 type="submit"
                                 disabled={isLoading}
-                                className="w-full py-4 rounded-xl font-semibold flex items-center justify-center gap-2 bg-brand-navy hover:bg-slate-800 text-white shadow-lg shadow-slate-900/20 disabled:bg-slate-200 disabled:text-slate-500 disabled:shadow-none transition-all"
+                                className="w-full py-4 rounded-xl font-light flex items-center justify-center gap-2 bg-brand-navy hover:bg-slate-800 text-white shadow-lg shadow-slate-900/20 disabled:bg-slate-200 disabled:text-slate-500 disabled:shadow-none transition-all"
                                 whileHover={!isLoading ? { y: -1 } : {}}
                                 whileTap={!isLoading ? { scale: 0.99 } : {}}
                             >
@@ -217,7 +217,7 @@ export default function Register({ onSwitchToLogin, onLogin }) {
                         <button
                             type="button"
                             onClick={onSwitchToLogin}
-                            className="font-semibold text-brand-pink hover:underline"
+                            className="font-light text-brand-pink hover:underline"
                         >
                             Sign in
                         </button>

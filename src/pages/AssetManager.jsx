@@ -4,6 +4,7 @@ import {
     AlertCircle, Loader2, X, Plus, Building2, PenLine, Stamp
 } from 'lucide-react'
 import API from '../api/client'
+import Breadcrumb from '../components/Breadcrumb'
 
 const TAB_TYPES = [
     { key: 'logo', label: 'Logos', Icon: Building2, desc: 'Company & brand logos' },
@@ -11,7 +12,7 @@ const TAB_TYPES = [
     { key: 'stamp', label: 'Stamps', Icon: Stamp, desc: 'Official stamps & seals' },
 ]
 
-export default function AssetManager({ token }) {
+export default function AssetManager({ token, onNavigate }) {
     const [activeTab, setActiveTab] = useState('logo')
     const [assets, setAssets] = useState([])
     const [isLoading, setIsLoading] = useState(true)
@@ -118,9 +119,13 @@ export default function AssetManager({ token }) {
                 <div className="w-14 h-14 rounded-2xl bg-gradient-to-br from-brand-pink to-pink-600 flex items-center justify-center shadow-xl shadow-brand-pink/30 shrink-0">
                     <Image className="w-7 h-7 text-white" />
                 </div>
-                <div>
-                    <h1 className="text-2xl font-bold text-brand-navy tracking-tight">Asset Manager</h1>
-                    <p className="text-slate-500 mt-0.5">Store logos, signatures & stamps — ready to grab in Template Builder</p>
+            <div>
+                    <Breadcrumb items={[
+                        { label: 'Dashboard', onClick: () => onNavigate?.('dashboard') },
+                        { label: 'Asset Manager' }
+                    ]} />
+                    <h1 className="text-2xl font-light text-brand-navy tracking-tight">Asset Manager</h1>
+                    <p className="text-slate-500 mt-0.5">Store logos, signatures &amp; stamps — ready to grab in Template Builder</p>
                 </div>
             </div>
 
@@ -137,7 +142,7 @@ export default function AssetManager({ token }) {
             {success && (
                 <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
                     <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
-                    <p className="text-sm font-semibold text-emerald-700">{success}</p>
+                    <p className="text-sm font-light text-emerald-700">{success}</p>
                 </div>
             )}
 
@@ -149,7 +154,7 @@ export default function AssetManager({ token }) {
                         <button
                             key={tab.key}
                             onClick={() => { setActiveTab(tab.key); setError('') }}
-                            className={`flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-semibold transition-all border-2 ${activeTab === tab.key
+                            className={`flex items-center gap-2.5 px-6 py-3 rounded-xl text-sm font-light transition-all border-2 ${activeTab === tab.key
                                     ? 'border-brand-pink bg-pink-50 text-brand-pink shadow-md shadow-brand-pink/10'
                                     : 'border-slate-200 bg-white text-slate-500 hover:border-slate-300 hover:text-slate-700'
                                 }`}
@@ -157,7 +162,7 @@ export default function AssetManager({ token }) {
                             <TabIcon className="w-4 h-4" />
                             <span>{tab.label}</span>
                             {activeTab === tab.key && assets.length > 0 && (
-                                <span className="ml-1 bg-brand-pink text-white text-[10px] font-bold px-1.5 py-0.5 rounded-full">{assets.length}</span>
+                                <span className="ml-1 bg-brand-pink text-white text-[10px] font-light px-1.5 py-0.5 rounded-full">{assets.length}</span>
                             )}
                         </button>
                     )
@@ -168,10 +173,10 @@ export default function AssetManager({ token }) {
             <div className="grid grid-cols-1 lg:grid-cols-5 gap-8 items-start">
 
                 {/* ── Upload Panel ── */}
-                <div className="lg:col-span-2 bg-white rounded-3xl border border-slate-100 shadow-sm overflow-hidden">
+                <div className="lg:col-span-2 bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card overflow-hidden transition-smooth">
                     {/* Panel header */}
                     <div className="px-7 py-5 border-b border-slate-100 bg-gradient-to-r from-pink-50/60 to-white">
-                        <h2 className="font-bold text-brand-navy flex items-center gap-2">
+                        <h2 className="font-light text-brand-navy flex items-center gap-2">
                             <Plus className="w-4 h-4 text-brand-pink" />
                             Upload {currentTab?.label.slice(0, -1)}
                         </h2>
@@ -210,7 +215,7 @@ export default function AssetManager({ token }) {
                                             className="max-h-36 max-w-full object-contain rounded-lg drop-shadow-sm"
                                         />
                                     </div>
-                                    <p className="text-xs text-slate-500 font-medium truncate max-w-full">{uploadFile?.name}</p>
+                                    <p className="text-xs text-slate-500 font-light truncate max-w-full">{uploadFile?.name}</p>
                                 </div>
                             ) : (
                                 <>
@@ -218,11 +223,11 @@ export default function AssetManager({ token }) {
                                         }`}>
                                         <Upload className="w-7 h-7" />
                                     </div>
-                                    <p className="font-bold text-brand-navy text-center">Drop image here</p>
+                                    <p className="font-light text-brand-navy text-center">Drop image here</p>
                                     <p className="text-slate-400 text-sm text-center mt-1">or click to browse</p>
                                     <div className="flex gap-2 mt-4 flex-wrap justify-center">
                                         {['PNG', 'JPG', 'SVG', 'WebP'].map(fmt => (
-                                            <span key={fmt} className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-semibold uppercase tracking-wider">{fmt}</span>
+                                            <span key={fmt} className="px-2 py-0.5 rounded-full bg-slate-100 text-slate-500 text-[10px] font-light uppercase tracking-wider">{fmt}</span>
                                         ))}
                                     </div>
                                 </>
@@ -240,7 +245,7 @@ export default function AssetManager({ token }) {
 
                         {/* Name input */}
                         <div className="space-y-2">
-                            <label className="block text-sm font-semibold text-slate-700">Asset Name</label>
+                            <label className="block text-sm font-light text-slate-700">Asset Name</label>
                             <input
                                 type="text"
                                 value={uploadName}
@@ -254,7 +259,7 @@ export default function AssetManager({ token }) {
                         <button
                             onClick={handleUpload}
                             disabled={isUploading || !uploadFile}
-                            className="w-full py-3.5 rounded-xl bg-brand-pink text-white font-bold text-sm hover:bg-pink-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-brand-pink/25 hover:shadow-brand-pink/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2"
+                            className="w-full py-3.5 rounded-xl bg-brand-pink text-white font-light text-sm hover:bg-pink-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-brand-pink/25 hover:shadow-brand-pink/40 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2"
                         >
                             {isUploading
                                 ? <><Loader2 className="w-4 h-4 animate-spin" /> Uploading...</>
@@ -273,7 +278,7 @@ export default function AssetManager({ token }) {
                 <div className="lg:col-span-3 space-y-5">
                     <div className="flex items-center gap-3">
                         {currentTab && <currentTab.Icon className="w-5 h-5 text-brand-pink" />}
-                        <h2 className="font-bold text-brand-navy text-lg">
+                        <h2 className="font-light text-brand-navy text-lg">
                             {currentTab?.label}
                             <span className="ml-2 text-sm text-slate-400 font-normal">({assets.length} {assets.length === 1 ? 'asset' : 'assets'})</span>
                         </h2>
@@ -281,15 +286,15 @@ export default function AssetManager({ token }) {
 
                     {/* Loading */}
                     {isLoading ? (
-                        <div className="flex flex-col items-center justify-center py-32 bg-white rounded-3xl border border-slate-100">
+                        <div className="flex flex-col items-center justify-center py-32 bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card transition-smooth">
                             <Loader2 className="w-10 h-10 text-brand-pink animate-spin mb-3" />
                             <p className="text-slate-400 text-sm">Loading assets...</p>
                         </div>
                     ) : assets.length === 0 ? (
                         /* Empty state */
-                        <div className="flex flex-col items-center justify-center py-32 bg-white rounded-3xl border-2 border-dashed border-slate-200 text-center px-8">
+                        <div className="flex flex-col items-center justify-center py-32 bg-white rounded-[1.25rem] border-2 border-dashed border-slate-200/80 text-center px-8 shadow-card transition-smooth">
                             {currentTab && <currentTab.Icon className="w-12 h-12 text-slate-200 mb-4" />}
-                            <p className="font-bold text-slate-600 text-lg">No {currentTab?.label.toLowerCase()} yet</p>
+                            <p className="font-light text-slate-600 text-lg">No {currentTab?.label.toLowerCase()} yet</p>
                             <p className="text-slate-400 text-sm mt-2 max-w-xs">
                                 Upload your first {currentTab?.label.slice(0, -1).toLowerCase()} using the panel on the left.
                             </p>
@@ -300,14 +305,14 @@ export default function AssetManager({ token }) {
                             {assets.map(asset => (
                                 <div
                                     key={asset.id}
-                                    className={`group bg-white rounded-3xl border-2 overflow-hidden transition-all duration-200 hover:shadow-xl ${asset.is_default
+                                    className={`group bg-white rounded-[1.25rem] border-2 overflow-hidden transition-smooth hover:shadow-card-hover ${asset.is_default
                                         ? 'border-brand-pink shadow-lg shadow-brand-pink/10'
                                         : 'border-slate-100 hover:border-slate-200 shadow-sm'
                                         }`}
                                 >
                                     {/* Default ribbon */}
                                     {asset.is_default && (
-                                        <div className="bg-gradient-to-r from-brand-pink to-pink-500 text-white text-[10px] font-black px-4 py-1.5 text-center tracking-widest uppercase flex items-center justify-center gap-1.5">
+                                        <div className="bg-gradient-to-r from-brand-pink to-pink-500 text-white text-[10px] font-light px-4 py-1.5 text-center tracking-widest uppercase flex items-center justify-center gap-1.5">
                                             <Star className="w-3 h-3 fill-current" /> Default Asset
                                         </div>
                                     )}
@@ -330,7 +335,7 @@ export default function AssetManager({ token }) {
                                     {/* Info & Actions */}
                                     <div className="p-5 space-y-4">
                                         <div>
-                                            <p className="font-bold text-brand-navy truncate" title={asset.name}>{asset.name}</p>
+                                            <p className="font-light text-brand-navy truncate" title={asset.name}>{asset.name}</p>
                                             <p className="text-xs text-slate-400 mt-0.5 capitalize">{asset.asset_type}</p>
                                         </div>
 
@@ -339,7 +344,7 @@ export default function AssetManager({ token }) {
                                             {/* Copy URL */}
                                             <button
                                                 onClick={() => handleCopyUrl(asset.file_url, asset.id)}
-                                                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl border text-xs font-semibold transition-all ${copiedId === asset.id
+                                                className={`flex-1 flex items-center justify-center gap-1.5 py-2 rounded-xl border text-xs font-light transition-all ${copiedId === asset.id
                                                     ? 'border-emerald-200 text-emerald-600 bg-emerald-50'
                                                     : 'border-slate-200 text-slate-600 hover:border-brand-pink hover:text-brand-pink hover:bg-pink-50'
                                                     }`}

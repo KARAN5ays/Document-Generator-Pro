@@ -4,10 +4,11 @@ import {
     ChevronDown, Download, X, Loader2, Info
 } from 'lucide-react'
 import API from '../api/client'
+import Breadcrumb from '../components/Breadcrumb'
 
 const STEPS = ['Select Template', 'Upload File', 'Review & Submit']
 
-export default function BulkIssuance({ token }) {
+export default function BulkIssuance({ token, onNavigate }) {
     const [step, setStep] = useState(0)
     const [templates, setTemplates] = useState([])
     const [selectedTemplate, setSelectedTemplate] = useState(null)
@@ -120,7 +121,8 @@ export default function BulkIssuance({ token }) {
                     <Users className="w-6 h-6 text-white" />
                 </div>
                 <div>
-                    <h1 className="text-2xl font-bold text-brand-navy">Bulk Issuance</h1>
+
+                    <h1 className="text-2xl font-light text-brand-navy">Bulk Issuance</h1>
                     <p className="text-slate-500 text-sm mt-0.5">Generate hundreds of documents at once from a CSV or Excel file</p>
                 </div>
             </div>
@@ -131,13 +133,13 @@ export default function BulkIssuance({ token }) {
                     {STEPS.map((label, i) => (
                         <div key={label} className="flex items-center gap-2 flex-1 last:flex-none">
                             <div className={`flex items-center gap-2 ${i <= step ? 'text-brand-pink' : 'text-slate-400'}`}>
-                                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-bold border-2 transition-all
+                                <div className={`w-7 h-7 rounded-full flex items-center justify-center text-xs font-light border-2 transition-all
                                     ${i < step ? 'bg-brand-pink border-brand-pink text-white'
                                         : i === step ? 'border-brand-pink text-brand-pink bg-pink-50'
                                             : 'border-slate-200 text-slate-400 bg-white'}`}>
                                     {i < step ? <CheckCircle2 className="w-4 h-4" /> : i + 1}
                                 </div>
-                                <span className="text-sm font-semibold hidden sm:block">{label}</span>
+                                <span className="text-sm font-light hidden sm:block">{label}</span>
                             </div>
                             {i < STEPS.length - 1 && (
                                 <div className={`h-[1px] flex-1 mx-2 transition-colors ${i < step ? 'bg-brand-pink' : 'bg-slate-200'}`} />
@@ -149,8 +151,8 @@ export default function BulkIssuance({ token }) {
 
             {/* ── Step 0: Template Selection ── */}
             {step === 0 && (
-                <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 space-y-6">
-                    <h2 className="text-lg font-bold text-brand-navy">Choose a Document Template</h2>
+                <div className="bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card p-8 space-y-6 transition-smooth">
+                    <h2 className="text-lg font-light text-brand-navy">Choose a Document Template</h2>
                     <p className="text-slate-500 text-sm">Select the template you want to use. The column headers in your file should match the template's field names.</p>
 
                     <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
@@ -166,7 +168,7 @@ export default function BulkIssuance({ token }) {
                                     <FileText className="w-4 h-4" />
                                 </div>
                                 <div>
-                                    <p className="font-semibold text-brand-navy text-sm">{t.name}</p>
+                                    <p className="font-light text-brand-navy text-sm">{t.name}</p>
                                     {t.fields_schema?.length > 0 && (
                                         <p className="text-xs text-slate-400 mt-0.5">Fields: {t.fields_schema.map(f => f.name || f).join(', ')}</p>
                                     )}
@@ -186,7 +188,7 @@ export default function BulkIssuance({ token }) {
                     <button
                         disabled={!selectedTemplate}
                         onClick={() => setStep(1)}
-                        className="w-full py-3 rounded-xl bg-brand-pink text-white font-bold text-sm hover:bg-pink-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-brand-pink/20 hover:shadow-brand-pink/30 hover:-translate-y-0.5 active:translate-y-0">
+                        className="w-full py-3 rounded-xl bg-brand-pink text-white font-light text-sm hover:bg-pink-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-brand-pink/20 hover:shadow-brand-pink/30 hover:-translate-y-0.5 active:translate-y-0">
                         Continue →
                     </button>
                 </div>
@@ -194,10 +196,10 @@ export default function BulkIssuance({ token }) {
 
             {/* ── Step 1: Upload File ── */}
             {step === 1 && (
-                <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 space-y-6">
+                <div className="bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card p-8 space-y-6 transition-smooth">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-bold text-brand-navy">Upload Your File</h2>
-                        <button onClick={() => setStep(0)} className="text-slate-400 hover:text-slate-600 text-xs font-semibold flex items-center gap-1">
+                        <h2 className="text-lg font-light text-brand-navy">Upload Your File</h2>
+                        <button onClick={() => setStep(0)} className="text-slate-400 hover:text-slate-600 text-xs font-light flex items-center gap-1">
                             <ChevronDown className="w-3 h-3 rotate-90" /> Back
                         </button>
                     </div>
@@ -220,15 +222,15 @@ export default function BulkIssuance({ token }) {
                         <div className={`w-14 h-14 rounded-2xl mx-auto mb-4 flex items-center justify-center transition-all ${isDragging ? 'bg-brand-pink text-white' : 'bg-slate-100 text-slate-400'}`}>
                             <Upload className="w-7 h-7" />
                         </div>
-                        <p className="font-bold text-brand-navy">Drop your file here, or click to browse</p>
-                        <p className="text-slate-400 text-sm mt-1">Supports <span className="font-semibold text-slate-600">.csv</span> and <span className="font-semibold text-slate-600">.xlsx</span> files</p>
+                        <p className="font-light text-brand-navy">Drop your file here, or click to browse</p>
+                        <p className="text-slate-400 text-sm mt-1">Supports <span className="font-light text-slate-600">.csv</span> and <span className="font-light text-slate-600">.xlsx</span> files</p>
                     </div>
 
                     {file && (
                         <div className="flex items-center gap-3 p-4 bg-emerald-50 rounded-xl border border-emerald-100">
                             <CheckCircle2 className="w-5 h-5 text-emerald-500 shrink-0" />
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-bold text-emerald-800 truncate">{file.name}</p>
+                                <p className="text-sm font-light text-emerald-800 truncate">{file.name}</p>
                                 <p className="text-xs text-emerald-600">{(file.size / 1024).toFixed(1)} KB</p>
                             </div>
                             <button onClick={(e) => { e.stopPropagation(); setFile(null); setPreviewHeaders([]); setPreviewRows([]) }}>
@@ -240,7 +242,7 @@ export default function BulkIssuance({ token }) {
                     <button
                         disabled={!file}
                         onClick={() => setStep(2)}
-                        className="w-full py-3 rounded-xl bg-brand-pink text-white font-bold text-sm hover:bg-pink-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-brand-pink/20 hover:shadow-brand-pink/30 hover:-translate-y-0.5 active:translate-y-0">
+                        className="w-full py-3 rounded-xl bg-brand-pink text-white font-light text-sm hover:bg-pink-600 transition-all disabled:opacity-40 disabled:cursor-not-allowed shadow-lg shadow-brand-pink/20 hover:shadow-brand-pink/30 hover:-translate-y-0.5 active:translate-y-0">
                         Preview & Submit →
                     </button>
                 </div>
@@ -248,35 +250,35 @@ export default function BulkIssuance({ token }) {
 
             {/* ── Step 2: Review ── */}
             {step === 2 && (
-                <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 space-y-6">
+                <div className="bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card p-8 space-y-6 transition-smooth">
                     <div className="flex items-center justify-between">
-                        <h2 className="text-lg font-bold text-brand-navy">Review & Submit</h2>
-                        <button onClick={() => setStep(1)} className="text-slate-400 hover:text-slate-600 text-xs font-semibold flex items-center gap-1">
+                        <h2 className="text-lg font-light text-brand-navy">Review & Submit</h2>
+                        <button onClick={() => setStep(1)} className="text-slate-400 hover:text-slate-600 text-xs font-light flex items-center gap-1">
                             <ChevronDown className="w-3 h-3 rotate-90" /> Back
                         </button>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="p-4 bg-pink-50 rounded-xl border border-pink-100">
-                            <p className="text-xs text-pink-500 font-semibold uppercase tracking-wider">Template</p>
-                            <p className="font-bold text-brand-navy mt-1">{selectedTemplate?.name}</p>
+                            <p className="text-xs text-pink-500 font-light uppercase tracking-wider">Template</p>
+                            <p className="font-light text-brand-navy mt-1">{selectedTemplate?.name}</p>
                         </div>
                         <div className="p-4 bg-slate-50 rounded-xl border border-slate-100">
-                            <p className="text-xs text-slate-500 font-semibold uppercase tracking-wider">File</p>
-                            <p className="font-bold text-brand-navy mt-1 truncate">{file?.name}</p>
+                            <p className="text-xs text-slate-500 font-light uppercase tracking-wider">File</p>
+                            <p className="font-light text-brand-navy mt-1 truncate">{file?.name}</p>
                         </div>
                     </div>
 
                     {/* CSV Preview Table */}
                     {previewHeaders.length > 0 && (
                         <div>
-                            <p className="text-sm font-semibold text-slate-600 mb-2">Preview (first 5 rows)</p>
+                            <p className="text-sm font-light text-slate-600 mb-2">Preview (first 5 rows)</p>
                             <div className="overflow-auto rounded-xl border border-slate-100">
                                 <table className="w-full text-xs">
                                     <thead>
                                         <tr className="bg-slate-50 border-b border-slate-100">
                                             {previewHeaders.map(h => (
-                                                <th key={h} className="px-3 py-2.5 text-left font-semibold text-slate-600 whitespace-nowrap">{h}</th>
+                                                <th key={h} className="px-3 py-2.5 text-left font-light text-slate-600 whitespace-nowrap">{h}</th>
                                             ))}
                                         </tr>
                                     </thead>
@@ -312,7 +314,7 @@ export default function BulkIssuance({ token }) {
                     <button
                         onClick={handleSubmit}
                         disabled={isSubmitting}
-                        className="w-full py-3.5 rounded-xl bg-brand-pink text-white font-bold text-sm hover:bg-pink-600 transition-all disabled:opacity-60 shadow-lg shadow-brand-pink/20 hover:shadow-brand-pink/30 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
+                        className="w-full py-3.5 rounded-xl bg-brand-pink text-white font-light text-sm hover:bg-pink-600 transition-all disabled:opacity-60 shadow-lg shadow-brand-pink/20 hover:shadow-brand-pink/30 hover:-translate-y-0.5 active:translate-y-0 flex items-center justify-center gap-2">
                         {isSubmitting ? (
                             <><Loader2 className="w-4 h-4 animate-spin" /> Generating Documents...</>
                         ) : (
@@ -324,29 +326,29 @@ export default function BulkIssuance({ token }) {
 
             {/* ── Step 3: Results ── */}
             {step === 3 && result && (
-                <div className="bg-white rounded-2xl border border-slate-100 shadow-sm p-8 space-y-6">
+                <div className="bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card p-8 space-y-6 transition-smooth">
                     <div className="text-center">
                         <div className="w-16 h-16 rounded-full bg-emerald-100 flex items-center justify-center mx-auto mb-4">
                             <CheckCircle2 className="w-8 h-8 text-emerald-500" />
                         </div>
-                        <h2 className="text-2xl font-bold text-brand-navy">Bulk Issuance Complete!</h2>
+                        <h2 className="text-2xl font-light text-brand-navy">Bulk Issuance Complete!</h2>
                         <p className="text-slate-500 text-sm mt-1">Your documents have been generated successfully.</p>
                     </div>
 
                     <div className="grid grid-cols-2 gap-4">
                         <div className="text-center p-6 bg-emerald-50 rounded-2xl border border-emerald-100">
-                            <p className="text-4xl font-black text-emerald-600">{result.created}</p>
-                            <p className="text-sm text-emerald-700 font-semibold mt-1">Documents Created</p>
+                            <p className="text-4xl font-light text-emerald-600">{result.created}</p>
+                            <p className="text-sm text-emerald-700 font-light mt-1">Documents Created</p>
                         </div>
                         <div className="text-center p-6 bg-red-50 rounded-2xl border border-red-100">
-                            <p className="text-4xl font-black text-red-500">{result.errors?.length || 0}</p>
-                            <p className="text-sm text-red-600 font-semibold mt-1">Rows Failed</p>
+                            <p className="text-4xl font-light text-red-500">{result.errors?.length || 0}</p>
+                            <p className="text-sm text-red-600 font-light mt-1">Rows Failed</p>
                         </div>
                     </div>
 
                     {result.errors?.length > 0 && (
                         <div className="p-4 bg-red-50 rounded-xl border border-red-100 space-y-1">
-                            <p className="text-sm font-bold text-red-700 mb-2">Row Errors</p>
+                            <p className="text-sm font-light text-red-700 mb-2">Row Errors</p>
                             {result.errors.map((err, i) => (
                                 <p key={i} className="text-xs text-red-600">Row {err.row}: {err.reason}</p>
                             ))}
@@ -356,12 +358,12 @@ export default function BulkIssuance({ token }) {
                     <div className="flex gap-3">
                         <button
                             onClick={downloadCodes}
-                            className="flex-1 py-3 rounded-xl border-2 border-brand-pink text-brand-pink font-bold text-sm hover:bg-pink-50 transition-all flex items-center justify-center gap-2">
+                            className="flex-1 py-3 rounded-xl border-2 border-brand-pink text-brand-pink font-light text-sm hover:bg-pink-50 transition-all flex items-center justify-center gap-2">
                             <Download className="w-4 h-4" /> Download Tracking Codes
                         </button>
                         <button
                             onClick={reset}
-                            className="flex-1 py-3 rounded-xl bg-brand-pink text-white font-bold text-sm hover:bg-pink-600 transition-all shadow-lg shadow-brand-pink/20">
+                            className="flex-1 py-3 rounded-xl bg-brand-pink text-white font-light text-sm hover:bg-pink-600 transition-all shadow-lg shadow-brand-pink/20">
                             New Bulk Import
                         </button>
                     </div>

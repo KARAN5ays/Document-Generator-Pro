@@ -263,21 +263,20 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
             <div className="flex items-center gap-2 text-sm text-brand-purple mb-1">
               <button onClick={onCancel} className="hover:text-brand-pink transition-colors">Dashboard</button>
               <span>/</span>
-              <span className="font-semibold text-brand-purple">Templates</span>
+              <span className="font-light text-brand-purple">Templates</span>
             </div>
-            <h1 className="text-2xl font-semibold text-brand-navy tracking-tight">Template Builder</h1>
+            <h1 className="text-2xl font-light text-brand-navy tracking-tight">Template Builder</h1>
           </div>
           <button
             onClick={openCreate}
-            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-pink text-white font-bold text-sm shadow-lg shadow-brand-pink/20 hover:bg-pink-600 active:scale-95 transition-all"
+            className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-pink text-white font-light text-sm shadow-lg shadow-brand-pink/20 hover:bg-pink-600 active:scale-95 transition-all"
           >
             <Plus className="w-4 h-4" />
             Add Template
           </button>
         </div>
-
         {/* Table Card */}
-        <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+        <div className="bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card overflow-hidden transition-smooth">
           {/* Search bar */}
           <div className="px-6 py-4 border-b border-slate-100 flex items-center gap-3">
             <div className="relative flex-1 max-w-sm">
@@ -287,13 +286,13 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
                 placeholder="Search by name..."
                 value={search}
                 onChange={e => setSearch(e.target.value)}
-                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm text-brand-navy font-medium outline-none focus:border-brand-pink focus:ring-4 focus:ring-brand-pink/5 transition-all bg-slate-50/50 placeholder:text-slate-300"
+                className="w-full pl-9 pr-4 py-2.5 rounded-xl border border-slate-200 text-sm text-brand-navy font-light outline-none focus:border-brand-pink focus:ring-4 focus:ring-brand-pink/5 transition-all bg-slate-50/50 placeholder:text-slate-300"
               />
             </div>
             {search && (
               <button
                 onClick={() => setSearch('')}
-                className="text-xs text-slate-400 hover:text-slate-600 font-medium"
+                className="text-xs text-slate-400 hover:text-slate-600 font-light"
               >
                 Clear
               </button>
@@ -304,14 +303,14 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
           {templateLoading ? (
             <div className="flex items-center gap-3 px-6 py-16 justify-center">
               <Loader2 className="w-5 h-5 animate-spin text-brand-pink" />
-              <p className="text-sm text-slate-500 font-medium">Loading templates...</p>
+              <p className="text-sm text-slate-500 font-light">Loading templates...</p>
             </div>
           ) : filtered.length === 0 ? (
             <div className="flex flex-col items-center gap-3 py-20 px-6 text-center">
               <div className="w-16 h-16 rounded-2xl bg-pink-50 flex items-center justify-center mb-2">
                 <LayoutTemplate className="w-8 h-8 text-pink-300" />
               </div>
-              <p className="text-base font-bold text-slate-600">
+              <p className="text-base font-light text-slate-600">
                 {search ? 'No templates match your search' : 'No templates yet'}
               </p>
               <p className="text-sm text-slate-400">
@@ -324,10 +323,10 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
               <table className="w-full text-left">
                 <thead>
                   <tr className="bg-slate-50 border-b border-slate-100">
-                    <th className="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Name</th>
-                    <th className="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Type</th>
-                    <th className="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider">Components</th>
-                    <th className="px-6 py-3.5 text-xs font-bold text-slate-500 uppercase tracking-wider text-right">Actions</th>
+                    <th className="px-6 py-3.5 text-xs font-light text-slate-500 uppercase tracking-wider">Name</th>
+                    <th className="px-6 py-3.5 text-xs font-light text-slate-500 uppercase tracking-wider">Type</th>
+                    <th className="px-6 py-3.5 text-xs font-light text-slate-500 uppercase tracking-wider">Components</th>
+                    <th className="px-6 py-3.5 text-xs font-light text-slate-500 uppercase tracking-wider text-right">Actions</th>
                   </tr>
                 </thead>
                 <tbody className="divide-y divide-slate-100">
@@ -349,7 +348,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
                               </div>
                               <button
                                 onClick={() => openEdit(t)}
-                                className="font-semibold text-sm text-brand-navy hover:text-brand-pink transition-colors text-left"
+                                className="font-light text-sm text-brand-navy hover:text-brand-pink transition-colors text-left"
                               >
                                 {t.name}
                               </button>
@@ -358,7 +357,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
 
                           {/* Type */}
                           <td className="px-6 py-4">
-                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-pink-50 border border-pink-100 text-xs font-semibold text-brand-pink">
+                            <span className="inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-pink-50 border border-pink-100 text-xs font-light text-brand-pink">
                               Custom Template
                             </span>
                           </td>
@@ -366,7 +365,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
                           {/* Components */}
                           <td className="px-6 py-4">
                             <span className="text-sm text-slate-500">
-                              <span className="font-semibold text-brand-navy">Text</span>
+                              <span className="font-light text-brand-navy">Text</span>
                               <span className="text-slate-400 ml-1">Template</span>
                             </span>
                           </td>
@@ -376,14 +375,14 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
                             <div className="flex items-center justify-end gap-1.5 opacity-0 group-hover:opacity-100 transition-opacity">
                               <button
                                 onClick={() => openEdit(t)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-500 hover:text-brand-pink hover:bg-pink-50 rounded-lg transition-colors"
+                                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-light text-slate-500 hover:text-brand-pink hover:bg-pink-50 rounded-lg transition-colors"
                               >
                                 <Pencil className="w-3.5 h-3.5" />
                                 Edit
                               </button>
                               <button
                                 onClick={() => handleDelete(t.id)}
-                                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-bold text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
+                                className="flex items-center gap-1.5 px-3 py-1.5 text-xs font-light text-slate-400 hover:text-red-500 hover:bg-red-50 rounded-lg transition-colors"
                               >
                                 <Trash2 className="w-3.5 h-3.5" />
                                 Delete
@@ -399,7 +398,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
 
               {/* Table footer */}
               <div className="px-6 py-3 border-t border-slate-100 bg-slate-50/50">
-                <p className="text-xs text-slate-400 font-medium">
+                <p className="text-xs text-slate-400 font-light">
                   {filtered.length} template{filtered.length !== 1 ? 's' : ''}
                   {search && ` found for "${search}"`}
                 </p>
@@ -422,21 +421,21 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
       <style dangerouslySetInnerHTML={{ __html: ckStyles }} />
 
       {/* Editor Header */}
-      <div className="mb-6 bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-5 flex items-center justify-between gap-4 flex-wrap">
+      <div className="mb-6 bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card px-6 py-5 flex items-center justify-between gap-4 flex-wrap transition-smooth">
         <div className="flex items-center gap-4">
           <button
             onClick={closeEditor}
-            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:text-brand-navy hover:border-slate-300 font-semibold text-sm transition-all bg-white hover:bg-slate-50"
+            className="flex items-center gap-2 px-4 py-2 rounded-xl border border-slate-200 text-slate-600 hover:text-brand-navy hover:border-slate-300 font-light text-sm transition-all bg-white hover:bg-slate-50"
           >
             <ArrowLeft className="w-4 h-4" />
             Back to Templates
           </button>
           <div className="h-6 w-px bg-slate-200" />
           <div>
-            <p className="text-xs text-slate-400 font-medium uppercase tracking-wider">
+            <p className="text-xs text-slate-400 font-light uppercase tracking-wider">
               {editingTemplate ? 'Editing' : 'New Template'}
             </p>
-            <h1 className="text-lg font-bold text-brand-navy tracking-tight">
+            <h1 className="text-lg font-light text-brand-navy tracking-tight">
               {editingTemplate ? editingTemplate.name : 'Template Builder'}
             </h1>
           </div>
@@ -449,7 +448,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm font-semibold"
+              className="flex items-center gap-2 px-4 py-2 bg-emerald-50 border border-emerald-200 rounded-xl text-emerald-700 text-sm font-light"
             >
               <CheckCircle2 className="w-4 h-4 shrink-0" />
               {success}
@@ -460,7 +459,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
               initial={{ opacity: 0, scale: 0.95 }}
               animate={{ opacity: 1, scale: 1 }}
               exit={{ opacity: 0, scale: 0.95 }}
-              className="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm font-semibold"
+              className="flex items-center gap-2 px-4 py-2 bg-red-50 border border-red-200 rounded-xl text-red-600 text-sm font-light"
             >
               <AlertCircle className="w-4 h-4 shrink-0" />
               {error}
@@ -470,8 +469,8 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
       </div>
 
       {/* Template Name */}
-      <div className="mb-5 bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-5">
-        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2">
+      <div className="mb-5 bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card px-6 py-5 transition-smooth">
+        <label className="block text-xs font-light text-slate-400 uppercase tracking-widest mb-2">
           <Database className="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" />
           Template Name
         </label>
@@ -479,21 +478,21 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
           value={name}
           onChange={e => setName(e.target.value)}
           placeholder={help.template_name_placeholder}
-          className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/40 text-brand-navy font-semibold text-sm outline-none focus:border-brand-pink focus:ring-4 focus:ring-brand-pink/5 focus:bg-white transition-all placeholder:text-slate-300"
+          className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/40 text-brand-navy font-light text-sm outline-none focus:border-brand-pink focus:ring-4 focus:ring-brand-pink/5 focus:bg-white transition-all placeholder:text-slate-300"
         />
       </div>
 
       {/* CK Editor */}
-      <div className="mb-5 bg-white rounded-2xl border border-slate-200 shadow-sm px-6 py-5">
-        <label className="block text-xs font-bold text-slate-400 uppercase tracking-widest mb-2 flex justify-between items-center">
+      <div className="mb-5 bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card px-6 py-5 transition-smooth">
+        <label className="block text-xs font-light text-slate-400 uppercase tracking-widest mb-2 flex justify-between items-center">
           <span><Type className="w-3.5 h-3.5 inline mr-1.5 -mt-0.5" /> Template Content</span>
-          <span className="text-brand-pink font-medium lowercase normal-case tracking-normal">Use {"{{ VariableName }}"} to insert dynamic fields</span>
+          <span className="text-brand-pink font-light lowercase normal-case tracking-normal">Use {"{{ VariableName }}"} to insert dynamic fields</span>
         </label>
 
         {editLoading ? (
           <div className="h-[900px] bg-slate-50/50 rounded-xl border border-slate-200 flex flex-col items-center justify-center gap-4">
             <Loader2 className="w-8 h-8 animate-spin text-brand-pink" />
-            <p className="text-sm font-semibold text-slate-600">Loading editor...</p>
+            <p className="text-sm font-light text-slate-600">Loading editor...</p>
           </div>
         ) : (
           <div className="ckeditor-wrapper border border-slate-200 rounded-xl overflow-hidden min-h-[900px]">
@@ -552,7 +551,7 @@ export default function TemplateBuilder({ token, onTemplateCreated, onTemplateDe
       <button
         onClick={handleSubmit}
         disabled={isSubmitting}
-        className="w-full h-14 rounded-xl bg-brand-pink text-white font-bold shadow-lg shadow-brand-pink/25 hover:bg-pink-600 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.99]"
+        className="w-full h-14 rounded-xl bg-brand-pink text-white font-light shadow-lg shadow-brand-pink/25 hover:bg-pink-600 flex items-center justify-center gap-2 disabled:opacity-50 disabled:cursor-not-allowed transition-all active:scale-[0.99]"
       >
         {isSubmitting ? (
           <Loader2 className="animate-spin w-5 h-5" />

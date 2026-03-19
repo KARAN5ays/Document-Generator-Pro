@@ -100,7 +100,7 @@ function TableEditor({ tableIdx, schema, fields, onBatchFieldChange }) {
         {headers.map((h, hi) => (
           <div
             key={hi}
-            className="px-3 py-1.5 rounded-lg bg-pink-50 border border-pink-100 text-center text-[10px] font-bold text-brand-pink uppercase tracking-wider truncate"
+            className="px-3 py-1.5 rounded-lg bg-pink-50 border border-pink-100 text-center text-[10px] font-light text-brand-pink uppercase tracking-wider truncate"
           >
             {h}
           </div>
@@ -120,7 +120,7 @@ function TableEditor({ tableIdx, schema, fields, onBatchFieldChange }) {
             style={{ gridTemplateColumns: `28px repeat(${numCols}, 1fr) 36px` }}
           >
             <div className="flex items-center justify-center">
-              <span className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-pink-100 text-slate-400 group-hover:text-brand-pink text-[10px] font-bold flex items-center justify-center transition-colors">
+              <span className="w-6 h-6 rounded-full bg-slate-100 group-hover:bg-pink-100 text-slate-400 group-hover:text-brand-pink text-[10px] font-light flex items-center justify-center transition-colors">
                 {ri + 1}
               </span>
             </div>
@@ -134,7 +134,7 @@ function TableEditor({ tableIdx, schema, fields, onBatchFieldChange }) {
                   onFocus={() => setFocusCell({ ri, ci })}
                   onBlur={() => setFocusCell(null)}
                   placeholder={`${headers[ci]}...`}
-                  className={`w-full px-3 py-2.5 rounded-xl border-2 text-brand-navy text-sm font-medium outline-none transition-all ${isFocused(ri, ci)
+                  className={`w-full px-3 py-2.5 rounded-xl border-2 text-brand-navy text-sm font-light outline-none transition-all ${isFocused(ri, ci)
                     ? 'border-brand-pink bg-white shadow-md shadow-brand-pink/10 ring-4 ring-brand-pink/5'
                     : cell
                       ? 'border-emerald-200 bg-emerald-50/40 hover:border-brand-pink hover:bg-white'
@@ -165,7 +165,7 @@ function TableEditor({ tableIdx, schema, fields, onBatchFieldChange }) {
       <button
         type="button"
         onClick={addRow}
-        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-semibold text-brand-pink border-2 border-dashed border-pink-200 hover:border-brand-pink hover:bg-pink-50/50 transition-all"
+        className="flex items-center justify-center gap-2 w-full py-2.5 rounded-xl text-sm font-light text-brand-pink border-2 border-dashed border-pink-200 hover:border-brand-pink hover:bg-pink-50/50 transition-all"
       >
         <Plus className="w-4 h-4" />
         Add Row
@@ -185,7 +185,7 @@ function SectionCard({ step, icon: Icon, title, description, children, accent = 
     >
       <div className={`px-5 py-4 flex items-center gap-3 border-b ${accent ? 'border-pink-200 bg-pink-50' : 'border-slate-100 bg-slate-50'}`}>
         {step && (
-          <span className="w-6 h-6 rounded-full bg-brand-pink text-white flex items-center justify-center text-[11px] font-bold shrink-0">
+          <span className="w-6 h-6 rounded-full bg-brand-pink text-white flex items-center justify-center text-[11px] font-light shrink-0">
             {step}
           </span>
         )}
@@ -193,7 +193,7 @@ function SectionCard({ step, icon: Icon, title, description, children, accent = 
           <Icon className={`w-4 h-4 ${accent ? 'text-brand-pink' : 'text-slate-500'}`} />
         </div>
         <div className="flex-1 min-w-0">
-          <h3 className="text-sm font-bold text-brand-navy">{title}</h3>
+          <h3 className="text-sm font-light text-brand-navy">{title}</h3>
           {description && <p className="text-[11px] text-slate-500 mt-0.5">{description}</p>}
         </div>
       </div>
@@ -363,7 +363,7 @@ export default function DataEntryForm({
         <div className="w-14 h-14 bg-pink-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <Loader2 className="w-7 h-7 text-brand-pink animate-spin" />
         </div>
-        <p className="text-slate-500 font-semibold">Loading templates...</p>
+        <p className="text-slate-500 font-light">Loading templates...</p>
         <p className="text-xs text-slate-400 mt-1">Please wait while we fetch your document types</p>
       </div>
     )
@@ -375,11 +375,11 @@ export default function DataEntryForm({
         <div className="w-16 h-16 bg-pink-50 rounded-2xl flex items-center justify-center mx-auto mb-4">
           <LayoutTemplate className="w-8 h-8 text-brand-pink" />
         </div>
-        <h3 className="text-lg font-bold text-brand-navy mb-2">No Templates Found</h3>
-        <p className="text-slate-500 font-medium mb-6 max-w-sm">
+        <h3 className="text-lg font-light text-brand-navy mb-2">No Templates Found</h3>
+        <p className="text-slate-500 font-light mb-6 max-w-sm">
           You haven't created any document templates yet. Build your first template to start generating documents.
         </p>
-        <div className="px-6 py-3 bg-pink-50 text-brand-pink rounded-xl font-bold border border-pink-100">
+        <div className="px-6 py-3 bg-pink-50 text-brand-pink rounded-xl font-light border border-pink-100">
           Use the Template Builder in the sidebar to create one.
         </div>
       </div>
@@ -413,7 +413,7 @@ export default function DataEntryForm({
               <FileCheck className="w-5 h-5" strokeWidth={2.5} />
             </motion.div>
             <div>
-              <p className="font-bold text-sm">Document Created Successfully!</p>
+              <p className="font-light text-sm">Document Created Successfully!</p>
               <p className="text-xs text-white/80">Check the preview panel for your PDF</p>
             </div>
           </motion.div>
@@ -427,7 +427,7 @@ export default function DataEntryForm({
             <PenLine className="w-5 h-5 text-slate-600" />
           </div>
           <div>
-            <h2 className="text-xl font-bold text-brand-navy tracking-tight">Create Document</h2>
+            <h2 className="text-xl font-light text-brand-navy tracking-tight">Create Document</h2>
             <p className="text-sm text-slate-500 mt-0.5">Fill in the details to generate your document</p>
           </div>
         </div>
@@ -440,7 +440,7 @@ export default function DataEntryForm({
             initial={{ opacity: 0, height: 0 }}
             animate={{ opacity: 1, height: 'auto' }}
             exit={{ opacity: 0, height: 0 }}
-            className="mx-6 sm:mx-8 mt-5 p-4 bg-red-50 border border-red-100 text-red-600 text-sm font-semibold rounded-xl flex items-start gap-3"
+            className="mx-6 sm:mx-8 mt-5 p-4 bg-red-50 border border-red-100 text-red-600 text-sm font-light rounded-xl flex items-start gap-3"
           >
             <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
             <span>{errors.server}</span>
@@ -457,7 +457,7 @@ export default function DataEntryForm({
               id="templateId"
               value={documentData.templateId || ''}
               onChange={(e) => handleChange('templateId', parseInt(e.target.value))}
-              className="w-full pl-5 pr-10 py-3.5 rounded-xl border border-slate-200 bg-white text-brand-navy font-semibold text-sm focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink transition-all appearance-none outline-none shadow-sm"
+              className="w-full pl-5 pr-10 py-3.5 rounded-xl border border-slate-200 bg-white text-brand-navy font-light text-sm focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink transition-all appearance-none outline-none shadow-sm"
             >
               {templates.map((t) => (
                 <option key={t.id} value={t.id}>{t.name}</option>
@@ -473,9 +473,9 @@ export default function DataEntryForm({
               className="mt-3 flex items-start gap-2.5 p-3 rounded-xl bg-amber-50 border border-amber-100"
             >
               <Lock className="w-4 h-4 text-amber-500 shrink-0 mt-0.5" />
-              <p className="text-xs text-amber-800 font-medium leading-relaxed">
+              <p className="text-xs text-amber-800 font-light leading-relaxed">
                 This template's layout is set in the Template Builder. Fill in the variables below to personalise it. To change the design, go to{' '}
-                <span className="font-bold text-amber-700">Template Builder → Edit</span>.
+                <span className="font-light text-amber-700">Template Builder → Edit</span>.
               </p>
             </motion.div>
           )}
@@ -494,10 +494,10 @@ export default function DataEntryForm({
               <div className="rounded-xl border border-slate-100 divide-y divide-slate-100 overflow-hidden">
                 {userFields.map((def) => (
                   <div key={def.id} className="flex items-center justify-between px-4 py-3 gap-4 hover:bg-slate-50 transition-colors">
-                    <span className="text-xs font-bold text-slate-400 uppercase tracking-widest shrink-0 min-w-[80px]">
+                    <span className="text-xs font-light text-slate-400 uppercase tracking-widest shrink-0 min-w-[80px]">
                       {def.label}
                     </span>
-                    <span className="text-sm font-semibold text-brand-navy text-right truncate">
+                    <span className="text-sm font-light text-brand-navy text-right truncate">
                       {def.placeholder || '—'}
                     </span>
                   </div>
@@ -517,7 +517,7 @@ export default function DataEntryForm({
                       key={def.id}
                       className={`${isTextArea ? 'sm:col-span-2' : ''} space-y-1.5`}
                     >
-                      <label className="block text-xs font-semibold text-slate-500 pl-0.5">
+                      <label className="block text-xs font-light text-slate-500 pl-0.5">
                         {def.label}
                         {def.required && <span className="text-red-400 ml-0.5">*</span>}
                       </label>
@@ -528,14 +528,14 @@ export default function DataEntryForm({
                           value={value}
                           onChange={(e) => handleFieldChange(def.id, e.target.value)}
                           placeholder={def.placeholder || `Enter ${def.label.toLowerCase()}...`}
-                          className={`w-full px-4 py-3 rounded-xl border text-sm text-brand-navy font-medium placeholder-slate-300 focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink focus:bg-white transition-all outline-none resize-none ${hasError ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-slate-50/30 hover:border-slate-300'}`}
+                          className={`w-full px-4 py-3 rounded-xl border text-sm text-brand-navy font-light placeholder-slate-300 focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink focus:bg-white transition-all outline-none resize-none ${hasError ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-slate-50/30 hover:border-slate-300'}`}
                         />
                       ) : isSelect ? (
                         <div className="relative">
                           <select
                             value={value || def.placeholder || (def.options?.[0]?.value ?? '')}
                             onChange={(e) => handleFieldChange(def.id, e.target.value)}
-                            className={`w-full px-4 py-3 rounded-xl border text-sm text-brand-navy font-medium focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink transition-all outline-none appearance-none ${hasError ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-slate-50/30'}`}
+                            className={`w-full px-4 py-3 rounded-xl border text-sm text-brand-navy font-light focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink transition-all outline-none appearance-none ${hasError ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-slate-50/30'}`}
                           >
                             {def.options.map((opt) => (
                               <option key={opt.value} value={opt.value}>{opt.label}</option>
@@ -550,7 +550,7 @@ export default function DataEntryForm({
                             value={value}
                             onChange={(e) => handleFieldChange(def.id, e.target.value)}
                             placeholder={def.placeholder || `Enter ${def.label.toLowerCase()}...`}
-                            className={`w-full px-4 py-3 rounded-xl border text-sm text-brand-navy font-medium placeholder-slate-300 focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink focus:bg-white transition-all outline-none ${hasError ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-slate-50/30 hover:border-slate-300'}`}
+                            className={`w-full px-4 py-3 rounded-xl border text-sm text-brand-navy font-light placeholder-slate-300 focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink focus:bg-white transition-all outline-none ${hasError ? 'border-red-300 bg-red-50/30' : 'border-slate-200 bg-slate-50/30 hover:border-slate-300'}`}
                           />
                           {value && !hasError && (
                             <Check className="absolute right-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-emerald-500 pointer-events-none" />
@@ -563,7 +563,7 @@ export default function DataEntryForm({
                           <motion.p
                             initial={{ opacity: 0, x: -4 }}
                             animate={{ opacity: 1, x: 0 }}
-                            className="text-xs font-semibold text-red-500 pl-0.5 flex items-center gap-1"
+                            className="text-xs font-light text-red-500 pl-0.5 flex items-center gap-1"
                           >
                             <AlertCircle className="w-3 h-3 shrink-0" />
                             {errors[key]}
@@ -605,7 +605,7 @@ export default function DataEntryForm({
         {userFields.length === 0 && hasDynamicHtmlFields && (
           <div className="text-center py-8 border-2 border-dashed border-slate-200 rounded-xl text-slate-400">
             <Wand2 className="w-7 h-7 mx-auto mb-2 opacity-50" />
-            <p className="text-sm font-semibold">No user-fillable fields</p>
+            <p className="text-sm font-light">No user-fillable fields</p>
             <p className="text-xs mt-1 opacity-75">Add {'{{ Variables }}'} in the Template Builder to see them here.</p>
           </div>
         )}
@@ -630,13 +630,13 @@ export default function DataEntryForm({
                 >
                   <div className="flex-1 grid grid-cols-2 gap-2.5">
                     <input
-                      className="px-4 py-2.5 rounded-xl border border-pink-200 bg-white text-sm font-medium text-brand-navy focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink transition-all outline-none placeholder:text-slate-300"
+                      className="px-4 py-2.5 rounded-xl border border-pink-200 bg-white text-sm font-light text-brand-navy focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink transition-all outline-none placeholder:text-slate-300"
                       placeholder="e.g. Serial No."
                       value={cf.label}
                       onChange={(e) => updateCustomFieldRow(cf.id, { label: e.target.value })}
                     />
                     <input
-                      className="px-4 py-2.5 rounded-xl border border-pink-200 bg-white text-sm font-medium text-brand-navy focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink transition-all outline-none placeholder:text-slate-300"
+                      className="px-4 py-2.5 rounded-xl border border-pink-200 bg-white text-sm font-light text-brand-navy focus:ring-4 focus:ring-brand-pink/5 focus:border-brand-pink transition-all outline-none placeholder:text-slate-300"
                       placeholder="e.g. SN-00123"
                       value={cf.value}
                       onChange={(e) => updateCustomFieldRow(cf.id, { value: e.target.value })}
@@ -657,7 +657,7 @@ export default function DataEntryForm({
             {(documentData.customFields || []).length === 0 && (
               <div className="text-center py-5 border-2 border-dashed border-pink-200 rounded-xl text-slate-400 mb-3">
                 <Sparkles className="w-6 h-6 mx-auto mb-1.5 text-pink-300" />
-                <p className="text-xs font-semibold text-slate-500">No custom fields yet</p>
+                <p className="text-xs font-light text-slate-500">No custom fields yet</p>
                 <p className="text-[11px] mt-0.5 opacity-75">Click below to add extra label-value pairs</p>
               </div>
             )}
@@ -665,7 +665,7 @@ export default function DataEntryForm({
             <button
               type="button"
               onClick={addCustomFieldRow}
-              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-dashed border-pink-200 text-brand-pink text-sm font-semibold hover:bg-pink-50 hover:border-brand-pink transition-all"
+              className="w-full flex items-center justify-center gap-2 py-2.5 rounded-xl border-2 border-dashed border-pink-200 text-brand-pink text-sm font-light hover:bg-pink-50 hover:border-brand-pink transition-all"
             >
               <Plus className="w-4 h-4" />
               Add Custom Field
@@ -677,7 +677,7 @@ export default function DataEntryForm({
         <motion.button
           type="submit"
           disabled={isGenerating}
-          className={`w-full h-14 rounded-xl text-white font-bold tracking-wide text-sm transition-all shadow-sm ${isGenerating
+          className={`w-full h-14 rounded-xl text-white font-light tracking-wide text-sm transition-all shadow-sm ${isGenerating
             ? 'bg-slate-200 cursor-not-allowed text-slate-400 border border-slate-300'
             : 'bg-brand-navy hover:bg-slate-800 border border-brand-navy'
             }`}

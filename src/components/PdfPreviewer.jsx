@@ -104,8 +104,8 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
               <Eye className="w-5 h-5 text-brand-pink" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-brand-navy">Document Preview</h2>
-              <p className="text-xs text-slate-400 font-medium">See how your document will look</p>
+              <h2 className="text-xl font-light text-brand-navy">Document Preview</h2>
+              <p className="text-xs text-slate-400 font-light">See how your document will look</p>
             </div>
           </div>
 
@@ -119,7 +119,7 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
               >
                 <motion.button
                   onClick={handlePrint}
-                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-bold hover:bg-slate-50 transition-smooth"
+                  className="flex items-center gap-2 px-4 py-2.5 rounded-xl border border-slate-200 text-slate-600 text-xs font-light hover:bg-slate-50 transition-smooth"
                   whileHover={{ y: -1 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -128,7 +128,7 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
                 </motion.button>
                 <motion.button
                   onClick={handleDownloadOfficial}
-                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-navy text-white text-xs font-bold hover:bg-slate-800 transition-smooth shadow-sm"
+                  className="flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-navy text-white text-xs font-light hover:bg-slate-800 transition-smooth shadow-sm"
                   whileHover={{ y: -1 }}
                   whileTap={{ scale: 0.98 }}
                 >
@@ -173,11 +173,11 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
                       <div className={`bg-slate-50 border-b border-slate-100 -m-10 -mb-8 p-10 rounded-t-lg relative overflow-hidden`}>
                         <div className="relative z-10 flex justify-between items-start">
                           <div>
-                            <div className="flex items-center gap-2 text-slate-500 text-[10px] font-bold uppercase tracking-widest mb-1">
+                            <div className="flex items-center gap-2 text-slate-500 text-[10px] font-light uppercase tracking-widest mb-1">
                               <Zap className="w-3 h-3 text-brand-pink" />
                               System Template
                             </div>
-                            <h1 className="text-3xl font-black text-brand-navy tracking-tight uppercase">
+                            <h1 className="text-3xl font-light text-brand-navy tracking-tight uppercase">
                               {template?.name || 'Document'}
                             </h1>
                           </div>
@@ -215,7 +215,7 @@ export default function PdfPreviewer({ documentData, templates, onUpdate }) {
                   <div className="w-20 h-20 bg-slate-100 rounded-full flex items-center justify-center mb-6">
                     <FileText className="w-10 h-10 text-slate-300" />
                   </div>
-                  <h3 className="text-lg font-semibold text-slate-500 mb-2">Preview will appear here</h3>
+                  <h3 className="text-lg font-light text-slate-500 mb-2">Preview will appear here</h3>
                   <p className="text-sm text-slate-400 max-w-[260px]">Fill in the form on the left and your document preview will show here in real time</p>
                 </div>
               )}
@@ -237,24 +237,24 @@ function CertificatePreview({ fields, template, documentData, formatDate }) {
         <div className="absolute bottom-4 left-4 w-12 h-12 border-b-2 border-l-2 border-brand-pink opacity-50"></div>
         <div className="absolute bottom-4 right-4 w-12 h-12 border-b-2 border-r-2 border-brand-pink opacity-50"></div>
 
-        <div className="text-sm font-bold uppercase tracking-[0.3em] text-brand-pink mb-6">Certificate of Achievement</div>
-        <h2 className="text-5xl font-serif font-black text-brand-navy mb-4 tracking-tight">{template?.name || 'Certificate'}</h2>
+        <div className="text-sm font-light uppercase tracking-[0.3em] text-brand-pink mb-6">Certificate of Achievement</div>
+        <h2 className="text-5xl font-serif font-light text-brand-navy mb-4 tracking-tight">{template?.name || 'Certificate'}</h2>
 
         <div className="w-16 h-1 bg-brand-pink mx-auto mb-12"></div>
 
         <div className="text-sm italic text-slate-500 mb-3">This is proudly presented to</div>
-        <div className="text-4xl font-serif font-bold text-slate-900 mb-6 border-b border-slate-200 inline-block pb-2 px-8">{fields.name || '[Recipient Name]'}</div>
+        <div className="text-4xl font-serif font-light text-slate-900 mb-6 border-b border-slate-200 inline-block pb-2 px-8">{fields.name || '[Recipient Name]'}</div>
 
-        <div className="text-slate-600 mb-2 font-medium">for successful completion of</div>
-        <div className="text-2xl font-bold text-brand-navy mb-4">{fields.courseName || '[Course Name]'}</div>
+        <div className="text-slate-600 mb-2 font-light">for successful completion of</div>
+        <div className="text-2xl font-light text-brand-navy mb-4">{fields.courseName || '[Course Name]'}</div>
 
         {fields.grade && (
           <div className="mt-4 text-slate-600">
-            Graduated with honors: <span className="font-bold text-brand-pink px-3 py-1 bg-pink-50 rounded-lg">{fields.grade}</span>
+            Graduated with honors: <span className="font-light text-brand-pink px-3 py-1 bg-pink-50 rounded-lg">{fields.grade}</span>
           </div>
         )}
 
-        <div className="mt-12 text-sm text-slate-500 font-medium">Issued on <span className="text-slate-800 font-bold">{formatDate(fields.date) || '[Date]'}</span></div>
+        <div className="mt-12 text-sm text-slate-500 font-light">Issued on <span className="text-slate-800 font-light">{formatDate(fields.date) || '[Date]'}</span></div>
 
         {(documentData.customFields || []).length > 0 && (
           <div className="mt-8 pt-6 max-w-sm mx-auto">
@@ -262,7 +262,7 @@ function CertificatePreview({ fields, template, documentData, formatDate }) {
               {(documentData.customFields || []).map(cf => (
                 <div key={cf.id} className="flex justify-between text-xs px-4">
                   <span className="text-slate-500">{cf.label}:</span>
-                  <span className="font-bold text-slate-800">{cf.value}</span>
+                  <span className="font-light text-slate-800">{cf.value}</span>
                 </div>
               ))}
             </div>
@@ -272,16 +272,16 @@ function CertificatePreview({ fields, template, documentData, formatDate }) {
         <div className="mt-16 flex justify-between items-end px-8">
           <div className="text-center w-40">
             <div className="border-b-2 border-slate-300 pb-2 mb-2"></div>
-            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Authorized Signature</div>
+            <div className="text-[10px] font-light uppercase tracking-widest text-slate-400">Authorized Signature</div>
           </div>
           <div className="relative z-10">
-            <div className="w-24 h-24 rounded-full border-4 border-pink-100 bg-pink-50 flex items-center justify-center text-[10px] uppercase tracking-widest text-brand-pink font-bold p-2 text-center leading-tight shadow-sm">
+            <div className="w-24 h-24 rounded-full border-4 border-pink-100 bg-pink-50 flex items-center justify-center text-[10px] uppercase tracking-widest text-brand-pink font-light p-2 text-center leading-tight shadow-sm">
               <span className="opacity-80">Official<br />Seal of<br />Excellence</span>
             </div>
           </div>
           <div className="text-center w-40">
             <div className="border-b-2 border-slate-300 pb-2 mb-2"></div>
-            <div className="text-[10px] font-bold uppercase tracking-widest text-slate-400">Date of Issuance</div>
+            <div className="text-[10px] font-light uppercase tracking-widest text-slate-400">Date of Issuance</div>
           </div>
         </div>
       </div>
@@ -299,7 +299,7 @@ function ReceiptPreview({ fields, documentData, formatDate, formatAmount }) {
         <div className="w-12 h-12 bg-slate-50 border border-slate-200 text-slate-500 rounded-full flex items-center justify-center mx-auto mb-4">
           <FileText className="w-5 h-5" />
         </div>
-        <h3 className="text-xl font-black text-brand-navy uppercase tracking-widest mb-1">Official Receipt</h3>
+        <h3 className="text-xl font-light text-brand-navy uppercase tracking-widest mb-1">Official Receipt</h3>
         {documentData.uniqueCode && (
           <div className="flex justify-center mt-2">
             <VerifyQR trackingCode={documentData.uniqueCode} size={64} />
@@ -309,35 +309,35 @@ function ReceiptPreview({ fields, documentData, formatDate, formatAmount }) {
 
       <div className="space-y-4 mb-8">
         <div className="flex justify-between items-end text-sm">
-          <span className="text-slate-500 font-medium">Date</span>
-          <span className="font-bold text-slate-800">{formatDate(fields.date) || '[Date]'}</span>
+          <span className="text-slate-500 font-light">Date</span>
+          <span className="font-light text-slate-800">{formatDate(fields.date) || '[Date]'}</span>
         </div>
         <div className="flex justify-between items-end text-sm">
-          <span className="text-slate-500 font-medium">Customer</span>
-          <span className="font-bold text-slate-800 text-right">{fields.name || '[Name]'}</span>
+          <span className="text-slate-500 font-light">Customer</span>
+          <span className="font-light text-slate-800 text-right">{fields.name || '[Name]'}</span>
         </div>
       </div>
 
       <div className="border-t-2 border-slate-800 pt-6 pb-2 mb-6">
         <div className="flex justify-between items-center">
-          <span className="text-slate-600 font-black uppercase tracking-widest text-sm">Total Paid</span>
-          <span className="text-3xl font-black text-brand-navy">${formatAmount(fields.amount)}</span>
+          <span className="text-slate-600 font-light uppercase tracking-widest text-sm">Total Paid</span>
+          <span className="text-3xl font-light text-brand-navy">${formatAmount(fields.amount)}</span>
         </div>
       </div>
 
       {(documentData.customFields || []).length > 0 && (
         <div className="mt-6 pt-4 border-t border-dashed border-slate-200 space-y-2">
-          <div className="text-[10px] uppercase font-bold text-slate-400 mb-2">Additional Details</div>
+          <div className="text-[10px] uppercase font-light text-slate-400 mb-2">Additional Details</div>
           {(documentData.customFields || []).map(cf => (
             <div key={cf.id} className="flex justify-between text-xs">
               <span className="text-slate-500">{cf.label}</span>
-              <span className="font-medium">{cf.value}</span>
+              <span className="font-light">{cf.value}</span>
             </div>
           ))}
         </div>
       )}
 
-      <div className="text-center text-xs text-slate-400 mt-8 font-medium">
+      <div className="text-center text-xs text-slate-400 mt-8 font-light">
         Thank you for your business.
       </div>
     </div>
@@ -350,7 +350,7 @@ function LetterPreview({ fields, template, documentData, formatDate }) {
     <div className="text-left font-serif leading-relaxed text-slate-800 space-y-6 max-w-2xl mx-auto px-4 py-8">
       <div className="text-sm font-sans mb-12 text-slate-500 flex justify-between items-start border-b border-slate-200 pb-6">
         <div>
-          <div className="font-bold text-brand-navy uppercase tracking-widest">{template?.name || 'Official Letter'}</div>
+          <div className="font-light text-brand-navy uppercase tracking-widest">{template?.name || 'Official Letter'}</div>
           {documentData.uniqueCode && (
             <div className="shrink-0">
               <VerifyQR trackingCode={documentData.uniqueCode} size={52} showLabel={false} />
@@ -376,15 +376,15 @@ function LetterPreview({ fields, template, documentData, formatDate }) {
           if (def.id === 'name' || def.id === 'date') return null
           return (
             <div key={def.id} className="grid grid-cols-3 gap-4 border-b border-slate-200 last:border-0 pb-2 last:pb-0">
-              <span className="text-slate-500 font-medium col-span-1">{def.label}</span>
-              <span className="font-bold text-brand-navy col-span-2">{val || `[${def.label}]`}</span>
+              <span className="text-slate-500 font-light col-span-1">{def.label}</span>
+              <span className="font-light text-brand-navy col-span-2">{val || `[${def.label}]`}</span>
             </div>
           )
         })}
         {customFields.map((cf) => (
           <div key={cf.id} className="grid grid-cols-3 gap-4 border-b border-slate-200 last:border-0 pb-2 last:pb-0">
-            <span className="text-slate-500 font-medium col-span-1">{cf.label || '—'}</span>
-            <span className="font-bold text-brand-navy col-span-2">{cf.value || '—'}</span>
+            <span className="text-slate-500 font-light col-span-1">{cf.label || '—'}</span>
+            <span className="font-light text-brand-navy col-span-2">{cf.value || '—'}</span>
           </div>
         ))}
       </div>
@@ -396,7 +396,7 @@ function LetterPreview({ fields, template, documentData, formatDate }) {
       <div className="mt-16 pt-8">
         <p className="mb-8">Sincerely,</p>
         <div className="w-48 border-b border-slate-300 mb-2"></div>
-        <p className="font-bold text-brand-navy">Authorized Representative</p>
+        <p className="font-light text-brand-navy">Authorized Representative</p>
         <p className="text-sm text-slate-500">Global Issuing Authority</p>
       </div>
     </div>
@@ -413,7 +413,7 @@ function DefaultPreview({ fields, template, documentData }) {
         return (
           <div key={def.id} className="flex justify-between items-center border-b border-slate-100 py-2.5 text-sm gap-4">
             <span className="text-slate-500 shrink-0">{def.label}</span>
-            <span className={`font-semibold text-right truncate ${val ? 'text-brand-navy' : 'text-slate-300 italic'}`}>
+            <span className={`font-light text-right truncate ${val ? 'text-brand-navy' : 'text-slate-300 italic'}`}>
               {val || `Enter ${def.label.toLowerCase()}...`}
             </span>
           </div>
@@ -423,19 +423,19 @@ function DefaultPreview({ fields, template, documentData }) {
       {fields.grade && !(template?.fields || []).some(f => f.id === 'grade') && (
         <div className="flex justify-between items-center border-b border-slate-100 py-2.5 text-sm">
           <span className="text-slate-500">Grade</span>
-          <span className="px-2 py-0.5 rounded-full bg-pink-50 text-pink-700 text-xs font-bold">{fields.grade}</span>
+          <span className="px-2 py-0.5 rounded-full bg-pink-50 text-pink-700 text-xs font-light">{fields.grade}</span>
         </div>
       )}
 
       {customFields.length > 0 && (
         <>
           <div className="pt-3 pb-1">
-            <span className="text-[10px] font-bold text-slate-400 uppercase tracking-widest">Custom Fields</span>
+            <span className="text-[10px] font-light text-slate-400 uppercase tracking-widest">Custom Fields</span>
           </div>
           {customFields.map((cf) => (
             <div key={cf.id} className="flex justify-between items-center border-b border-pink-50 py-2.5 text-sm gap-4">
               <span className="text-slate-500 shrink-0">{cf.label || '—'}</span>
-              <span className="font-semibold text-brand-navy text-right truncate">{cf.value || '—'}</span>
+              <span className="font-light text-brand-navy text-right truncate">{cf.value || '—'}</span>
             </div>
           ))}
         </>

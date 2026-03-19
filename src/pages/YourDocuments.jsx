@@ -24,6 +24,7 @@ import {
 } from 'lucide-react'
 import API from '../api/client'
 import PdfPreviewer from '../components/PdfPreviewer'
+import Breadcrumb from '../components/Breadcrumb'
 
 function formatDate(dateStr) {
   if (!dateStr) return '—'
@@ -119,10 +120,10 @@ function ShareModal({ doc, onClose }) {
         animate={{ scale: 1, opacity: 1 }}
         exit={{ scale: 0.9, opacity: 0 }}
         onClick={(e) => e.stopPropagation()}
-        className="bg-white rounded-3xl shadow-2xl max-w-md w-full overflow-hidden"
+        className="bg-white/90 backdrop-blur-md rounded-[1.25rem] shadow-card max-w-md w-full overflow-hidden border border-slate-100/80 transition-smooth"
       >
         <div className="p-6 pb-0 flex items-center justify-between">
-          <h3 className="text-xl font-bold text-brand-navy flex items-center gap-2">
+          <h3 className="text-xl font-light text-brand-navy flex items-center gap-2">
             <Share2 className="w-5 h-5 text-brand-pink" />
             Share Document
           </h3>
@@ -134,7 +135,7 @@ function ShareModal({ doc, onClose }) {
         <div className="p-6 space-y-6">
           {/* URL Copy Section */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Document Link</label>
+            <label className="text-xs font-light text-slate-500 uppercase tracking-wider">Document Link</label>
             <div className="flex items-center gap-2 p-2 rounded-xl border border-slate-200 bg-slate-50">
               <div className="p-2 bg-white rounded-lg text-brand-navy shadow-sm border border-slate-100">
                 <LinkIcon className="w-4 h-4" />
@@ -142,11 +143,11 @@ function ShareModal({ doc, onClose }) {
               <input
                 readOnly
                 value={url}
-                className="flex-1 bg-transparent text-sm font-medium text-slate-700 outline-none truncate"
+                className="flex-1 bg-transparent text-sm font-light text-slate-700 outline-none truncate"
               />
               <button
                 onClick={handleCopy}
-                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all ${copied ? 'bg-green-500 text-white' : 'bg-brand-navy text-white hover:bg-slate-700'
+                className={`px-3 py-1.5 rounded-lg text-xs font-light transition-all ${copied ? 'bg-green-500 text-white' : 'bg-brand-navy text-white hover:bg-slate-700'
                   }`}
               >
                 {copied ? 'Copied!' : 'Copy'}
@@ -156,7 +157,7 @@ function ShareModal({ doc, onClose }) {
 
           {/* Social Share Grid */}
           <div className="space-y-2">
-            <label className="text-xs font-bold text-slate-500 uppercase tracking-wider">Share via</label>
+            <label className="text-xs font-light text-slate-500 uppercase tracking-wider">Share via</label>
             <div className="grid grid-cols-4 gap-3">
               {shareLinks.map((link) => (
                 <a
@@ -169,7 +170,7 @@ function ShareModal({ doc, onClose }) {
                   <div className={`w-12 h-12 rounded-2xl flex items-center justify-center text-white shadow-lg transition-transform group-hover:scale-110 ${link.color}`}>
                     <link.icon className="w-5 h-5" />
                   </div>
-                  <span className="text-[10px] font-semibold text-slate-500 group-hover:text-brand-navy">{link.name}</span>
+                  <span className="text-[10px] font-light text-slate-500 group-hover:text-brand-navy">{link.name}</span>
                 </a>
               ))}
             </div>
@@ -241,7 +242,7 @@ function DetailsModal({ doc, onClose, onShare }) {
         animate={{ opacity: 1, scale: 1, y: 0 }}
         exit={{ opacity: 0, scale: 0.95, y: 20 }}
         onClick={(e) => e.stopPropagation()}
-        className="w-full max-w-4xl max-h-[90vh] flex flex-col bg-white rounded-3xl shadow-2xl border border-slate-200 overflow-hidden"
+        className="w-full max-w-4xl max-h-[90vh] flex flex-col bg-white/95 backdrop-blur-md rounded-[1.5rem] shadow-card border border-slate-100/80 overflow-hidden transition-smooth"
       >
         {/* Header */}
         <div className="shrink-0 p-6 pb-4 border-b border-slate-100 flex items-start justify-between bg-slate-50/50">
@@ -250,7 +251,7 @@ function DetailsModal({ doc, onClose, onShare }) {
               <FileText className="w-6 h-6 text-brand-pink" />
             </div>
             <div>
-              <h2 className="text-xl font-bold text-brand-navy leading-tight">
+              <h2 className="text-xl font-light text-brand-navy leading-tight">
                 {doc?.document_type_name || 'Document View'}
               </h2>
               <div className="flex flex-wrap items-center gap-2 mt-1.5 text-xs">
@@ -276,7 +277,7 @@ function DetailsModal({ doc, onClose, onShare }) {
             <button
               onClick={handleDownload}
               disabled={!pdfUrl || isLoadingPdf || isRegenerating}
-              className="p-2.5 rounded-xl bg-brand-navy hover:bg-slate-800 text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 px-4 font-bold text-sm"
+              className="p-2.5 rounded-xl bg-brand-navy hover:bg-slate-800 text-white transition-all shadow-sm disabled:opacity-50 disabled:cursor-not-allowed flex items-center gap-2 px-4 font-light text-sm"
               title="Download PDF"
             >
               <Download className="w-4 h-4" />
@@ -298,7 +299,7 @@ function DetailsModal({ doc, onClose, onShare }) {
           {isLoadingPdf ? (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
               <Loader2 className="w-8 h-8 animate-spin mb-4 text-brand-pink" />
-              <p className="font-medium">Loading Document View...</p>
+              <p className="font-light">Loading Document View...</p>
             </div>
           ) : pdfUrl ? (
             <div className="h-full min-h-[500px] w-full bg-white rounded-xl shadow-sm border border-slate-200 overflow-hidden flex flex-col md:flex-row">
@@ -306,7 +307,7 @@ function DetailsModal({ doc, onClose, onShare }) {
                 {isRegenerating && (
                   <div className="absolute inset-0 bg-white/80 z-20 flex flex-col items-center justify-center gap-3">
                     <Loader2 className="w-8 h-8 animate-spin text-brand-pink" />
-                    <p className="text-[10px] font-semibold text-slate-500 uppercase tracking-widest">Regenerating...</p>
+                    <p className="text-[10px] font-light text-slate-500 uppercase tracking-widest">Regenerating...</p>
                   </div>
                 )}
                 <iframe
@@ -318,14 +319,14 @@ function DetailsModal({ doc, onClose, onShare }) {
 
               <div className="w-full md:w-72 bg-slate-50 overflow-y-auto p-5 shrink-0 h-full max-h-[500px] md:max-h-full">
                 <div className="flex items-center justify-between mb-4">
-                  <h4 className="text-[10px] font-semibold text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
+                  <h4 className="text-[10px] font-light text-slate-400 uppercase tracking-[0.2em] flex items-center gap-2">
                     <Database className="w-3 h-3 text-brand-pink" />
                     Document Data
                   </h4>
                   <button
                     onClick={() => loadPdf(true)}
                     disabled={isRegenerating}
-                    className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white border border-slate-200 text-[9px] font-semibold text-slate-500 hover:text-brand-pink hover:border-pink-200 transition-all active:scale-95 disabled:opacity-50"
+                    className="flex items-center gap-1.5 px-2 py-1 rounded-lg bg-white border border-slate-200 text-[9px] font-light text-slate-500 hover:text-brand-pink hover:border-pink-200 transition-all active:scale-95 disabled:opacity-50"
                   >
                     <RefreshCw className={`w-2.5 h-2.5 ${isRegenerating ? 'animate-spin' : ''}`} />
                     Refresh
@@ -339,10 +340,10 @@ function DetailsModal({ doc, onClose, onShare }) {
                   ) : (
                     getMetadataRows(doc?.metadata).map((row, i) => (
                       <div key={i} className="bg-white p-3 rounded-xl border border-slate-200 shadow-sm">
-                        <label className="block text-[9px] font-bold text-slate-400 uppercase tracking-wider mb-1">
+                        <label className="block text-[9px] font-light text-slate-400 uppercase tracking-wider mb-1">
                           {row.label}
                         </label>
-                        <p className="text-sm font-semibold text-brand-navy break-words leading-relaxed">
+                        <p className="text-sm font-light text-brand-navy break-words leading-relaxed">
                           {row.value}
                         </p>
                       </div>
@@ -354,14 +355,14 @@ function DetailsModal({ doc, onClose, onShare }) {
           ) : (
             <div className="absolute inset-0 flex flex-col items-center justify-center text-slate-400 bg-slate-50">
               <AlertTriangle className="w-8 h-8 mb-4 text-slate-300" />
-              <p className="font-medium">Failed to load document preview</p>
+              <p className="font-light">Failed to load document preview</p>
             </div>
           )}
         </div>
 
         {/* Footer Actions */}
         <div className="shrink-0 p-4 border-t border-slate-100 bg-white flex justify-between items-center">
-          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold uppercase ${doc?.status === 'valid' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
+          <span className={`inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-light uppercase ${doc?.status === 'valid' ? 'bg-emerald-50 text-emerald-700' : 'bg-slate-100 text-slate-600'
             }`}>
             <span className={`w-1.5 h-1.5 rounded-full ${doc?.status === 'valid' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
             {doc?.status || 'Unknown Status'}
@@ -372,7 +373,7 @@ function DetailsModal({ doc, onClose, onShare }) {
               onClose();
               doc.onDelete?.(doc);
             }}
-            className="flex items-center gap-2 px-4 py-2 text-sm font-bold text-red-500 hover:bg-red-50 hover:text-red-600 rounded-xl transition-colors"
+            className="flex items-center gap-2 px-4 py-2 text-sm font-light text-red-500 hover:bg-red-50 hover:text-red-600 rounded-xl transition-colors"
           >
             <Trash2 className="w-4 h-4" />
             Delete Document
@@ -385,11 +386,11 @@ function DetailsModal({ doc, onClose, onShare }) {
 
 function DocumentsTable({ documents, onViewDetails, onShare, onDelete }) {
   return (
-    <div className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden">
+    <div className="bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card overflow-hidden transition-smooth">
       <div className="overflow-x-auto">
         <table className="w-full text-left">
           <thead>
-            <tr className="bg-slate-100 border-b border-slate-100 text-[11px] font-semibold text-brand-black uppercase tracking-wider backdrop-blur-sm sticky top-0 z-10">
+            <tr className="bg-slate-100 border-b border-slate-100 text-[11px] font-light text-brand-black uppercase tracking-wider backdrop-blur-sm sticky top-0 z-10">
               <th className="px-6 py-4">Document</th>
               <th className="px-6 py-4">Tracking ID</th>
               <th className="px-6 py-4">Created</th>
@@ -407,10 +408,10 @@ function DocumentsTable({ documents, onViewDetails, onShare, onDelete }) {
               >
                 <td className="px-6 py-4">
                   <div className="flex items-center gap-3">
-                    <div className="w-9 h-9 rounded-lg bg-pink-50 border border-pink-100 flex items-center justify-center text-brand-pink font-bold shrink-0">
+                    <div className="w-9 h-9 rounded-lg bg-pink-50 border border-pink-100 flex items-center justify-center text-brand-pink font-light shrink-0">
                       <FileText className="w-4 h-4" />
                     </div>
-                    <div className="font-semibold text-brand-navy">{doc.document_type_name || 'Document'}</div>
+                    <div className="font-light text-brand-navy">{doc.document_type_name || 'Document'}</div>
                   </div>
                 </td>
                 <td className="px-6 py-4">
@@ -426,7 +427,7 @@ function DocumentsTable({ documents, onViewDetails, onShare, onDelete }) {
                   </div>
                 </td>
                 <td className="px-6 py-4">
-                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-bold uppercase tracking-wide border ${doc.status === 'valid' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>
+                  <span className={`inline-flex items-center gap-1.5 px-2.5 py-1 rounded-full text-xs font-light uppercase tracking-wide border ${doc.status === 'valid' ? 'bg-emerald-50 text-emerald-700 border-emerald-100' : 'bg-slate-100 text-slate-600 border-slate-200'}`}>
                     <span className={`w-1.5 h-1.5 rounded-full ${doc.status === 'valid' ? 'bg-emerald-500' : 'bg-slate-400'}`} />
                     {doc.status || '—'}
                   </span>
@@ -455,7 +456,7 @@ function DocumentsTable({ documents, onViewDetails, onShare, onDelete }) {
 
 function SkeletonTable() {
   return (
-    <div className="bg-white rounded-2xl border border-pink-100 shadow-sm overflow-hidden animate-pulse">
+    <div className="bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card overflow-hidden animate-pulse">
       <div className="h-12 bg-slate-50 border-b border-pink-100" />
       {[1, 2, 3, 4, 5].map(i => (
         <div key={i} className="flex items-center px-6 py-4 border-b border-pink-50 gap-4">
@@ -571,27 +572,27 @@ export default function YourDocuments({ onNavigate }) {
               initial={{ scale: 0.9, opacity: 0 }}
               animate={{ scale: 1, opacity: 1 }}
               exit={{ scale: 0.9, opacity: 0 }}
-              className="bg-white rounded-2xl shadow-xl max-w-sm w-full p-6 overflow-hidden"
+              className="bg-white rounded-[1.25rem] shadow-card border border-slate-100/80 max-w-sm w-full p-6 overflow-hidden transition-smooth"
             >
               <div className="flex flex-col items-center text-center">
                 <div className="w-12 h-12 rounded-full bg-red-100 flex items-center justify-center mb-4">
                   <AlertTriangle className="w-6 h-6 text-red-500" />
                 </div>
-                <h3 className="text-lg font-bold text-slate-800 mb-2">Delete Document?</h3>
+                <h3 className="text-lg font-light text-slate-800 mb-2">Delete Document?</h3>
                 <p className="text-sm text-slate-500 mb-6">
-                  Are you sure you want to delete <span className="font-mono font-medium text-slate-700">{deleteConfirm.tracking_field}</span>? This action cannot be undone.
+                  Are you sure you want to delete <span className="font-mono font-light text-slate-700">{deleteConfirm.tracking_field}</span>? This action cannot be undone.
                 </p>
                 <div className="flex gap-3 w-full">
                   <button
                     onClick={() => setDeleteConfirm(null)}
-                    className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-semibold hover:bg-slate-50 transition-colors"
+                    className="flex-1 py-2.5 rounded-xl border border-slate-200 text-slate-600 font-light hover:bg-slate-50 transition-colors"
                   >
                     Cancel
                   </button>
                   <button
                     onClick={confirmDelete}
                     disabled={isDeleting}
-                    className="flex-1 py-2.5 rounded-xl bg-red-500 text-white font-semibold hover:bg-red-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
+                    className="flex-1 py-2.5 rounded-xl bg-red-500 text-white font-light hover:bg-red-600 transition-colors disabled:opacity-50 flex items-center justify-center gap-2"
                   >
                     {isDeleting ? 'Deleting...' : 'Delete'}
                   </button>
@@ -608,14 +609,17 @@ export default function YourDocuments({ onNavigate }) {
       {/* Modern Header Section */}
       <div className="flex flex-col lg:flex-row lg:items-center lg:justify-between gap-6 mb-8">
         <div>
-          <h1 className="text-xl  text-brand-purple tracking-tight">Your Documents</h1>
-          <p className="text-slate-500 font-light mt-1">Manage, verify, and share your generated documents.</p>
+          <Breadcrumb items={[
+            { label: 'Dashboard', onClick: () => onNavigate?.('dashboard') },
+            { label: 'My Documents' }
+          ]} />
+          <h1 className="text-2xl font-light text-brand-navy tracking-tight">My Documents</h1>
         </div>
 
         <button
           type="button"
           onClick={() => onNavigate?.('generate')}
-          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-pink hover:bg-pink-600 text-white font-bold shadow-sm hover:shadow-md transition-all text-sm"
+          className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-brand-pink hover:bg-pink-600 text-white font-light shadow-sm hover:shadow-md transition-all text-sm"
         >
           <FileText className="w-4 h-4" />
           Create New Document
@@ -626,7 +630,7 @@ export default function YourDocuments({ onNavigate }) {
       <div className="space-y-6">
 
         {/* Controls Bar */}
-        <div className="bg-white rounded-2xl border border-pink-100 shadow-sm p-2 flex flex-col md:flex-row gap-2">
+        <div className="bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card p-2 flex flex-col md:flex-row gap-2 transition-smooth">
           <div className="relative flex-1">
             <Search className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
             <input
@@ -634,12 +638,12 @@ export default function YourDocuments({ onNavigate }) {
               placeholder="Search by code, name, or metadata..."
               value={searchQuery}
               onChange={(e) => setSearchQuery(e.target.value)}
-              className="w-full h-12 pl-12 pr-4 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 outline-none transition-all font-medium text-slate-700"
+              className="w-full h-12 pl-12 pr-4 rounded-xl bg-slate-50 border border-transparent focus:bg-white focus:border-brand-pink focus:ring-2 focus:ring-brand-pink/20 outline-none transition-all font-light text-slate-700"
             />
           </div>
 
           <div className="flex items-center gap-2 overflow-x-auto pb-2 md:pb-0">
-            <button onClick={() => setStatusFilter(statusFilter === 'all' ? 'valid' : statusFilter === 'valid' ? 'revoked' : 'all')} className="flex items-center gap-2 px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl font-semibold text-slate-600 transition-colors whitespace-nowrap">
+            <button onClick={() => setStatusFilter(statusFilter === 'all' ? 'valid' : statusFilter === 'valid' ? 'revoked' : 'all')} className="flex items-center gap-2 px-4 py-3 bg-slate-50 hover:bg-slate-100 rounded-xl font-light text-slate-600 transition-colors whitespace-nowrap">
               <Filter className="w-4 h-4" />
               Status: <span className="text-brand-navy capitalize">{statusFilter}</span>
             </button>
@@ -655,7 +659,7 @@ export default function YourDocuments({ onNavigate }) {
               <div className="w-20 h-20 bg-slate-50 rounded-full flex items-center justify-center mb-6">
                 <FileX className="w-8 h-8 text-slate-300" />
               </div>
-              <h3 className="text-xl font-bold text-slate-700">No documents found</h3>
+              <h3 className="text-xl font-light text-slate-700">No documents found</h3>
               <p className="text-slate-400 mt-2">Try adjusting your filters or create a new document.</p>
             </motion.div>
           ) : (

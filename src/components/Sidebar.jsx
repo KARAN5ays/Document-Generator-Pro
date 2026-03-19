@@ -11,27 +11,38 @@ import {
     Settings,
     ChevronUp,
     Users,
-    Image
+    Image,
+    FileText,
+    CheckSquare,
+    List,
+    ChevronDown,
 } from 'lucide-react'
 
-const NAV_GROUPS = [
+const NAV_SECTIONS = [
     {
-        label: 'Main',
+        id: 'documents',
+        label: 'Documents',
+        color: 'brand-purple',
         items: [
             { id: 'dashboard', label: 'Dashboard', icon: LayoutDashboard },
             { id: 'generate', label: 'Create Document', icon: FilePlus },
-            { id: 'documents', label: 'Your Documents', icon: FolderOpen },
+            { id: 'documents', label: 'My Documents', icon: FolderOpen },
             { id: 'verify', label: 'Verify Document', icon: ShieldCheck },
             { id: 'builder', label: 'Template Builder', icon: FileEdit },
-        ]
-    },
-    {
-        label: 'Tools',
-        items: [
             { id: 'bulk', label: 'Bulk Issuance', icon: Users },
             { id: 'assets', label: 'Asset Manager', icon: Image },
         ]
-    }
+    },
+    {
+        id: 'memos',
+        label: 'Memos',
+        color: 'brand-pink',
+        items: [
+            { id: 'memo-create', label: 'Create Memo', icon: FileText },
+            { id: 'memo-list', label: 'My Memos', icon: List },
+            { id: 'memo-inbox', label: 'Memo Inbox', icon: CheckSquare },
+        ]
+    },
 ]
 
 const containerVariants = {
@@ -50,13 +61,14 @@ const itemVariants = {
 }
 
 export default function Sidebar({ activeView, onViewChange, onLogout, isOpen = false, onClose, username = 'Admin User', role = 'Standard User' }) {
-    // Extract initials from username
     const initials = username
         .split(' ')
         .map(word => word[0])
         .join('')
         .toUpperCase()
         .slice(0, 2)
+
+    const isMemoSection = (sectionId) => sectionId === 'memos'
 
     return (
         <>
@@ -80,8 +92,8 @@ export default function Sidebar({ activeView, onViewChange, onLogout, isOpen = f
                     ${isOpen ? 'translate-x-0' : '-translate-x-full lg:translate-x-0'}
                 `}
             >
-                {/* Brand Section - same height as navbar */}
-                <div className="h-16 px-6 border-0 border-slate-200 flex items-center shrink-0">
+                {/* Brand Section */}
+                <div className="h-16 px-6 flex items-center shrink-0">
                     <motion.div
                         initial={{ opacity: 0, x: -20 }}
                         animate={{ opacity: 1, x: 0 }}
@@ -91,62 +103,65 @@ export default function Sidebar({ activeView, onViewChange, onLogout, isOpen = f
                         <div className="w-9 h-9 rounded-xl bg-brand-purple flex items-center justify-center shadow-md shadow-brand-purple/20 shrink-0">
                             <Layers className="text-white w-5 h-5" />
                         </div>
-                        <div>
-                            <h1 className="text-[17px] font-bold tracking-tight text-brand-purple leading-none">Dastavez</h1>
-                        </div>
+                        <h1 className="text-[20px] font-light tracking-tight text-brand-purple leading-none">Dastavez</h1>
                     </motion.div>
                 </div>
 
-                {/* Navigation Groups */}
-                <nav className="flex-1 overflow-y-auto scrollbar-hide pt-5">
-                    <motion.div
-                        variants={containerVariants}
-                        initial="hidden"
-                        animate="show"
-                        className="space-y-6"
-                    >
-                        {NAV_GROUPS.map((group) => (
-                            <div key={group.label} className="space-y-1">
-                                {/* Group Header */}
-                                <motion.div
-                                    variants={itemVariants}
-                                    className="px-6 py-1 text-[11px] font-bold text-slate-400 uppercase tracking-wider mb-2"
-                                >
-                                    {group.label}
-                                </motion.div>
+                {/* Navigation Sections */}
+                <nav className="flex-1 overflow-y-auto scrollbar-hide pt-3">
+                    <motion.div variants={containerVariants} initial="hidden" animate="show" className="space-y-2">
+                        {NAV_SECTIONS.map((section) => {
+                            const isMemo = isMemoSection(section.id)
+                            const activeColor = isMemo ? 'none' : 'none'
+                            const activeBg = isMemo ? 'bg-pink-50 border-brand-pink   ' : 'bg-pink-50 border-brand-pink'
+                            const activeIcon = isMemo ? 'text-brand-pink' : 'text-brand-pink'
 
-                                {/* Group Items */}
-                                <div className="space-y-0.5">
-                                    {group.items.map((item) => {
-                                        const Icon = item.icon
-                                        const isActive = activeView === item.id
+                            return (
+                                <div key={section.id}>
+                                    {/* Section Header */}
+                                    <motion.div
+                                        variants={itemVariants}
+                                        className="px-4 py-2"
+                                    >
+                                        <span className={`text-[10px] font-light uppercase tracking-widest ${isMemo ? 'text-brand-pink' : 'text-brand-pink'}`}>
+                                            {section.label}
+                                        </span>
+                                    </motion.div>                                    {/* Section Items */}
+                                    <div className="space-y-0.5 mt-1 mb-2">
+                                        {section.items.map((item) => {
+                                            const Icon = item.icon
+                                            const isActive = activeView === item.id
 
-                                        return (
-                                            <motion.button
-                                                key={item.id}
-                                                variants={itemVariants}
-                                                onClick={() => onViewChange(item.id)}
-                                                className={`relative w-full flex items-center gap-3 pl-6 pr-4 py-2.5 text-sm font-medium transition-all group overflow-hidden ${isActive
-                                                    ? 'bg-pink-50 text-brand-pink border-r-[3px] border-brand-pink'
-                                                    : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-r-[3px] border-transparent'
-                                                    }`}
-                                            >
-                                                <Icon
-                                                    className={`w-5 h-5 transition-all relative z-10 ${isActive
-                                                        ? 'text-brand-pink'
-                                                        : 'text-slate-400 group-hover:text-slate-600'
+                                            return (
+                                                <motion.button
+                                                    key={item.id}
+                                                    variants={itemVariants}
+                                                    onClick={() => onViewChange(item.id)}
+                                                    className={`relative w-full flex items-center gap-3 pl-6 pr-4 py-2.5 text-sm font-light transition-all group overflow-hidden border-r-[3px] ${isActive
+                                                        ? `${activeBg} ${activeColor}`
+                                                        : 'text-slate-600 hover:text-slate-900 hover:bg-slate-50 border-transparent'
                                                         }`}
-                                                    strokeWidth={2}
-                                                />
-                                                <span className={`relative z-10 transition-colors ${isActive ? 'font-bold' : 'font-medium'}`}>
-                                                    {item.label}
-                                                </span>
-                                            </motion.button>
-                                        )
-                                    })}
+                                                >
+                                                    <Icon
+                                                        className={`w-[18px] h-[18px] transition-all relative z-10 ${isActive
+                                                            ? activeIcon
+                                                            : 'text-slate-400 group-hover:text-slate-600'
+                                                            }`}
+                                                        strokeWidth={2}
+                                                    />
+                                                    <span className={`relative z-10 transition-colors ${isActive ? 'font-light' : 'font-light'}`}>
+                                                        {item.label}
+                                                    </span>
+                                                </motion.button>
+                                            )
+                                        })}
+                                    </div>
+
+                                    {/* Divider */}
+                                    <div className="mx-4 border-t border-slate-100 mt-1" />
                                 </div>
-                            </div>
-                        ))}
+                            )
+                        })}
                     </motion.div>
                 </nav>
 
@@ -154,12 +169,12 @@ export default function Sidebar({ activeView, onViewChange, onLogout, isOpen = f
                 <div className="mt-auto px-4 pt-4 border-t border-slate-200">
                     <div className="relative group/profile">
                         <button className="w-full flex items-center gap-3 p-2 rounded-xl hover:bg-slate-50 transition-colors text-left">
-                            <div className="w-9 h-9 rounded-full bg-pink-100 flex items-center justify-center text-brand-pink text-[11px] font-bold shrink-0 ring-1 ring-slate-200/50">
+                            <div className="w-9 h-9 rounded-full bg-pink-100 flex items-center justify-center text-brand-pink text-[11px] font-light shrink-0 ring-1 ring-slate-200/50">
                                 {initials}
                             </div>
                             <div className="flex-1 min-w-0">
-                                <p className="text-sm font-bold text-slate-800 truncate leading-tight">{username}</p>
-                                <p className="text-[10px] text-slate-500 uppercase tracking-wider font-semibold mt-0.5">{role}</p>
+                                <p className="text-sm font-light text-slate-800 truncate leading-tight">{username}</p>
+                                <p className="text-[10px] text-slate-500 uppercase tracking-wider font-light mt-0.5">{role}</p>
                             </div>
                             <ChevronUp className="w-4 h-4 text-slate-400 group-hover/profile:text-slate-600 transition-colors" />
                         </button>
@@ -168,14 +183,14 @@ export default function Sidebar({ activeView, onViewChange, onLogout, isOpen = f
                         <div className="absolute bottom-full left-0 w-full mb-2 p-1.5 bg-white border border-slate-200 rounded-xl shadow-card opacity-0 scale-95 invisible group-hover/profile:opacity-100 group-hover/profile:scale-100 group-hover/profile:visible transition-all duration-200 origin-bottom">
                             <button
                                 onClick={() => onViewChange('settings')}
-                                className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-brand-navy hover:bg-slate-50 rounded-lg transition-colors"
+                                className="w-full flex items-center gap-2 px-3 py-2 text-xs font-light text-slate-600 hover:text-brand-navy hover:bg-slate-50 rounded-lg transition-colors"
                             >
                                 <User className="w-4 h-4 text-slate-400" />
                                 Profile
                             </button>
                             <button
                                 onClick={() => onViewChange('settings')}
-                                className="w-full flex items-center gap-2 px-3 py-2 text-xs font-semibold text-slate-600 hover:text-brand-navy hover:bg-slate-50 rounded-lg transition-colors"
+                                className="w-full flex items-center gap-2 px-3 py-2 text-xs font-light text-slate-600 hover:text-brand-navy hover:bg-slate-50 rounded-lg transition-colors"
                             >
                                 <Settings className="w-4 h-4 text-slate-400" />
                                 Settings
@@ -183,7 +198,7 @@ export default function Sidebar({ activeView, onViewChange, onLogout, isOpen = f
                             <div className="my-1 border-t border-slate-100"></div>
                             <button
                                 onClick={onLogout}
-                                className="w-full flex items-center gap-2 px-3 py-2 text-xs font-bold text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
+                                className="w-full flex items-center gap-2 px-3 py-2 text-xs font-light text-red-600 hover:text-red-700 hover:bg-red-50 rounded-lg transition-colors"
                             >
                                 <LogOut className="w-4 h-4 text-red-500" />
                                 Sign Out

@@ -44,8 +44,8 @@ const CustomTooltip = ({ active, payload, label }) => {
     if (active && payload && payload.length) {
         return (
             <div className="bg-white px-5 py-4 rounded-xl shadow-xl border border-slate-200">
-                <p className="text-xs font-semibold text-slate-500 uppercase tracking-wider mb-1">{label}</p>
-                <p className="text-lg font-bold text-brand-navy">
+                <p className="text-xs font-light text-slate-500 uppercase tracking-wider mb-1">{label}</p>
+                <p className="text-lg font-light text-brand-navy">
                     {payload[0].value} document{payload[0].value !== 1 ? 's' : ''}
                 </p>
             </div>
@@ -104,7 +104,27 @@ export default function Dashboard({ onNavigate }) {
         { label: 'Alerts', value: statsData.verification_alerts, icon: AlertCircle, color: 'text-brand-pink', bg: 'bg-pink-50' },
     ]
 
-    const trends = statsData.trends || []
+    const processTrends = (backendTrends) => {
+        const months = ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul", "Aug", "Sep", "Oct", "Nov", "Dec"];
+        const padded = [];
+        const date = new Date();
+        date.setDate(1);
+        date.setMonth(date.getMonth() - 5);
+        for (let i = 0; i < 6; i++) {
+            const m = months[date.getMonth()];
+            padded.push({ month: m, count: 0 });
+            date.setMonth(date.getMonth() + 1);
+        }
+        
+        if (!backendTrends || backendTrends.length === 0) return padded;
+        
+        return padded.map(p => {
+            const found = backendTrends.find(b => b.month && (b.month === p.month || b.month.startsWith(p.month)));
+            return found ? { ...p, count: found.count } : p;
+        });
+    }
+
+    const trends = processTrends(statsData.trends);
 
     // Verification Success Data (Mocked/Derived)
     const verificationData = [
@@ -151,12 +171,12 @@ export default function Dashboard({ onNavigate }) {
             <motion.div
                 initial={{ opacity: 0, y: 10 }}
                 animate={{ opacity: 1, y: 0 }}
-                className="bg-white rounded-2xl border border-slate-200 shadow-sm p-8"
+                className="bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card p-8 transition-smooth"
             >
                 <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
                     <div>
                         <div className="flex items-center gap-2 mb-2">
-                            <span className="text-xs font-semibold text-brand-purple flex items-center gap-1.5 uppercase tracking-wider">
+                            <span className="text-xs font-light text-brand-purple flex items-center gap-1.5 uppercase tracking-wider">
                                 <Sparkles className="w-3.5 h-3.5" />
                                 {getGreeting()}
                             </span>
@@ -164,14 +184,14 @@ export default function Dashboard({ onNavigate }) {
                         <h1 className="text-2xl md:text-3xl font-semibold text-brand-navy tracking-tight mb-2">
                             Welcome Back, {localStorage.getItem('username') || 'User'}
                         </h1>
-                        <p className="text-slate-500 max-w-lg text-sm font-medium">
+                        <p className="text-slate-500 max-w-lg text-sm font-light">
                             Ready to create something amazing today? Your document suite is ready.
                         </p>
                     </div>
                     <div className="flex flex-shrink-0">
                         <button
                             onClick={() => onNavigate?.('generate')}
-                            className="bg-brand-pink hover:bg-pink-600 text-white px-5 py-2.5 rounded-xl text-sm font-bold shadow-sm transition-all flex items-center gap-2"
+                            className="bg-brand-pink hover:bg-pink-600 text-white px-5 py-2.5 rounded-xl text-sm font-light shadow-sm transition-all flex items-center gap-2"
                         >
                             <FilePlus className="w-4 h-4" />
                             Create New
@@ -188,10 +208,10 @@ export default function Dashboard({ onNavigate }) {
                         initial={{ opacity: 0, y: 20 }}
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: i * 0.08 }}
-                        className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm hover:shadow-md hover:border-slate-300 transition-all duration-300 group cursor-default"
+                        className="bg-white p-6 rounded-[1.25rem] border border-slate-100/80 shadow-card hover:shadow-card-hover hover:border-slate-200 transition-smooth group cursor-default"
                     >
-                        <div className="flex justify-between items-start mb-4">
-                            <div className="text-sm font-semibold text-slate-500 transition-colors">{stat.label}</div>
+                        <div className="flex flex-col md:flex-row md:items-center justify-between gap-6">
+                            <div className="text-sm font-light text-slate-500 transition-colors">{stat.label}</div>
                             {i === 0 && <span className="flex h-2 w-2 rounded-full bg-pink-500 ring-4 ring-pink-50 mt-1 animate-pulse" />}
                         </div>
                         <div className="text-3xl font-semibold text-brand-navy tabular-nums tracking-tight">{(stat.value || 0).toLocaleString()}</div>
@@ -206,10 +226,10 @@ export default function Dashboard({ onNavigate }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.15 }}
-                    className="lg:col-span-2 bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col"
+                    className="lg:col-span-2 bg-white p-6 rounded-[1.25rem] border border-slate-100/80 shadow-card flex flex-col transition-smooth hover:shadow-card-hover"
                 >
                     <div className="flex items-center justify-between mb-4">
-                        <h3 className="font-bold text-brand-navy flex items-center gap-2">
+                        <h3 className="font-semibold text-brand-navy flex items-center gap-2">
                             <FileText className="w-5 h-5 text-brand-pink" />
                             Document Status
                         </h3>
@@ -218,8 +238,8 @@ export default function Dashboard({ onNavigate }) {
                         <ResponsiveContainer width="100%" height="100%">
                             <BarChart data={barChartData} margin={{ top: 20, right: 30, left: 0, bottom: 5 }}>
                                 <CartesianGrid strokeDasharray="3 3" vertical={false} stroke="#e2e8f0" />
-                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11 }} dy={10} />
-                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11 }} dx={-10} />
+                                <XAxis dataKey="name" axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11, fontWeight: 600 }} dy={10} />
+                                <YAxis axisLine={false} tickLine={false} tick={{ fill: '#64748b', fontSize: 11, fontWeight: 600 }} dx={-10} />
                                 <Tooltip cursor={{ fill: '#f8fafc' }} contentStyle={{ borderRadius: '8px', border: '1px solid #e2e8f0', boxShadow: '0 4px 6px -1px rgb(0 0 0 / 0.1)' }} />
                                 <Legend wrapperStyle={{ paddingTop: '20px', fontSize: '12px' }} />
                                 <Bar dataKey="Generated" fill="#7CB5EC" radius={[0, 0, 0, 0]} maxBarSize={40} />
@@ -234,18 +254,18 @@ export default function Dashboard({ onNavigate }) {
                     initial={{ opacity: 0, y: 20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="bg-white p-6 rounded-2xl border border-slate-200 shadow-sm flex flex-col"
+                    className="bg-white p-6 rounded-[1.25rem] border border-slate-100/80 shadow-card flex flex-col transition-smooth hover:shadow-card-hover"
                 >
                     <div className="flex items-center justify-between mb-2">
-                        <h3 className="font-bold text-brand-navy flex items-center gap-2">
+                        <h3 className="font-semibold text-brand-navy flex items-center gap-2">
                             <ShieldCheck className="w-5 h-5 text-brand-pink" />
                             Verification Success
                         </h3>
                     </div>
                     <div className="w-full h-[250px] relative flex items-center justify-center mt-2">
                         <div className="absolute inset-0 flex items-center justify-center flex-col pointer-events-none">
-                            <span className="text-3xl font-bold text-brand-navy">{verificationSuccessRate}%</span>
-                            <span className="text-xs text-slate-400 font-medium uppercase tracking-wider">Success</span>
+                            <span className="text-3xl font-semibold text-brand-navy">{verificationSuccessRate}%</span>
+                            <span className="text-xs text-slate-400 font-light uppercase tracking-wider">Success</span>
                         </div>
                         <div className="w-full h-full">
                             <ResponsiveContainer width="100%" height="100%">
@@ -273,7 +293,7 @@ export default function Dashboard({ onNavigate }) {
                         {verificationData.map((d, i) => (
                             <div key={i} className="flex items-center gap-2">
                                 <div className="w-3 h-3 rounded-full" style={{ backgroundColor: d.color }} />
-                                <span className="text-sm text-slate-600 font-medium">{d.name}</span>
+                                <span className="text-sm text-slate-600 font-light">{d.name}</span>
                             </div>
                         ))}
                     </div>
@@ -288,11 +308,11 @@ export default function Dashboard({ onNavigate }) {
                     initial={{ opacity: 0, x: -20 }}
                     animate={{ opacity: 1, x: 0 }}
                     transition={{ delay: 0.2 }}
-                    className="lg:col-span-2 bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden flex flex-col"
+                    className="lg:col-span-2 bg-white rounded-[1.25rem] border border-slate-100/80 shadow-card overflow-hidden flex flex-col transition-smooth hover:shadow-card-hover"
                 >
-                    <div className="px-6 lg:px-8 py-5 border-b border-slate-100 flex items-center justify-between flex-wrap gap-4">
+                    <div className="px-6 lg:px-8 py-5 border-b border-slate-100 flex flex-col lg:flex-row items-start lg:items-center justify-between gap-4">
                         <div>
-                            <h2 className="text-xl font-bold text-brand-navy flex items-center gap-2">
+                            <h2 className="text-xl font-semibold text-brand-navy flex items-center gap-2">
                                 <div className="p-2 rounded-lg bg-pink-50">
                                     <TrendingUp className="w-5 h-5 text-brand-pink" />
                                 </div>
@@ -302,7 +322,7 @@ export default function Dashboard({ onNavigate }) {
                         </div>
                         <div className="flex items-center gap-2 px-4 py-2 rounded-xl bg-slate-50 border border-slate-100">
                             <Calendar className="w-4 h-4 text-slate-500" />
-                            <span className="text-sm font-semibold text-slate-600">Last 6 Months</span>
+                            <span className="text-sm font-light text-slate-600">Last 6 Months</span>
                         </div>
                     </div>
 
@@ -311,50 +331,53 @@ export default function Dashboard({ onNavigate }) {
                             <div className="w-20 h-20 rounded-2xl bg-slate-100 flex items-center justify-center mb-6">
                                 <Activity className="w-10 h-10 text-slate-300" />
                             </div>
-                            <p className="text-base font-semibold text-slate-600 mb-1">No trend data yet</p>
+                            <p className="text-base font-light text-slate-600 mb-1">No trend data yet</p>
                             <p className="text-sm text-slate-500 text-center max-w-sm mb-6">Create documents to see your activity visualized here</p>
                             <button
                                 onClick={() => onNavigate?.('generate')}
-                                className="px-6 py-3 rounded-xl bg-brand-pink text-white font-semibold text-sm hover:bg-pink-600 transition-colors"
+                                className="px-6 py-3 rounded-xl bg-brand-pink text-white font-light text-sm hover:bg-pink-600 transition-colors"
                             >
                                 Create your first document
                             </button>
                         </div>
                     ) : (
-                        <div className="w-full h-[320px] p-6 lg:p-8 pt-4">
+                        <div className="w-full h-[380px] p-6 lg:p-8 pt-4 pb-2">
                             <ResponsiveContainer width="100%" height="100%">
-                                <AreaChart data={trends} margin={{ top: 20, right: 20, left: 0, bottom: 10 }}>
+                                <AreaChart data={trends} margin={{ top: 30, right: 30, left: 10, bottom: 0 }}>
                                     <defs>
                                         <linearGradient id="colorCount" x1="0" y1="0" x2="0" y2="1">
-                                            <stop offset="0%" stopColor="#EC4899" stopOpacity={0.25} />
-                                            <stop offset="100%" stopColor="#EC4899" stopOpacity={0.02} />
+                                            <stop offset="5%" stopColor="#EC4899" stopOpacity={0.4} />
+                                            <stop offset="95%" stopColor="#EC4899" stopOpacity={0.0} />
                                         </linearGradient>
                                     </defs>
-                                    <CartesianGrid strokeDasharray="4 4" vertical={false} stroke="#e2e8f0" />
+                                    <CartesianGrid vertical={false} stroke="#f1f5f9" strokeWidth={1} />
                                     <XAxis
                                         dataKey="month"
-                                        axisLine={false}
-                                        tickLine={false}
+                                        axisLine={{ stroke: '#cbd5e1', strokeWidth: 2 }}
+                                        tickLine={{ stroke: '#cbd5e1', strokeWidth: 2 }}
                                         tick={{ fill: '#64748b', fontSize: 11, fontWeight: 600 }}
-                                        dy={8}
+                                        dy={12}
                                     />
                                     <YAxis
                                         axisLine={false}
                                         tickLine={false}
-                                        tick={{ fill: '#64748b', fontSize: 11 }}
-                                        dx={-8}
-                                        width={36}
+                                        tick={{ fill: '#64748b', fontSize: 11, fontWeight: 600 }}
+                                        dx={-10}
+                                        width={45}
+                                        domain={[0, 'auto']}
+                                        allowDecimals={false}
                                         tickFormatter={(v) => (v >= 1000 ? `${v / 1000}k` : v)}
                                     />
-                                    <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#94a3b8', strokeWidth: 1, strokeDasharray: '5 5' }} />
+                                    <Tooltip content={<CustomTooltip />} cursor={{ stroke: '#cbd5e1', strokeWidth: 1, strokeDasharray: '4 4' }} />
                                     <Area
                                         type="monotone"
                                         dataKey="count"
                                         stroke="#EC4899"
-                                        strokeWidth={2.5}
+                                        strokeWidth={3}
                                         fillOpacity={1}
                                         fill="url(#colorCount)"
-                                        activeDot={{ r: 5, strokeWidth: 2, stroke: '#fff', fill: '#EC4899' }}
+                                        dot={{ r: 4, strokeWidth: 2, fill: '#fff', stroke: '#EC4899' }}
+                                        activeDot={{ r: 6, strokeWidth: 0, fill: '#EC4899' }}
                                     />
                                 </AreaChart>
                             </ResponsiveContainer>
@@ -372,7 +395,7 @@ export default function Dashboard({ onNavigate }) {
                         transition={{ delay: 0.3 }}
                         className="bg-white rounded-2xl border border-slate-200 shadow-sm p-6"
                     >
-                        <h3 className="font-bold text-brand-navy mb-4 flex items-center gap-2">
+                        <h3 className="font-semibold text-brand-navy mb-4 flex items-center gap-2">
                             <Zap className="w-4 h-4 text-brand-pink fill-brand-pink" />
                             Quick Actions
                         </h3>
@@ -382,7 +405,7 @@ export default function Dashboard({ onNavigate }) {
                                     <FilePlus className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <div className="font-semibold text-sm text-slate-700">Create Document</div>
+                                    <div className="font-light text-sm text-slate-700">Create Document</div>
                                     <div className="text-xs text-slate-400">Start from a template</div>
                                 </div>
                             </button>
@@ -391,7 +414,7 @@ export default function Dashboard({ onNavigate }) {
                                     <ShieldCheck className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <div className="font-semibold text-sm text-slate-700">Verify Authenticity</div>
+                                    <div className="font-light text-sm text-slate-700">Verify Authenticity</div>
                                     <div className="text-xs text-slate-400">Check document status</div>
                                 </div>
                             </button>
@@ -400,7 +423,7 @@ export default function Dashboard({ onNavigate }) {
                                     <FolderOpen className="w-5 h-5" />
                                 </div>
                                 <div>
-                                    <div className="font-semibold text-sm text-slate-700">Template Builder</div>
+                                    <div className="font-light text-sm text-slate-700">Template Builder</div>
                                     <div className="text-xs text-slate-400">Manage templates</div>
                                 </div>
                             </button>
@@ -415,8 +438,8 @@ export default function Dashboard({ onNavigate }) {
                         className="bg-white rounded-2xl border border-slate-200 shadow-sm overflow-hidden"
                     >
                         <div className="p-4 border-b border-slate-200 flex items-center justify-between bg-slate-50/50">
-                            <h3 className="font-bold text-sm text-brand-navy uppercase tracking-wider">Recent Activity</h3>
-                            <button onClick={() => onNavigate?.('documents')} className="text-xs font-semibold text-brand-purple hover:text-purple-900">View All</button>
+                            <h3 className="font-semibold text-sm text-brand-navy uppercase tracking-wider">Recent Activity</h3>
+                            <button onClick={() => onNavigate?.('documents')} className="text-xs font-light text-brand-purple hover:text-purple-900">View All</button>
                         </div>
                         <div className="divide-y divide-slate-50">
                             {recentDocs.length === 0 ? (
@@ -431,10 +454,10 @@ export default function Dashboard({ onNavigate }) {
                                             <FileText className="w-4 h-4 text-slate-500" />
                                         </div>
                                         <div className="flex-1 min-w-0">
-                                            <p className="text-sm font-semibold text-slate-700 truncate">{doc.document_type_name || 'Document'}</p>
+                                            <p className="text-sm font-light text-slate-700 truncate">{doc.document_type_name || 'Document'}</p>
                                             <p className="text-xs text-slate-400 font-mono truncate">#{doc.tracking_field}</p>
                                         </div>
-                                        <span className="px-2 py-0.5 rounded text-[10px] font-bold bg-pink-100 text-brand-pink uppercase">
+                                        <span className="px-2 py-0.5 rounded text-[10px] font-light bg-pink-100 text-brand-pink uppercase">
                                             Valid
                                         </span>
                                     </div>
