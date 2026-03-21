@@ -131,6 +131,17 @@ export default function CreateMemo({ token, onNavigate }) {
                                 {error}
                             </motion.div>
                         )}
+                        {merchantId === null && (
+                            <motion.div
+                                initial={{ opacity: 0, height: 0 }}
+                                animate={{ opacity: 1, height: 'auto' }}
+                                exit={{ opacity: 0, height: 0 }}
+                                className="p-4 bg-amber-50 border border-amber-100 rounded-xl flex items-start gap-3 text-amber-700 text-sm overflow-hidden"
+                            >
+                                <AlertCircle className="w-5 h-5 shrink-0 mt-0.5" />
+                                Your account is not assigned to any organization. You must be assigned to an organization to submit a memo.
+                            </motion.div>
+                        )}
                         {success && (
                             <motion.div
                                 initial={{ opacity: 0, height: 0 }}
@@ -147,7 +158,7 @@ export default function CreateMemo({ token, onNavigate }) {
                     {/* Meta section */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
                         <div>
-                            <label className="block text-xs font-light text-slate-500 uppercase tracking-wider mb-2">Memo Type</label>
+                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Memo Type</label>
                             <div className="relative">
                                 <LayoutList className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                 <select
@@ -164,7 +175,7 @@ export default function CreateMemo({ token, onNavigate }) {
                         </div>
 
                         <div>
-                            <label className="block text-xs font-light text-slate-500 uppercase tracking-wider mb-2">Amount (if applicable)</label>
+                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Amount (if applicable)</label>
                             <div className="relative">
                                 <DollarSign className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                 <input
@@ -184,7 +195,7 @@ export default function CreateMemo({ token, onNavigate }) {
                     {/* Departments */}
                     <div className="grid grid-cols-1 md:grid-cols-2 gap-6 pb-6 border-b border-slate-100">
                         <div>
-                            <label className="block text-xs font-light text-slate-500 uppercase tracking-wider mb-2">From Department</label>
+                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">From Department</label>
                             <div className="relative">
                                 <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                 <input
@@ -200,7 +211,7 @@ export default function CreateMemo({ token, onNavigate }) {
                         </div>
 
                         <div>
-                            <label className="block text-xs font-light text-slate-500 uppercase tracking-wider mb-2">To Department</label>
+                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">To Department</label>
                             <div className="relative">
                                 <Building2 className="absolute left-4 top-1/2 -translate-y-1/2 w-5 h-5 text-slate-400" />
                                 <input
@@ -219,33 +230,33 @@ export default function CreateMemo({ token, onNavigate }) {
                     {/* Content */}
                     <div className="space-y-6">
                         <div>
-                            <label className="block text-xs font-light text-slate-500 uppercase tracking-wider mb-2">Subject</label>
+                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Subject</label>
                             <input
                                 type="text"
                                 name="subject"
                                 value={formData.subject}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition-all outline-none font-light text-lg"
+                                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition-all outline-none font-light"
                                 placeholder="Brief subject of the memo"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-xs font-light text-slate-500 uppercase tracking-wider mb-2">Title</label>
+                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2">Title</label>
                             <input
                                 type="text"
                                 name="title"
                                 value={formData.title}
                                 onChange={handleChange}
                                 required
-                                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition-all outline-none font-light text-xl"
+                                className="w-full px-4 py-3 rounded-xl border border-slate-200 bg-slate-50/50 text-slate-800 placeholder:text-slate-400 focus:ring-2 focus:ring-brand-pink/20 focus:border-brand-pink transition-all outline-none font-light"
                                 placeholder="Full formal title"
                             />
                         </div>
 
                         <div>
-                            <label className="block text-xs font-light text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
                                 <AlignLeft className="w-4 h-4" /> Background
                             </label>
                             <textarea
@@ -260,7 +271,7 @@ export default function CreateMemo({ token, onNavigate }) {
                         </div>
 
                         <div>
-                            <label className="block text-xs font-light text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
+                            <label className="block text-xs font-semibold text-slate-500 uppercase tracking-wider mb-2 flex items-center gap-2">
                                 <AlignRight className="w-4 h-4" /> Purpose
                             </label>
                             <textarea
