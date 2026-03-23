@@ -146,17 +146,17 @@ export default function MemoInbox({ token, onNavigate }) {
                                                     <FileText className="w-5 h-5 text-indigo-500 drop-shadow-sm" />
                                                 </div>
                                                 <div>
-                                                    <h3 className="font-light text-brand-navy text-lg group-hover:text-indigo-600 transition-colors">
+                                                    <h3 className="font-light text-brand-navy text-base group-hover:text-indigo-600 transition-colors">
                                                         {memo.title}
                                                     </h3>
-                                                    <p className="text-xs text-slate-400 mt-0.5 font-light">
+                                                    <p className="text-[10px] text-slate-400 mt-0.5 font-light">
                                                         From: {memo.from_department} • Ref: {memo.reference_number}
                                                     </p>
                                                 </div>
                                             </div>
                                         </td>
                                         <td className="px-6 py-4">
-                                            <span className="text-slate-600 font-light">
+                                            <span className="text-slate-600 font-light text-sm">
                                                 ${parseFloat(memo.amount).toLocaleString(undefined, { minimumFractionDigits: 2 })}
                                             </span>
                                         </td>
